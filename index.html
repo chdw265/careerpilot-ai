@@ -252,7 +252,67 @@
   </p>
 
 </section>
+<section class="section" id="job-search">
+  <h2>Search Current Jobs</h2>
 
+  <p>
+    Search current opportunities collected from CareerPilot's connected job sources.
+  </p>
+
+  <div style="max-width: 1000px; margin: 30px auto;">
+    
+    <div style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    ">
+
+      <input
+        type="text"
+        id="jobKeyword"
+        placeholder="Job title or keyword"
+        style="padding: 14px; font-size: 16px;"
+      >
+
+      <input
+        type="text"
+        id="jobLocation"
+        placeholder="City, state, or remote"
+        style="padding: 14px; font-size: 16px;"
+      >
+
+      <select
+        id="jobWorkSetting"
+        style="padding: 14px; font-size: 16px;"
+      >
+        <option value="">Any work setting</option>
+        <option value="remote">Remote</option>
+        <option value="hybrid">Hybrid</option>
+        <option value="onsite">On-site</option>
+      </select>
+
+    </div>
+
+    <button
+      id="searchJobsButton"
+      style="
+        padding: 14px 24px;
+        font-size: 16px;
+        cursor: pointer;
+      "
+    >
+      Search Jobs
+    </button>
+
+    <p id="jobSearchStatus" style="margin-top: 20px;">
+      Loading current jobs...
+    </p>
+
+    <div id="jobResults"></div>
+
+  </div>
+</section>
 <footer>
   © 2026 CareerPilot AI. Currently in development.
 </footer>
@@ -263,22 +323,188 @@
 
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function testDatabaseConnection() {
-    const { data, error } = await db
-      .from("job_sources")
-      .select("name, source_type, active")
-      .limit(20);
+  async function searchJobs() {
+  const keyword = document
+    .getElementById("jobKeyword")
+    .value
+    .trim();
 
-    if (error) {
-      console.error("Supabase connection error:", error);
-      return;
-    }
+  const location = document
+    .getElementById("jobLocation")
+    .value
+    .trim();
 
-    console.log("Supabase connected successfully!");
-    console.table(data);
+  const workSetting = document
+    .getElementById("jobWorkSetting")
+    .value;
+
+  const status = document.getElementById("jobSearchStatus");
+  const results = document.getElementById("jobResults");
+
+  status.textContent = "Searching current jobs...";
+  results.innerHTML = "";
+
+  let query = db
+    .from("jobs")
+    .select(`
+      id,
+      title,
+      company_name,
+      location_text,
+      work_setting,
+      salary_min,
+      salary_max,
+      posted_at,
+      source_name,
+      description,
+      apply_url
+    `)
+    .eq("is_active", true)
+    .order("posted_at", { ascending: false })
+    .limit(50);
+
+  if (keyword) {
+    query = query.or(
+      `title.ilike.%${keyword}%,company_name.ilike.%${keyword}%,description.ilike.%${keyword}%`
+    );
   }
 
-  testDatabaseConnection();
+  if (location) {
+    query = query.ilike(
+      "location_text",
+      `%${location}%`
+    );
+  }
+
+  if (workSetting) {
+    query = query.eq(
+      "work_setting",
+      workSetting
+    );
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Job search error:", error);
+    status.textContent =
+      "There was a problem loading jobs.";
+    return;
+  }
+
+  status.textContent =
+    `${data.length} current job${data.length === 1 ? "" : "s"} found`;
+
+  if (data.length === 0) {
+    results.innerHTML =
+      "<p>No jobs matched your search.</p>";
+    return;
+  }
+
+  data.forEach((job) => {
+    const card = document.createElement("div");
+
+    card.style.cssText = `
+      border: 1px solid #d9deea;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 18px 0;
+      text-align: left;
+      background: white;
+    `;
+
+    const title = document.createElement("h3");
+    title.textContent = job.title || "Untitled position";
+
+    const company = document.createElement("p");
+    company.textContent =
+      job.company_name || "Company not listed";
+
+    const details = document.createElement("p");
+
+    const detailParts = [
+      job.location_text,
+      job.work_setting
+        ? job.work_setting.charAt(0).toUpperCase() +
+          job.work_setting.slice(1)
+        : null,
+      job.source_name
+        ? `Source: ${job.source_name}`
+        : null
+    ].filter(Boolean);
+
+    details.textContent = detailParts.join(" • ");
+
+    if (job.salary_min || job.salary_max) {
+      const salary = document.createElement("p");
+
+      const min = job.salary_min
+        ? Number(job.salary_min).toLocaleString()
+        : null;
+
+      const max = job.salary_max
+        ? Number(job.salary_max).toLocaleString()
+        : null;
+
+      salary.textContent =
+        min && max
+          ? `$${min} – $${max}`
+          : `$${min || max}`;
+
+      card.appendChild(title);
+      card.appendChild(company);
+      card.appendChild(details);
+      card.appendChild(salary);
+    } else {
+      card.appendChild(title);
+      card.appendChild(company);
+      card.appendChild(details);
+    }
+
+    if (job.description) {
+      const description = document.createElement("p");
+
+      description.textContent =
+        job.description.length > 250
+          ? job.description.substring(0, 250) + "..."
+          : job.description;
+
+      description.style.marginTop = "12px";
+
+      card.appendChild(description);
+    }
+
+    if (job.apply_url) {
+      const link = document.createElement("a");
+
+      link.href = job.apply_url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "View Job";
+
+      link.style.cssText = `
+        display: inline-block;
+        margin-top: 14px;
+        padding: 10px 18px;
+        background: #315ee8;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+      `;
+
+      card.appendChild(link);
+    }
+
+    results.appendChild(card);
+  });
+}
+
+document
+  .getElementById("searchJobsButton")
+  .addEventListener("click", searchJobs);
+
+searchJobs();
 </script>
   
 </body>
