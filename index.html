@@ -1,49 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CareerPilot AI | Smarter Job Search</title>
 
   <style>
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: Arial, Helvetica, sans-serif;
       background: #f5f7fb;
       color: #14213d;
       line-height: 1.6;
     }
-
-    body.modal-open {
-      overflow: hidden;
-    }
-
-
-    /* =========================================================
-       HEADER
-    ========================================================= */
+    body.modal-open { overflow: hidden; }
 
     header {
       background: #111827;
       color: white;
       min-height: 78px;
-      padding: 16px 6%;
+      padding: 16px 4%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -51,21 +28,15 @@
       position: sticky;
       top: 0;
       z-index: 1500;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .12);
+      box-shadow: 0 2px 10px rgba(0,0,0,.12);
     }
-
-    .header-left {
+    .header-left, .header-right, #signedOutNav, #signedInNav {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
+    .header-right { justify-content: flex-end; flex-wrap: wrap; }
+    .logo { font-size: 24px; font-weight: 800; white-space: nowrap; }
     .beta-badge {
       background: #625bf6;
       padding: 6px 11px;
@@ -74,15 +45,6 @@
       font-weight: 700;
       white-space: nowrap;
     }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
     .header-button {
       border: 1px solid #475467;
       background: transparent;
@@ -93,20 +55,9 @@
       font-weight: 700;
       cursor: pointer;
     }
-
-    .header-button:hover {
-      background: #1f2937;
-    }
-
-    .header-button.primary {
-      background: #315ee8;
-      border-color: #315ee8;
-    }
-
-    .header-button.primary:hover {
-      background: #244bc5;
-    }
-
+    .header-button:hover { background: #1f2937; }
+    .header-button.primary { background: #315ee8; border-color: #315ee8; }
+    .header-button.primary:hover { background: #244bc5; }
     .user-pill {
       display: none;
       align-items: center;
@@ -118,7 +69,6 @@
       color: white;
       font-size: 14px;
     }
-
     .user-avatar {
       width: 30px;
       height: 30px;
@@ -130,50 +80,25 @@
       color: white;
       font-weight: 800;
     }
-
-    #signedInNav {
-      display: none;
-      align-items: center;
-      gap: 9px;
-      flex-wrap: wrap;
-    }
-
-    #signedOutNav {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
-
-
-    /* =========================================================
-       HERO
-    ========================================================= */
+    #signedInNav { display: none; }
 
     .hero {
-      padding: 95px 8%;
+      padding: 90px 8%;
       text-align: center;
-      background:
-        linear-gradient(
-          135deg,
-          #eef2ff,
-          #ffffff
-        );
+      background: linear-gradient(135deg, #eef2ff, #ffffff);
     }
-
     .hero h1 {
       font-size: 52px;
       line-height: 1.1;
       max-width: 900px;
       margin: 0 auto 25px;
     }
-
     .hero p {
       max-width: 800px;
       margin: auto;
       font-size: 20px;
       color: #5b6475;
     }
-
     .hero-actions {
       margin-top: 30px;
       display: flex;
@@ -181,7 +106,6 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .hero-button {
       padding: 12px 22px;
       border-radius: 8px;
@@ -190,17 +114,8 @@
       font-weight: 700;
       cursor: pointer;
     }
-
-    .hero-button.primary {
-      background: #315ee8;
-      color: white;
-    }
-
-    .hero-button.secondary {
-      background: white;
-      color: #315ee8;
-    }
-
+    .hero-button.primary { background: #315ee8; color: white; }
+    .hero-button.secondary { background: white; color: #315ee8; }
     .status {
       display: inline-block;
       margin-top: 28px;
@@ -211,77 +126,41 @@
       font-weight: bold;
     }
 
-
-    /* =========================================================
-       GENERAL SECTIONS
-    ========================================================= */
-
     .section {
-      padding: 75px 8%;
-      max-width: 1400px;
+      padding: 70px 6%;
+      max-width: 1500px;
       margin: auto;
     }
-
-    .section-title {
-      text-align: center;
-      font-size: 36px;
-      margin-bottom: 15px;
-    }
-
+    .section-title { text-align: center; font-size: 36px; margin-bottom: 15px; }
     .section-subtitle {
       text-align: center;
       color: #667085;
       max-width: 760px;
-      margin: 0 auto 50px;
+      margin: 0 auto 45px;
     }
-
-
-    /* =========================================================
-       FEATURES
-    ========================================================= */
 
     .features {
       display: grid;
-      grid-template-columns:
-        repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 25px;
     }
-
     .feature {
       background: white;
       padding: 30px;
       border-radius: 16px;
       border: 1px solid #e3e7ef;
-      box-shadow:
-        0 8px 25px rgba(0, 0, 0, .04);
+      box-shadow: 0 8px 25px rgba(0,0,0,.04);
     }
-
-    .feature h3 {
-      margin-bottom: 12px;
-      font-size: 20px;
-    }
-
-    .feature p {
-      color: #667085;
-    }
-
-
-    /* =========================================================
-       MISSION
-    ========================================================= */
+    .feature h3 { margin-bottom: 12px; font-size: 20px; }
+    .feature p { color: #667085; }
 
     .mission {
       background: #111827;
       color: white;
-      padding: 75px 8%;
+      padding: 70px 8%;
       text-align: center;
     }
-
-    .mission h2 {
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
-
+    .mission h2 { font-size: 36px; margin-bottom: 20px; }
     .mission p {
       color: #cbd5e1;
       max-width: 850px;
@@ -289,24 +168,13 @@
       font-size: 18px;
     }
 
-
-    /* =========================================================
-       MEMBER AREA
-    ========================================================= */
-
-    #memberSection {
-      display: none;
-      padding-top: 60px;
-      padding-bottom: 25px;
-    }
-
+    #memberSection { display: none; padding-top: 55px; padding-bottom: 25px; }
     .member-shell {
       background: linear-gradient(135deg, #172033, #111827);
       color: white;
       border-radius: 18px;
       padding: 30px;
     }
-
     .member-header {
       display: flex;
       align-items: flex-start;
@@ -315,82 +183,69 @@
       flex-wrap: wrap;
       margin-bottom: 25px;
     }
-
-    .member-header h2 {
-      font-size: 28px;
-      margin-bottom: 5px;
-    }
-
-    .member-header p {
-      color: #cbd5e1;
-    }
-
+    .member-header h2 { font-size: 28px; margin-bottom: 5px; }
+    .member-header p { color: #cbd5e1; }
     .member-grid {
       display: grid;
-      grid-template-columns:
-        repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px,1fr));
       gap: 15px;
     }
-
     .member-card {
-      background: rgba(255, 255, 255, .07);
-      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
       padding: 20px;
       border-radius: 12px;
     }
+    .member-card h3 { font-size: 15px; color: #cbd5e1; margin-bottom: 8px; }
+    .member-number { font-size: 30px; font-weight: 800; }
+    .member-small { color: #cbd5e1; margin-top: 4px; font-size: 13px; }
 
-    .member-card h3 {
-      font-size: 15px;
-      color: #cbd5e1;
-      margin-bottom: 8px;
+    #savedJobsSection { display: none; }
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
     }
-
-    .member-number {
-      font-size: 30px;
-      font-weight: 800;
+    .workspace-header h2 { font-size: 32px; }
+    .workspace-header p { color: #667085; }
+    .workspace-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .workspace-button {
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 10px 16px;
+      background: white;
+      color: #14213d;
+      font-weight: 700;
+      cursor: pointer;
     }
-
-    .member-small {
-      color: #cbd5e1;
-      margin-top: 4px;
-      font-size: 13px;
-    }
-
-
-    /* =========================================================
-       JOB SEARCH
-    ========================================================= */
-
-    .search-heading {
-      margin-bottom: 8px;
-      font-size: 32px;
-    }
-
-    .search-description {
+    .workspace-button:hover { background: #f8fafc; }
+    .saved-empty {
+      background: white;
+      border: 1px dashed #cfd6e1;
+      border-radius: 14px;
+      padding: 40px 24px;
+      text-align: center;
       color: #667085;
-      margin-bottom: 28px;
     }
 
+    .search-heading { margin-bottom: 8px; font-size: 32px; }
+    .search-description { color: #667085; margin-bottom: 28px; }
     .search-panel {
       background: white;
       padding: 28px;
       border-radius: 16px;
       border: 1px solid #e3e7ef;
-      box-shadow:
-        0 8px 25px rgba(0, 0, 0, .04);
+      box-shadow: 0 8px 25px rgba(0,0,0,.04);
     }
-
     .filter-grid {
       display: grid;
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0,1fr));
       gap: 18px;
     }
-
-    .filter-field {
-      position: relative;
-    }
-
+    .filter-field { position: relative; }
     .filter-field label {
       display: block;
       font-size: 13px;
@@ -398,9 +253,7 @@
       margin-bottom: 6px;
       color: #344054;
     }
-
-    .filter-field input,
-    .filter-field select {
+    .filter-field input, .filter-field select {
       width: 100%;
       min-height: 48px;
       padding: 12px 13px;
@@ -410,24 +263,16 @@
       color: #14213d;
       font-size: 15px;
     }
-
-    .filter-field input:focus,
-    .filter-field select:focus {
+    .filter-field input:focus, .filter-field select:focus {
       outline: 2px solid #315ee8;
       outline-offset: 1px;
       border-color: #315ee8;
     }
-
     .filter-field select:disabled {
       background: #f2f4f7;
       color: #98a2b3;
       cursor: not-allowed;
     }
-
-
-    /* =========================================================
-       AUTOCOMPLETE
-    ========================================================= */
 
     .suggestions {
       display: none;
@@ -441,14 +286,9 @@
       background: white;
       border: 1px solid #d0d5dd;
       border-radius: 8px;
-      box-shadow:
-        0 12px 26px rgba(15, 23, 42, .14);
+      box-shadow: 0 12px 26px rgba(15,23,42,.14);
     }
-
-    .suggestions.open {
-      display: block;
-    }
-
+    .suggestions.open { display: block; }
     .suggestion-item {
       width: 100%;
       display: block;
@@ -461,28 +301,10 @@
       color: #14213d;
       cursor: pointer;
     }
+    .suggestion-item:last-child { border-bottom: 0; }
+    .suggestion-item:hover, .suggestion-item.active { background: #eef2ff; }
 
-    .suggestion-item:last-child {
-      border-bottom: 0;
-    }
-
-    .suggestion-item:hover,
-    .suggestion-item.active {
-      background: #eef2ff;
-    }
-
-
-    /* =========================================================
-       SEARCH OPTIONS
-    ========================================================= */
-
-    .search-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 25px;
-      margin-top: 22px;
-    }
-
+    .search-options { display: flex; flex-wrap: wrap; gap: 25px; margin-top: 22px; }
     .checkbox-option {
       display: flex;
       align-items: center;
@@ -490,59 +312,28 @@
       font-size: 14px;
       color: #344054;
     }
-
-    .checkbox-option input {
-      width: 17px;
-      height: 17px;
-    }
-
-    .search-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .search-button {
-      border: 1px solid #315ee8;
+    .checkbox-option input { width: 17px; height: 17px; }
+    .search-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .search-button, .reset-button {
       border-radius: 8px;
       padding: 13px 22px;
-      background: #315ee8;
-      color: white;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
     }
-
-    .search-button:hover {
-      background: #244bc5;
+    .search-button {
+      border: 1px solid #315ee8;
+      background: #315ee8;
+      color: white;
     }
-
+    .search-button:hover { background: #244bc5; }
     .reset-button {
       border: 1px solid #cfd6e1;
-      border-radius: 8px;
-      padding: 13px 22px;
       background: white;
       color: #14213d;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
     }
-
-    .reset-button:hover {
-      background: #f8fafc;
-    }
-
-    #jobSearchStatus {
-      margin-top: 28px;
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-
-
-    /* =========================================================
-       JOB CARDS
-    ========================================================= */
+    .reset-button:hover { background: #f8fafc; }
+    #jobSearchStatus { margin-top: 28px; margin-bottom: 15px; font-weight: 600; }
 
     .job-card {
       background: white;
@@ -552,57 +343,60 @@
       margin: 18px 0;
       text-align: left;
     }
-
-    .job-card h3 {
-      margin-bottom: 6px;
-      font-size: 21px;
+    .job-card h3 { margin-bottom: 6px; font-size: 21px; }
+    .job-meta { margin: 3px 0; color: #344054; }
+    .job-description { margin-top: 14px; color: #344054; }
+    .job-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
     }
-
-    .job-meta {
-      margin: 3px 0;
-      color: #344054;
-    }
-
-    .job-description {
-      margin-top: 14px;
-      color: #344054;
-    }
-
-    .view-job-button {
-      display: inline-block;
-      margin-top: 15px;
+    .view-job-button, .save-job-button, .remove-job-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
       padding: 10px 18px;
-      background: #315ee8;
-      color: white;
-      text-decoration: none;
       border-radius: 8px;
       font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
     }
-
-    .view-job-button:hover {
-      background: #244bc5;
+    .view-job-button {
+      background: #315ee8;
+      color: white;
+      border: 1px solid #315ee8;
     }
-
-
-    /* =========================================================
-       AUTH MODAL
-    ========================================================= */
+    .view-job-button:hover { background: #244bc5; }
+    .save-job-button {
+      background: white;
+      color: #315ee8;
+      border: 1px solid #315ee8;
+    }
+    .save-job-button:hover { background: #eef2ff; }
+    .save-job-button.saved { background: #eef2ff; color: #244bc5; }
+    .save-job-button:disabled { opacity: .6; cursor: wait; }
+    .remove-job-button {
+      background: white;
+      color: #b42318;
+      border: 1px solid #fda29b;
+    }
+    .remove-job-button:hover { background: #fef3f2; }
+    .save-hint { margin-top: 10px; color: #667085; font-size: 13px; }
 
     .modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 3000;
-      background: rgba(15, 23, 42, .72);
+      background: rgba(15,23,42,.72);
       padding: 25px;
       align-items: center;
       justify-content: center;
     }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
+    .modal-backdrop.open { display: flex; }
     .auth-modal {
       width: 100%;
       max-width: 470px;
@@ -610,12 +404,10 @@
       overflow-y: auto;
       background: white;
       border-radius: 18px;
-      box-shadow:
-        0 30px 80px rgba(0, 0, 0, .3);
+      box-shadow: 0 30px 80px rgba(0,0,0,.3);
       padding: 30px;
       position: relative;
     }
-
     .modal-close {
       position: absolute;
       right: 17px;
@@ -629,22 +421,9 @@
       font-size: 20px;
       cursor: pointer;
     }
-
-    .auth-brand {
-      margin-bottom: 20px;
-    }
-
-    .auth-brand strong {
-      display: block;
-      font-size: 22px;
-      color: #14213d;
-    }
-
-    .auth-brand span {
-      color: #667085;
-      font-size: 14px;
-    }
-
+    .auth-brand { margin-bottom: 20px; }
+    .auth-brand strong { display: block; font-size: 22px; color: #14213d; }
+    .auth-brand span { color: #667085; font-size: 14px; }
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -653,7 +432,6 @@
       overflow: hidden;
       margin-bottom: 22px;
     }
-
     .auth-tab {
       border: 0;
       background: white;
@@ -662,12 +440,7 @@
       cursor: pointer;
       color: #475467;
     }
-
-    .auth-tab.active {
-      background: #eef2ff;
-      color: #315ee8;
-    }
-
+    .auth-tab.active { background: #eef2ff; color: #315ee8; }
     .google-button {
       width: 100%;
       min-height: 48px;
@@ -683,17 +456,8 @@
       justify-content: center;
       gap: 10px;
     }
-
-    .google-button:hover {
-      background: #f8fafc;
-    }
-
-    .google-icon {
-      font-size: 19px;
-      font-weight: 900;
-      color: #4285f4;
-    }
-
+    .google-button:hover { background: #f8fafc; }
+    .google-icon { font-size: 19px; font-weight: 900; color: #4285f4; }
     .auth-divider {
       display: flex;
       align-items: center;
@@ -702,19 +466,13 @@
       font-size: 12px;
       margin: 19px 0;
     }
-
-    .auth-divider::before,
-    .auth-divider::after {
+    .auth-divider::before, .auth-divider::after {
       content: "";
       flex: 1;
       height: 1px;
       background: #e4e7ec;
     }
-
-    .auth-field {
-      margin-bottom: 15px;
-    }
-
+    .auth-field { margin-bottom: 15px; }
     .auth-field label {
       display: block;
       font-size: 13px;
@@ -722,7 +480,6 @@
       color: #344054;
       margin-bottom: 6px;
     }
-
     .auth-field input {
       width: 100%;
       padding: 12px 13px;
@@ -730,12 +487,7 @@
       border-radius: 8px;
       font-size: 15px;
     }
-
-    .auth-field input:focus {
-      outline: 2px solid #315ee8;
-      outline-offset: 1px;
-    }
-
+    .auth-field input:focus { outline: 2px solid #315ee8; outline-offset: 1px; }
     .auth-submit {
       width: 100%;
       min-height: 48px;
@@ -747,24 +499,9 @@
       font-weight: 700;
       cursor: pointer;
     }
-
-    .auth-submit:hover {
-      background: #244bc5;
-    }
-
-    .auth-submit:disabled,
-    .google-button:disabled {
-      opacity: .65;
-      cursor: wait;
-    }
-
-    .auth-link-row {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 14px;
-      color: #667085;
-    }
-
+    .auth-submit:hover { background: #244bc5; }
+    .auth-submit:disabled, .google-button:disabled { opacity: .65; cursor: wait; }
+    .auth-link-row { margin-top: 15px; text-align: center; font-size: 14px; color: #667085; }
     .link-button {
       border: 0;
       background: transparent;
@@ -772,7 +509,6 @@
       font-weight: 700;
       cursor: pointer;
     }
-
     .auth-message {
       display: none;
       margin-top: 16px;
@@ -780,47 +516,25 @@
       border-radius: 8px;
       font-size: 14px;
     }
-
     .auth-message.success {
       display: block;
       background: #ecfdf3;
       color: #067647;
       border: 1px solid #abefc6;
     }
-
     .auth-message.error {
       display: block;
       background: #fef3f2;
       color: #b42318;
       border: 1px solid #fecdca;
     }
-
     .auth-message.info {
       display: block;
       background: #eff8ff;
       color: #175cd3;
       border: 1px solid #b2ddff;
     }
-
-    .password-help {
-      font-size: 12px;
-      color: #667085;
-      margin-top: 4px;
-    }
-
-
-    /* =========================================================
-       RESET PASSWORD MODAL
-    ========================================================= */
-
-    #resetPasswordModal .auth-modal {
-      max-width: 430px;
-    }
-
-
-    /* =========================================================
-       TOAST
-    ========================================================= */
+    .password-help { font-size: 12px; color: #667085; margin-top: 4px; }
 
     #toast {
       visibility: hidden;
@@ -834,4355 +548,965 @@
       color: white;
       padding: 13px 17px;
       border-radius: 9px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
       transition: opacity .2s ease;
     }
+    #toast.show { visibility: visible; opacity: 1; }
 
-    #toast.show {
-      visibility: visible;
-      opacity: 1;
+    footer { text-align: center; padding: 35px; color: #7b8495; font-size: 14px; }
+
+    @media(max-width: 1100px) {
+      .filter-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      header { align-items: flex-start; }
     }
-
-
-    /* =========================================================
-       FOOTER
-    ========================================================= */
-
-    footer {
-      text-align: center;
-      padding: 35px;
-      color: #7b8495;
-      font-size: 14px;
-    }
-
-
-    /* =========================================================
-       RESPONSIVE
-    ========================================================= */
-
-    @media(max-width: 1050px) {
-
-      .filter-grid {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
-      }
-
-    }
-
     @media(max-width: 760px) {
-
-      header {
-        padding: 14px 5%;
-        align-items: flex-start;
-      }
-
-      .header-left {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .header-right {
-        justify-content: flex-end;
-      }
-
-      .hero h1 {
-        font-size: 38px;
-      }
-
-      .hero {
-        padding: 65px 6%;
-      }
-
-      .section {
-        padding: 50px 6%;
-      }
-
-      .filter-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .search-panel {
-        padding: 20px;
-      }
-
-      .member-shell {
-        padding: 22px;
-      }
-
-      .header-button {
-        padding: 8px 11px;
-      }
-
+      header { padding: 14px 5%; }
+      .header-left { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .hero h1 { font-size: 38px; }
+      .hero { padding: 65px 6%; }
+      .section { padding: 50px 6%; }
+      .filter-grid { grid-template-columns: 1fr; }
+      .search-panel { padding: 20px; }
+      .member-shell { padding: 22px; }
+      .header-button { padding: 8px 11px; }
     }
-
     @media(max-width: 540px) {
-
-      header {
-        position: static;
-        flex-direction: column;
-      }
-
-      .header-right,
-      #signedOutNav,
-      #signedInNav {
-        width: 100%;
-      }
-
-      #signedOutNav .header-button,
-      #signedInNav .header-button {
-        flex: 1;
-      }
-
-      .user-pill {
-        width: 100%;
-      }
-
-      .auth-modal {
-        padding: 24px 20px;
-      }
-
+      header { position: static; flex-direction: column; }
+      .header-right, #signedOutNav, #signedInNav { width: 100%; }
+      #signedOutNav .header-button, #signedInNav .header-button { flex: 1; }
+      .user-pill { width: 100%; }
+      .auth-modal { padding: 24px 20px; }
     }
-
   </style>
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-  </script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
-
 <body>
-
-
-  <!-- =========================================================
-       HEADER
-  ========================================================== -->
-
   <header>
-
     <div class="header-left">
-
-      <div class="logo">
-        CareerPilot AI
-      </div>
-
-      <div class="beta-badge">
-        Private Beta
-      </div>
-
+      <div class="logo">CareerPilot AI</div>
+      <div class="beta-badge">Private Beta</div>
     </div>
-
 
     <div class="header-right">
-
-
-      <!-- LOGGED OUT -->
-
       <div id="signedOutNav">
-
-        <button
-          type="button"
-          class="header-button"
-          id="headerSignIn"
-        >
-          Sign In
-        </button>
-
-        <button
-          type="button"
-          class="header-button primary"
-          id="headerCreateAccount"
-        >
-          Create Account
-        </button>
-
+        <button type="button" class="header-button" id="headerSignIn">Sign In</button>
+        <button type="button" class="header-button primary" id="headerCreateAccount">Create Account</button>
       </div>
-
-
-      <!-- LOGGED IN -->
 
       <div id="signedInNav">
-
-        <div
-          class="user-pill"
-          id="userPill"
-        >
-
-          <div
-            class="user-avatar"
-            id="userAvatar"
-          >
-            U
-          </div>
-
-          <span id="headerUserName">
-            User
-          </span>
-
+        <div class="user-pill" id="userPill">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <span id="headerUserName">User</span>
         </div>
-
-        <button
-          type="button"
-          class="header-button"
-          id="myCareerPilotButton"
-        >
-          My CareerPilot
-        </button>
-
-        <button
-          type="button"
-          class="header-button"
-          id="savedJobsButton"
-        >
-          Saved Jobs
-        </button>
-
-        <button
-          type="button"
-          class="header-button"
-          id="applicationsButton"
-        >
-          Applications
-        </button>
-
-        <button
-          type="button"
-          class="header-button"
-          id="profileButton"
-        >
-          Profile
-        </button>
-
-        <button
-          type="button"
-          class="header-button"
-          id="signOutButton"
-        >
-          Sign Out
-        </button>
-
+        <button type="button" class="header-button" id="myCareerPilotButton">My CareerPilot</button>
+        <button type="button" class="header-button" id="savedJobsButton">Saved Jobs</button>
+        <button type="button" class="header-button" id="applicationsButton">Applications</button>
+        <button type="button" class="header-button" id="profileButton">Profile</button>
+        <button type="button" class="header-button" id="signOutButton">Sign Out</button>
       </div>
-
     </div>
-
   </header>
 
-
-  <!-- =========================================================
-       HERO
-  ========================================================== -->
-
   <section class="hero">
-
-    <h1>
-      A smarter way to search, match,
-      and apply for jobs.
-    </h1>
-
+    <h1>A smarter way to search, match, and apply for jobs.</h1>
     <p>
-      CareerPilot AI brings job discovery, intelligent
-      matching, career profiles, resume intelligence,
-      application assistance, and job tracking together
-      in one streamlined experience.
+      CareerPilot AI brings job discovery, intelligent matching, career profiles,
+      resume intelligence, application assistance, and job tracking together in one streamlined experience.
     </p>
-
-
     <div class="hero-actions">
-
-      <button
-        type="button"
-        class="hero-button primary"
-        id="heroSearchJobs"
-      >
-        Search Jobs
-      </button>
-
-      <button
-        type="button"
-        class="hero-button secondary"
-        id="heroAccountButton"
-      >
-        Create Free Account
-      </button>
-
+      <button type="button" class="hero-button primary" id="heroSearchJobs">Search Jobs</button>
+      <button type="button" class="hero-button secondary" id="heroAccountButton">Create Free Account</button>
     </div>
-
-
-    <div class="status">
-      Private Beta Development
-    </div>
-
+    <div class="status">Private Beta Development</div>
   </section>
-
-
-  <!-- =========================================================
-       FEATURES
-  ========================================================== -->
 
   <section class="section">
-
-    <h2 class="section-title">
-      One platform. A better job search.
-    </h2>
-
+    <h2 class="section-title">One platform. A better job search.</h2>
     <p class="section-subtitle">
-      CareerPilot AI is being designed for job seekers
-      across industries, career levels, and locations.
+      CareerPilot AI is being designed for job seekers across industries, career levels, and locations.
     </p>
-
-
     <div class="features">
-
-      <div class="feature">
-
-        <h3>
-          Unified Job Search
-        </h3>
-
-        <p>
-          Search relevant opportunities from multiple
-          connected job sources through one centralized
-          Job Hub.
-        </p>
-
-      </div>
-
-
-      <div class="feature">
-
-        <h3>
-          AI Job Matching
-        </h3>
-
-        <p>
-          Compare job requirements against your verified
-          experience and skills to understand why an
-          opportunity may be a strong match.
-        </p>
-
-      </div>
-
-
-      <div class="feature">
-
-        <h3>
-          Resume Intelligence
-        </h3>
-
-        <p>
-          Turn your resume into a structured career
-          profile that can support matching, tailoring,
-          and future application assistance.
-        </p>
-
-      </div>
-
-
-      <div class="feature">
-
-        <h3>
-          ATS Optimization
-        </h3>
-
-        <p>
-          Analyze job descriptions and tailor resumes
-          using verified candidate experience without
-          inventing qualifications.
-        </p>
-
-      </div>
-
-
-      <div class="feature">
-
-        <h3>
-          Powerful Filtering
-        </h3>
-
-        <p>
-          Search by title, company, industry, location,
-          work setting, salary, posting age, and
-          eventually AI match score.
-        </p>
-
-      </div>
-
-
-      <div class="feature">
-
-        <h3>
-          Application Assistance
-        </h3>
-
-        <p>
-          CareerPilot is being designed to reduce
-          repetitive application entry and support
-          future CareerPilot Quick Apply integrations.
-        </p>
-
-      </div>
-
+      <div class="feature"><h3>Unified Job Search</h3><p>Search relevant opportunities from multiple connected job sources through one centralized Job Hub.</p></div>
+      <div class="feature"><h3>AI Job Matching</h3><p>Compare job requirements against your verified experience and skills to understand why an opportunity may be a strong match.</p></div>
+      <div class="feature"><h3>Resume Intelligence</h3><p>Turn your resume into a structured career profile that can support matching, tailoring, and future application assistance.</p></div>
+      <div class="feature"><h3>ATS Optimization</h3><p>Analyze job descriptions and tailor resumes using verified candidate experience without inventing qualifications.</p></div>
+      <div class="feature"><h3>Powerful Filtering</h3><p>Search by title, company, industry, location, work setting, salary, posting age, and eventually AI match score.</p></div>
+      <div class="feature"><h3>Application Assistance</h3><p>Reduce repetitive application entry and support future CareerPilot Quick Apply integrations.</p></div>
     </div>
-
   </section>
-
-
-  <!-- =========================================================
-       MISSION
-  ========================================================== -->
 
   <section class="mission">
-
-    <h2>
-      Built to give job seekers their time back.
-    </h2>
-
-    <p>
-      Discover relevant jobs, understand your match,
-      organize applications, prepare stronger resumes,
-      and spend less time repeatedly entering the same
-      information.
-    </p>
-
+    <h2>Built to give job seekers their time back.</h2>
+    <p>Discover relevant jobs, understand your match, organize applications, prepare stronger resumes, and spend less time repeatedly entering the same information.</p>
   </section>
 
-
-  <!-- =========================================================
-       MEMBER DASHBOARD
-  ========================================================== -->
-
-  <section
-    class="section"
-    id="memberSection"
-  >
-
+  <section class="section" id="memberSection">
     <div class="member-shell">
-
       <div class="member-header">
-
         <div>
-
-          <h2 id="memberWelcome">
-            My CareerPilot
-          </h2>
-
-          <p>
-            Your personal career workspace is connected
-            to your CareerPilot account.
-          </p>
-
+          <h2 id="memberWelcome">My CareerPilot</h2>
+          <p>Your personal career workspace is connected to your CareerPilot account.</p>
         </div>
-
       </div>
-
-
       <div class="member-grid">
-
-        <div class="member-card">
-
-          <h3>
-            Saved Jobs
-          </h3>
-
-          <div
-            class="member-number"
-            id="savedJobsCount"
-          >
-            0
-          </div>
-
-          <div class="member-small">
-            Jobs saved to your account
-          </div>
-
-        </div>
-
-
-        <div class="member-card">
-
-          <h3>
-            Applications
-          </h3>
-
-          <div
-            class="member-number"
-            id="applicationsCount"
-          >
-            0
-          </div>
-
-          <div class="member-small">
-            Applications being tracked
-          </div>
-
-        </div>
-
-
-        <div class="member-card">
-
-          <h3>
-            Job Matches
-          </h3>
-
-          <div
-            class="member-number"
-            id="jobMatchesCount"
-          >
-            0
-          </div>
-
-          <div class="member-small">
-            AI matching will be connected next
-          </div>
-
-        </div>
-
-
-        <div class="member-card">
-
-          <h3>
-            Career Profile
-          </h3>
-
-          <div
-            class="member-number"
-            id="profileStatus"
-            style="font-size: 18px;"
-          >
-            Getting started
-          </div>
-
-          <div class="member-small">
-            Resume and profile tools coming next
-          </div>
-
-        </div>
-
+        <div class="member-card"><h3>Saved Jobs</h3><div class="member-number" id="savedJobsCount">0</div><div class="member-small">Jobs saved to your account</div></div>
+        <div class="member-card"><h3>Applications</h3><div class="member-number" id="applicationsCount">0</div><div class="member-small">Applications being tracked</div></div>
+        <div class="member-card"><h3>Job Matches</h3><div class="member-number" id="jobMatchesCount">0</div><div class="member-small">AI matching will be connected next</div></div>
+        <div class="member-card"><h3>Career Profile</h3><div class="member-number" id="profileStatus" style="font-size:18px;">Getting started</div><div class="member-small">Resume and profile tools are coming next</div></div>
       </div>
-
     </div>
-
   </section>
 
+  <section class="section" id="savedJobsSection">
+    <div class="workspace-header">
+      <div>
+        <h2>Saved Jobs</h2>
+        <p>Your bookmarked opportunities are saved to your CareerPilot account.</p>
+      </div>
+      <div class="workspace-actions">
+        <button type="button" class="workspace-button" id="backToSearchButton">Back to Job Search</button>
+      </div>
+    </div>
+    <p id="savedJobsStatus"></p>
+    <div id="savedJobsResults"></div>
+  </section>
 
-  <!-- =========================================================
-       JOB SEARCH
-  ========================================================== -->
-
-  <section
-    class="section"
-    id="job-search"
-  >
-
-    <h2 class="search-heading">
-      Search Current Jobs
-    </h2>
-
-    <p class="search-description">
-      Search current opportunities collected from
-      CareerPilot's connected job sources.
-    </p>
-
+  <section class="section" id="job-search">
+    <h2 class="search-heading">Search Current Jobs</h2>
+    <p class="search-description">Search current opportunities collected from CareerPilot's connected job sources.</p>
 
     <div class="search-panel">
-
       <form id="jobSearchForm">
-
-
         <div class="filter-grid">
-
-
-          <!-- TITLE -->
-
           <div class="filter-field">
-
-            <label for="jobKeyword">
-              Title / keyword
-            </label>
-
-            <input
-              type="text"
-              id="jobKeyword"
-              placeholder="e.g. Revenue Cycle"
-              autocomplete="off"
-            >
-
-            <div
-              id="jobKeywordSuggestions"
-              class="suggestions">
-            </div>
-
+            <label for="jobKeyword">Title / keyword</label>
+            <input type="text" id="jobKeyword" placeholder="e.g. Revenue Cycle" autocomplete="off">
+            <div id="jobKeywordSuggestions" class="suggestions"></div>
           </div>
-
-
-          <!-- COMPANY -->
-
           <div class="filter-field">
-
-            <label for="jobCompany">
-              Company
-            </label>
-
-            <input
-              type="text"
-              id="jobCompany"
-              placeholder="e.g. AdventHealth"
-              autocomplete="off"
-            >
-
-            <div
-              id="jobCompanySuggestions"
-              class="suggestions">
-            </div>
-
+            <label for="jobCompany">Company</label>
+            <input type="text" id="jobCompany" placeholder="e.g. AdventHealth" autocomplete="off">
+            <div id="jobCompanySuggestions" class="suggestions"></div>
           </div>
-
-
-          <!-- POSTED -->
-
           <div class="filter-field">
-
-            <label for="jobPosted">
-              Posted
-            </label>
-
+            <label for="jobPosted">Posted</label>
             <select id="jobPosted">
-
-              <option value="">
-                Any time
-              </option>
-
-              <option value="1">
-                Last 24 hours
-              </option>
-
-              <option value="3">
-                Last 3 days
-              </option>
-
-              <option
-                value="7"
-                selected
-              >
-                Last 7 days
-              </option>
-
-              <option value="14">
-                Last 14 days
-              </option>
-
-              <option value="30">
-                Last 30 days
-              </option>
-
+              <option value="">Any time</option>
+              <option value="1">Last 24 hours</option>
+              <option value="3">Last 3 days</option>
+              <option value="7" selected>Last 7 days</option>
+              <option value="14">Last 14 days</option>
+              <option value="30">Last 30 days</option>
             </select>
-
           </div>
-
-
-          <!-- WORK SETTING -->
-
           <div class="filter-field">
-
-            <label for="jobWorkSetting">
-              Work setting
-            </label>
-
+            <label for="jobWorkSetting">Work setting</label>
             <select id="jobWorkSetting">
-
-              <option value="">
-                Any work setting
-              </option>
-
-              <option value="remote-hybrid">
-                Remote + Hybrid
-              </option>
-
-              <option value="remote">
-                Remote
-              </option>
-
-              <option value="hybrid">
-                Hybrid
-              </option>
-
-              <option value="onsite">
-                On-site
-              </option>
-
+              <option value="">Any work setting</option>
+              <option value="remote-hybrid">Remote + Hybrid</option>
+              <option value="remote">Remote</option>
+              <option value="hybrid">Hybrid</option>
+              <option value="onsite">On-site</option>
             </select>
-
           </div>
-
-
-          <!-- SALARY -->
-
           <div class="filter-field">
-
-            <label for="jobMinimumSalary">
-              Minimum salary
-            </label>
-
+            <label for="jobMinimumSalary">Minimum salary</label>
             <select id="jobMinimumSalary">
-
-              <option value="">
-                Any salary
-              </option>
-
-              <option value="50000">
-                $50,000+
-              </option>
-
-              <option value="75000">
-                $75,000+
-              </option>
-
-              <option value="90000">
-                $90,000+
-              </option>
-
-              <option value="100000">
-                $100,000+
-              </option>
-
-              <option value="125000">
-                $125,000+
-              </option>
-
-              <option value="150000">
-                $150,000+
-              </option>
-
-              <option value="175000">
-                $175,000+
-              </option>
-
-              <option value="200000">
-                $200,000+
-              </option>
-
+              <option value="">Any salary</option>
+              <option value="50000">$50,000+</option>
+              <option value="75000">$75,000+</option>
+              <option value="90000">$90,000+</option>
+              <option value="100000">$100,000+</option>
+              <option value="125000">$125,000+</option>
+              <option value="150000">$150,000+</option>
+              <option value="175000">$175,000+</option>
+              <option value="200000">$200,000+</option>
             </select>
-
           </div>
-
-
-          <!-- MATCH -->
-
           <div class="filter-field">
-
-            <label for="jobMinimumMatch">
-              Minimum match
-            </label>
-
-            <select
-              id="jobMinimumMatch"
-              disabled
-              title="Available when CareerPilot AI matching is enabled"
-            >
-
-              <option>
-                Coming with AI matching
-              </option>
-
-            </select>
-
+            <label for="jobMinimumMatch">Minimum match</label>
+            <select id="jobMinimumMatch" disabled title="Available when CareerPilot AI matching is enabled"><option>Coming with AI matching</option></select>
           </div>
-
-
-          <!-- INDUSTRY -->
-
           <div class="filter-field">
-
-            <label for="jobIndustry">
-              Industry
-            </label>
-
-            <input
-              type="text"
-              id="jobIndustry"
-              placeholder="e.g. Healthcare"
-              autocomplete="off"
-            >
-
-            <div
-              id="jobIndustrySuggestions"
-              class="suggestions">
-            </div>
-
+            <label for="jobIndustry">Industry</label>
+            <input type="text" id="jobIndustry" placeholder="e.g. Healthcare" autocomplete="off">
+            <div id="jobIndustrySuggestions" class="suggestions"></div>
           </div>
-
-
-          <!-- LOCATION -->
-
           <div class="filter-field">
-
-            <label for="jobLocation">
-              Location
-            </label>
-
-            <input
-              type="text"
-              id="jobLocation"
-              placeholder="e.g. Orlando, Florida"
-              autocomplete="off"
-            >
-
-            <div
-              id="jobLocationSuggestions"
-              class="suggestions">
-            </div>
-
+            <label for="jobLocation">Location</label>
+            <input type="text" id="jobLocation" placeholder="e.g. Orlando, Florida" autocomplete="off">
+            <div id="jobLocationSuggestions" class="suggestions"></div>
           </div>
-
-
-          <!-- DISTANCE -->
-
           <div class="filter-field">
-
-            <label for="jobDistance">
-              Distance
-            </label>
-
-            <select
-              id="jobDistance"
-              disabled
-            >
-
-              <option>
-                Coming soon
-              </option>
-
-            </select>
-
+            <label for="jobDistance">Distance</label>
+            <select id="jobDistance" disabled><option>Coming soon</option></select>
           </div>
-
         </div>
-
 
         <div class="search-options">
-
-          <label class="checkbox-option">
-
-            <input
-              type="checkbox"
-              id="includeSalaryUnknown"
-              checked
-            >
-
-            Include jobs with salary not listed
-
-          </label>
-
-
-          <label class="checkbox-option">
-
-            <input
-              type="checkbox"
-              id="includeWorkSettingUnknown"
-              checked
-            >
-
-            Include jobs where work setting is unclear
-
-          </label>
-
+          <label class="checkbox-option"><input type="checkbox" id="includeSalaryUnknown" checked>Include jobs with salary not listed</label>
+          <label class="checkbox-option"><input type="checkbox" id="includeWorkSettingUnknown" checked>Include jobs where work setting is unclear</label>
         </div>
-
 
         <div class="search-actions">
-
-          <button
-            type="submit"
-            class="search-button"
-          >
-            Search Current Jobs
-          </button>
-
-
-          <button
-            type="button"
-            id="resetFiltersButton"
-            class="reset-button"
-          >
-            Reset Filters
-          </button>
-
+          <button type="submit" class="search-button">Search Current Jobs</button>
+          <button type="button" id="resetFiltersButton" class="reset-button">Reset Filters</button>
         </div>
-
       </form>
 
-
-      <p id="jobSearchStatus">
-        Loading current jobs...
-      </p>
-
-
-      <div id="jobResults">
-      </div>
-
+      <p id="jobSearchStatus">Loading current jobs...</p>
+      <div id="jobResults"></div>
     </div>
-
   </section>
 
-
-  <!-- =========================================================
-       AUTH MODAL
-  ========================================================== -->
-
-  <div
-    class="modal-backdrop"
-    id="authModal"
-    role="dialog"
-    aria-modal="true"
-  >
-
+  <div class="modal-backdrop" id="authModal" role="dialog" aria-modal="true">
     <div class="auth-modal">
-
-      <button
-        type="button"
-        class="modal-close"
-        id="closeAuthModal"
-        aria-label="Close"
-      >
-        ×
-      </button>
-
-
-      <div class="auth-brand">
-
-        <strong>
-          CareerPilot AI
-        </strong>
-
-        <span id="authSubtitle">
-          Sign in to your CareerPilot account.
-        </span>
-
-      </div>
-
-
+      <button type="button" class="modal-close" id="closeAuthModal" aria-label="Close">×</button>
+      <div class="auth-brand"><strong>CareerPilot AI</strong><span id="authSubtitle">Sign in to your CareerPilot account.</span></div>
       <div class="auth-tabs">
-
-        <button
-          type="button"
-          class="auth-tab active"
-          id="signInTab"
-        >
-          Sign In
-        </button>
-
-        <button
-          type="button"
-          class="auth-tab"
-          id="createAccountTab"
-        >
-          Create Account
-        </button>
-
+        <button type="button" class="auth-tab active" id="signInTab">Sign In</button>
+        <button type="button" class="auth-tab" id="createAccountTab">Create Account</button>
       </div>
-
-
-      <button
-        type="button"
-        class="google-button"
-        id="googleAuthButton"
-      >
-
-        <span class="google-icon">
-          G
-        </span>
-
-        Continue with Google
-
-      </button>
-
-
-      <div class="auth-divider">
-        OR CONTINUE WITH EMAIL
-      </div>
-
-
+      <button type="button" class="google-button" id="googleAuthButton"><span class="google-icon">G</span>Continue with Google</button>
+      <div class="auth-divider">OR CONTINUE WITH EMAIL</div>
       <form id="authForm">
-
-
-        <div
-          class="auth-field"
-          id="fullNameField"
-          style="display: none;"
-        >
-
-          <label for="authFullName">
-            Full name
-          </label>
-
-          <input
-            type="text"
-            id="authFullName"
-            autocomplete="name"
-            placeholder="Your full name"
-          >
-
+        <div class="auth-field" id="fullNameField" style="display:none;">
+          <label for="authFullName">Full name</label>
+          <input type="text" id="authFullName" autocomplete="name" placeholder="Your full name">
         </div>
-
-
         <div class="auth-field">
-
-          <label for="authEmail">
-            Email address
-          </label>
-
-          <input
-            type="email"
-            id="authEmail"
-            required
-            autocomplete="email"
-            placeholder="you@example.com"
-          >
-
+          <label for="authEmail">Email address</label>
+          <input type="email" id="authEmail" required autocomplete="email" placeholder="you@example.com">
         </div>
-
-
         <div class="auth-field">
-
-          <label for="authPassword">
-            Password
-          </label>
-
-          <input
-            type="password"
-            id="authPassword"
-            required
-            autocomplete="current-password"
-            placeholder="Enter your password"
-          >
-
-          <div
-            class="password-help"
-            id="passwordHelp"
-            style="display: none;"
-          >
-            Use at least 8 characters.
-          </div>
-
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" required autocomplete="current-password" placeholder="Enter your password">
+          <div class="password-help" id="passwordHelp" style="display:none;">Use at least 8 characters.</div>
         </div>
-
-
-        <button
-          type="submit"
-          class="auth-submit"
-          id="authSubmitButton"
-        >
-          Sign In
-        </button>
-
+        <button type="submit" class="auth-submit" id="authSubmitButton">Sign In</button>
       </form>
-
-
-      <div
-        class="auth-link-row"
-        id="forgotPasswordRow"
-      >
-
-        <button
-          type="button"
-          class="link-button"
-          id="forgotPasswordButton"
-        >
-          Forgot your password?
-        </button>
-
-      </div>
-
-
-      <div
-        class="auth-message"
-        id="authMessage"
-      >
-      </div>
-
+      <div class="auth-link-row" id="forgotPasswordRow"><button type="button" class="link-button" id="forgotPasswordButton">Forgot your password?</button></div>
+      <div class="auth-message" id="authMessage"></div>
     </div>
-
   </div>
 
-
-  <!-- =========================================================
-       FORGOT PASSWORD MODAL
-  ========================================================== -->
-
-  <div
-    class="modal-backdrop"
-    id="forgotPasswordModal"
-    role="dialog"
-    aria-modal="true"
-  >
-
+  <div class="modal-backdrop" id="forgotPasswordModal" role="dialog" aria-modal="true">
     <div class="auth-modal">
-
-      <button
-        type="button"
-        class="modal-close"
-        id="closeForgotModal"
-        aria-label="Close"
-      >
-        ×
-      </button>
-
-
-      <div class="auth-brand">
-
-        <strong>
-          Reset your password
-        </strong>
-
-        <span>
-          Enter your email and we'll send you a
-          secure password reset link.
-        </span>
-
-      </div>
-
-
+      <button type="button" class="modal-close" id="closeForgotModal" aria-label="Close">×</button>
+      <div class="auth-brand"><strong>Reset your password</strong><span>Enter your email and we'll send you a secure password reset link.</span></div>
       <form id="forgotPasswordForm">
-
         <div class="auth-field">
-
-          <label for="forgotEmail">
-            Email address
-          </label>
-
-          <input
-            type="email"
-            id="forgotEmail"
-            required
-            autocomplete="email"
-            placeholder="you@example.com"
-          >
-
+          <label for="forgotEmail">Email address</label>
+          <input type="email" id="forgotEmail" required autocomplete="email" placeholder="you@example.com">
         </div>
-
-
-        <button
-          type="submit"
-          class="auth-submit"
-          id="forgotSubmitButton"
-        >
-          Send Reset Link
-        </button>
-
+        <button type="submit" class="auth-submit" id="forgotSubmitButton">Send Reset Link</button>
       </form>
-
-
-      <div
-        class="auth-message"
-        id="forgotMessage"
-      >
-      </div>
-
+      <div class="auth-message" id="forgotMessage"></div>
     </div>
-
   </div>
 
-
-  <!-- =========================================================
-       NEW PASSWORD MODAL
-  ========================================================== -->
-
-  <div
-    class="modal-backdrop"
-    id="resetPasswordModal"
-    role="dialog"
-    aria-modal="true"
-  >
-
+  <div class="modal-backdrop" id="resetPasswordModal" role="dialog" aria-modal="true">
     <div class="auth-modal">
-
-      <div class="auth-brand">
-
-        <strong>
-          Choose a new password
-        </strong>
-
-        <span>
-          Enter the new password you'd like to use
-          for CareerPilot.
-        </span>
-
-      </div>
-
-
+      <div class="auth-brand"><strong>Choose a new password</strong><span>Enter the new password you'd like to use for CareerPilot.</span></div>
       <form id="newPasswordForm">
-
-        <div class="auth-field">
-
-          <label for="newPassword">
-            New password
-          </label>
-
-          <input
-            type="password"
-            id="newPassword"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          >
-
-        </div>
-
-
-        <div class="auth-field">
-
-          <label for="confirmNewPassword">
-            Confirm new password
-          </label>
-
-          <input
-            type="password"
-            id="confirmNewPassword"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          >
-
-        </div>
-
-
-        <button
-          type="submit"
-          class="auth-submit"
-          id="newPasswordSubmit"
-        >
-          Update Password
-        </button>
-
+        <div class="auth-field"><label for="newPassword">New password</label><input type="password" id="newPassword" required minlength="8" autocomplete="new-password"></div>
+        <div class="auth-field"><label for="confirmNewPassword">Confirm new password</label><input type="password" id="confirmNewPassword" required minlength="8" autocomplete="new-password"></div>
+        <button type="submit" class="auth-submit" id="newPasswordSubmit">Update Password</button>
       </form>
-
-
-      <div
-        class="auth-message"
-        id="newPasswordMessage"
-      >
-      </div>
-
+      <div class="auth-message" id="newPasswordMessage"></div>
     </div>
-
   </div>
 
-
-  <!-- =========================================================
-       TOAST
-  ========================================================== -->
-
-  <div id="toast">
-  </div>
-
-
-  <!-- =========================================================
-       FOOTER
-  ========================================================== -->
-
-  <footer>
-    © 2026 CareerPilot AI.
-    Currently in development.
-  </footer>
-
-
-  <!-- =========================================================
-       JAVASCRIPT
-  ========================================================== -->
+  <div id="toast"></div>
+  <footer>© 2026 CareerPilot AI. Currently in development.</footer>
 
   <script>
-
-
-    /* =========================================================
-       SUPABASE
-    ========================================================= */
-
-    const SUPABASE_URL =
-      "https://jebakbovivznzcmtyvcc.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
-
-    const SITE_URL =
-      "https://chdw265.github.io/careerpilot-ai/";
-
-    const db =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-
-    /* =========================================================
-       HELPERS
-    ========================================================= */
-
-    function debounce(
-      func,
-      delay = 250
-    ) {
-
-      let timer;
-
-      return (...args) => {
-
-        clearTimeout(timer);
-
-        timer = setTimeout(
-          () => func(...args),
-          delay
-        );
-
-      };
-
-    }
-
-
-    function showToast(
-      message
-    ) {
-
-      const toast =
-        document.getElementById(
-          "toast"
-        );
-
-      toast.textContent =
-        message;
-
-      toast.classList.add(
-        "show"
-      );
-
-      setTimeout(
-        () => {
-          toast.classList.remove(
-            "show"
-          );
-        },
-        3500
-      );
-
-    }
-
-
-    function setMessage(
-      element,
-      message,
-      type
-    ) {
-
-      element.textContent =
-        message;
-
-      element.className =
-        `auth-message ${type}`;
-
-    }
-
-
-    function clearMessage(
-      element
-    ) {
-
-      element.textContent =
-        "";
-
-      element.className =
-        "auth-message";
-
-    }
-
-
-    function openModal(
-      element
-    ) {
-
-      element.classList.add(
-        "open"
-      );
-
-      document.body.classList.add(
-        "modal-open"
-      );
-
-    }
-
-
-    function closeModal(
-      element
-    ) {
-
-      element.classList.remove(
-        "open"
-      );
-
-      const anyModalOpen =
-        document.querySelector(
-          ".modal-backdrop.open"
-        );
-
-      if (!anyModalOpen) {
-
-        document.body.classList.remove(
-          "modal-open"
-        );
-
-      }
-
-    }
-
-
-    function getUserDisplayName(
-      user
-    ) {
-
-      if (!user) {
-        return "User";
-      }
-
-      const metadata =
-        user.user_metadata || {};
-
-      return (
-        metadata.full_name ||
-        metadata.name ||
-        metadata.first_name ||
-        user.email?.split("@")[0] ||
-        "User"
-      );
-
-    }
-
-
-    function getInitials(
-      value
-    ) {
-
-      if (!value) {
-        return "U";
-      }
-
-      const parts =
-        value
-          .trim()
-          .split(/\s+/)
-          .filter(Boolean);
-
-      if (!parts.length) {
-        return "U";
-      }
-
-      if (parts.length === 1) {
-
-        return parts[0]
-          .substring(0, 1)
-          .toUpperCase();
-
-      }
-
-      return (
-        parts[0][0] +
-        parts[parts.length - 1][0]
-      ).toUpperCase();
-
-    }
-
-
-    /* =========================================================
-       AUTH UI STATE
-    ========================================================= */
+    const SUPABASE_URL = "https://jebakbovivznzcmtyvcc.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
+    const SITE_URL = "https://chdw265.github.io/careerpilot-ai/";
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentSession = null;
     let authMode = "signin";
+    let savedJobIds = new Set();
+    let pendingSaveJobId = null;
 
-
-    const signedOutNav =
-      document.getElementById(
-        "signedOutNav"
-      );
-
-    const signedInNav =
-      document.getElementById(
-        "signedInNav"
-      );
-
-    const userPill =
-      document.getElementById(
-        "userPill"
-      );
-
-    const headerUserName =
-      document.getElementById(
-        "headerUserName"
-      );
-
-    const userAvatar =
-      document.getElementById(
-        "userAvatar"
-      );
-
-    const heroAccountButton =
-      document.getElementById(
-        "heroAccountButton"
-      );
-
-    const memberSection =
-      document.getElementById(
-        "memberSection"
-      );
-
-    const memberWelcome =
-      document.getElementById(
-        "memberWelcome"
-      );
-
-
-    function updateAuthUI(
-      session
-    ) {
-
-      currentSession =
-        session;
-
-      const user =
-        session?.user || null;
-
-
-      if (user) {
-
-        const displayName =
-          getUserDisplayName(
-            user
-          );
-
-        signedOutNav.style.display =
-          "none";
-
-        signedInNav.style.display =
-          "flex";
-
-        userPill.style.display =
-          "flex";
-
-        headerUserName.textContent =
-          displayName;
-
-        userAvatar.textContent =
-          getInitials(
-            displayName
-          );
-
-        heroAccountButton.textContent =
-          "My CareerPilot";
-
-        memberWelcome.textContent =
-          `Welcome, ${displayName}`;
-
-        memberSection.style.display =
-          "block";
-
-        loadMemberDashboard(
-          user.id
-        );
-
-      }
-
-      else {
-
-        signedOutNav.style.display =
-          "flex";
-
-        signedInNav.style.display =
-          "none";
-
-        userPill.style.display =
-          "none";
-
-        heroAccountButton.textContent =
-          "Create Free Account";
-
-        memberSection.style.display =
-          "none";
-
-        document.getElementById(
-          "savedJobsCount"
-        ).textContent = "0";
-
-        document.getElementById(
-          "applicationsCount"
-        ).textContent = "0";
-
-        document.getElementById(
-          "jobMatchesCount"
-        ).textContent = "0";
-
-      }
-
+    function debounce(func, delay = 250) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+      };
     }
 
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3500);
+    }
 
-    async function loadMemberDashboard(
-      userId
-    ) {
+    function setMessage(element, message, type) {
+      element.textContent = message;
+      element.className = `auth-message ${type}`;
+    }
+    function clearMessage(element) { element.textContent = ""; element.className = "auth-message"; }
+    function openModal(element) { element.classList.add("open"); document.body.classList.add("modal-open"); }
+    function closeModal(element) {
+      element.classList.remove("open");
+      if (!document.querySelector(".modal-backdrop.open")) document.body.classList.remove("modal-open");
+    }
 
+    function getUserDisplayName(user) {
+      if (!user) return "User";
+      const metadata = user.user_metadata || {};
+      return metadata.full_name || metadata.name || metadata.first_name || user.email?.split("@")[0] || "User";
+    }
+    function getInitials(value) {
+      if (!value) return "U";
+      const parts = value.trim().split(/\s+/).filter(Boolean);
+      if (!parts.length) return "U";
+      if (parts.length === 1) return parts[0].substring(0,1).toUpperCase();
+      return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+    }
+    function safeExternalUrl(value) {
+      if (!value) return null;
       try {
+        const url = new URL(value);
+        if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+        return url.href;
+      } catch { return null; }
+    }
+    function formatWorkSetting(value) {
+      if (!value) return null;
+      if (value === "onsite") return "On-site";
+      if (value === "remote") return "Remote";
+      if (value === "hybrid") return "Hybrid";
+      if (value === "unclear") return "Work setting unclear";
+      return value;
+    }
+    function formatEmploymentType(value) {
+      if (!value) return null;
+      return value.replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+    function formatSalary(job) {
+      const min = job.salary_min !== null && job.salary_min !== undefined ? Number(job.salary_min) : null;
+      const max = job.salary_max !== null && job.salary_max !== undefined ? Number(job.salary_max) : null;
+      if (min === null && max === null) return null;
+      let formatter;
+      try {
+        formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: job.salary_currency || "USD", maximumFractionDigits: 0 });
+      } catch {
+        formatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+      }
+      let text;
+      if (min !== null && max !== null && min === max) text = formatter.format(min);
+      else if (min !== null && max !== null) text = `${formatter.format(min)} – ${formatter.format(max)}`;
+      else if (min !== null) text = `From ${formatter.format(min)}`;
+      else text = `Up to ${formatter.format(max)}`;
+      if (job.salary_period) text += ` / ${job.salary_period}`;
+      return text;
+    }
+    function getPostedCutoff(days) {
+      if (!days) return null;
+      const date = new Date();
+      date.setDate(date.getDate() - Number(days));
+      return date.toISOString();
+    }
 
-        const [
-          savedResult,
-          applicationResult,
-          matchResult,
-          profileResult
-        ] = await Promise.all([
+    const signedOutNav = document.getElementById("signedOutNav");
+    const signedInNav = document.getElementById("signedInNav");
+    const userPill = document.getElementById("userPill");
+    const headerUserName = document.getElementById("headerUserName");
+    const userAvatar = document.getElementById("userAvatar");
+    const heroAccountButton = document.getElementById("heroAccountButton");
+    const memberSection = document.getElementById("memberSection");
+    const memberWelcome = document.getElementById("memberWelcome");
+    const savedJobsSection = document.getElementById("savedJobsSection");
+    const authModal = document.getElementById("authModal");
+    const authMessage = document.getElementById("authMessage");
+    const signInTab = document.getElementById("signInTab");
+    const createAccountTab = document.getElementById("createAccountTab");
+    const fullNameField = document.getElementById("fullNameField");
+    const authFullName = document.getElementById("authFullName");
+    const authEmail = document.getElementById("authEmail");
+    const authPassword = document.getElementById("authPassword");
+    const authSubmitButton = document.getElementById("authSubmitButton");
+    const passwordHelp = document.getElementById("passwordHelp");
+    const forgotPasswordRow = document.getElementById("forgotPasswordRow");
+    const authSubtitle = document.getElementById("authSubtitle");
+    const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+    const forgotMessage = document.getElementById("forgotMessage");
+    const resetPasswordModal = document.getElementById("resetPasswordModal");
+    const newPasswordMessage = document.getElementById("newPasswordMessage");
 
-          db
-            .from("saved_jobs")
-            .select(
-              "id",
-              {
-                count: "exact",
-                head: true
-              }
-            )
-            .eq(
-              "user_id",
-              userId
-            ),
+    async function updateAuthUI(session) {
+      currentSession = session;
+      const user = session?.user || null;
+      if (user) {
+        const displayName = getUserDisplayName(user);
+        signedOutNav.style.display = "none";
+        signedInNav.style.display = "flex";
+        userPill.style.display = "flex";
+        headerUserName.textContent = displayName;
+        userAvatar.textContent = getInitials(displayName);
+        heroAccountButton.textContent = "My CareerPilot";
+        memberWelcome.textContent = `Welcome, ${displayName}`;
+        memberSection.style.display = "block";
+        await loadSavedJobIds();
+        await loadMemberDashboard(user.id);
+        syncSaveButtons();
+        if (pendingSaveJobId) {
+          const jobId = pendingSaveJobId;
+          pendingSaveJobId = null;
+          if (!savedJobIds.has(jobId)) await saveJob(jobId);
+        }
+      } else {
+        signedOutNav.style.display = "flex";
+        signedInNav.style.display = "none";
+        userPill.style.display = "none";
+        heroAccountButton.textContent = "Create Free Account";
+        memberSection.style.display = "none";
+        savedJobsSection.style.display = "none";
+        savedJobIds = new Set();
+        document.getElementById("savedJobsCount").textContent = "0";
+        document.getElementById("applicationsCount").textContent = "0";
+        document.getElementById("jobMatchesCount").textContent = "0";
+        syncSaveButtons();
+      }
+    }
 
-          db
-            .from("applications")
-            .select(
-              "id",
-              {
-                count: "exact",
-                head: true
-              }
-            )
-            .eq(
-              "user_id",
-              userId
-            ),
-
-          db
-            .from("job_matches")
-            .select(
-              "id",
-              {
-                count: "exact",
-                head: true
-              }
-            )
-            .eq(
-              "user_id",
-              userId
-            ),
-
-          db
-            .from("profiles")
-            .select(
-              "professional_headline,onboarding_completed"
-            )
-            .eq(
-              "id",
-              userId
-            )
-            .maybeSingle()
-
+    async function loadMemberDashboard(userId) {
+      try {
+        const [applicationResult, matchResult, profileResult] = await Promise.all([
+          db.from("applications").select("id", { count: "exact", head: true }).eq("user_id", userId),
+          db.from("job_matches").select("id", { count: "exact", head: true }).eq("user_id", userId),
+          db.from("profiles").select("professional_headline,onboarding_completed").eq("id", userId).maybeSingle()
         ]);
-
-
-        document.getElementById(
-          "savedJobsCount"
-        ).textContent =
-          savedResult.count ?? 0;
-
-
-        document.getElementById(
-          "applicationsCount"
-        ).textContent =
-          applicationResult.count ?? 0;
-
-
-        document.getElementById(
-          "jobMatchesCount"
-        ).textContent =
-          matchResult.count ?? 0;
-
-
-        const profile =
-          profileResult.data;
-
-
-        document.getElementById(
-          "profileStatus"
-        ).textContent =
-          profile?.onboarding_completed
-
-            ? "Profile ready"
-
-            : profile?.professional_headline
-
-              ? "In progress"
-
-              : "Getting started";
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Dashboard load error:",
-          error
-        );
-
-      }
-
+        document.getElementById("savedJobsCount").textContent = savedJobIds.size;
+        document.getElementById("applicationsCount").textContent = applicationResult.count ?? 0;
+        document.getElementById("jobMatchesCount").textContent = matchResult.count ?? 0;
+        const profile = profileResult.data;
+        document.getElementById("profileStatus").textContent = profile?.onboarding_completed ? "Profile ready" : profile?.professional_headline ? "In progress" : "Getting started";
+      } catch (error) { console.error("Dashboard load error:", error); }
     }
 
-
-    /* =========================================================
-       AUTH MODAL
-    ========================================================= */
-
-    const authModal =
-      document.getElementById(
-        "authModal"
-      );
-
-    const authMessage =
-      document.getElementById(
-        "authMessage"
-      );
-
-    const signInTab =
-      document.getElementById(
-        "signInTab"
-      );
-
-    const createAccountTab =
-      document.getElementById(
-        "createAccountTab"
-      );
-
-    const fullNameField =
-      document.getElementById(
-        "fullNameField"
-      );
-
-    const authFullName =
-      document.getElementById(
-        "authFullName"
-      );
-
-    const authEmail =
-      document.getElementById(
-        "authEmail"
-      );
-
-    const authPassword =
-      document.getElementById(
-        "authPassword"
-      );
-
-    const authSubmitButton =
-      document.getElementById(
-        "authSubmitButton"
-      );
-
-    const passwordHelp =
-      document.getElementById(
-        "passwordHelp"
-      );
-
-    const forgotPasswordRow =
-      document.getElementById(
-        "forgotPasswordRow"
-      );
-
-    const authSubtitle =
-      document.getElementById(
-        "authSubtitle"
-      );
-
-
-    function setAuthMode(
-      mode
-    ) {
-
-      authMode =
-        mode;
-
-      clearMessage(
-        authMessage
-      );
-
-
-      if (
-        mode === "signup"
-      ) {
-
-        signInTab.classList.remove(
-          "active"
-        );
-
-        createAccountTab.classList.add(
-          "active"
-        );
-
-        fullNameField.style.display =
-          "block";
-
-        authFullName.required =
-          true;
-
-        authPassword.autocomplete =
-          "new-password";
-
-        passwordHelp.style.display =
-          "block";
-
-        forgotPasswordRow.style.display =
-          "none";
-
-        authSubmitButton.textContent =
-          "Create Account";
-
-        authSubtitle.textContent =
-          "Create your free CareerPilot account.";
-
+    function setAuthMode(mode) {
+      authMode = mode;
+      clearMessage(authMessage);
+      if (mode === "signup") {
+        signInTab.classList.remove("active");
+        createAccountTab.classList.add("active");
+        fullNameField.style.display = "block";
+        authFullName.required = true;
+        authPassword.autocomplete = "new-password";
+        passwordHelp.style.display = "block";
+        forgotPasswordRow.style.display = "none";
+        authSubmitButton.textContent = "Create Account";
+        authSubtitle.textContent = "Create your free CareerPilot account.";
+      } else {
+        createAccountTab.classList.remove("active");
+        signInTab.classList.add("active");
+        fullNameField.style.display = "none";
+        authFullName.required = false;
+        authPassword.autocomplete = "current-password";
+        passwordHelp.style.display = "none";
+        forgotPasswordRow.style.display = "block";
+        authSubmitButton.textContent = "Sign In";
+        authSubtitle.textContent = "Sign in to your CareerPilot account.";
       }
-
-      else {
-
-        createAccountTab.classList.remove(
-          "active"
-        );
-
-        signInTab.classList.add(
-          "active"
-        );
-
-        fullNameField.style.display =
-          "none";
-
-        authFullName.required =
-          false;
-
-        authPassword.autocomplete =
-          "current-password";
-
-        passwordHelp.style.display =
-          "none";
-
-        forgotPasswordRow.style.display =
-          "block";
-
-        authSubmitButton.textContent =
-          "Sign In";
-
-        authSubtitle.textContent =
-          "Sign in to your CareerPilot account.";
-
-      }
-
+    }
+    function openAuth(mode, message = "") {
+      setAuthMode(mode);
+      if (message) setMessage(authMessage, message, "info");
+      openModal(authModal);
+      setTimeout(() => authEmail.focus(), 50);
     }
 
+    document.getElementById("headerSignIn").addEventListener("click", () => openAuth("signin"));
+    document.getElementById("headerCreateAccount").addEventListener("click", () => openAuth("signup"));
+    signInTab.addEventListener("click", () => setAuthMode("signin"));
+    createAccountTab.addEventListener("click", () => setAuthMode("signup"));
+    document.getElementById("closeAuthModal").addEventListener("click", () => closeModal(authModal));
+    authModal.addEventListener("click", event => { if (event.target === authModal) closeModal(authModal); });
 
-    function openAuth(
-      mode
-    ) {
+    document.getElementById("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage(authMessage);
+      const email = authEmail.value.trim();
+      const password = authPassword.value;
+      authSubmitButton.disabled = true;
+      try {
+        if (authMode === "signup") {
+          const fullName = authFullName.value.trim();
+          if (!fullName) { setMessage(authMessage, "Please enter your full name.", "error"); return; }
+          if (password.length < 8) { setMessage(authMessage, "Please use a password with at least 8 characters.", "error"); return; }
+          const { data, error } = await db.auth.signUp({ email, password, options: { data: { full_name: fullName }, emailRedirectTo: SITE_URL } });
+          if (error) throw error;
+          if (data.session) setMessage(authMessage, "Your account was created and you are now signed in.", "success");
+          else setMessage(authMessage, "Account created. Please check your email and click the confirmation link before signing in.", "success");
+        } else {
+          const { error } = await db.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          closeModal(authModal);
+          showToast("Welcome back to CareerPilot.");
+        }
+      } catch (error) {
+        console.error("Authentication error:", error);
+        setMessage(authMessage, error?.message || "We couldn't complete that request. Please try again.", "error");
+      } finally { authSubmitButton.disabled = false; }
+    });
 
-      setAuthMode(
-        mode
-      );
+    document.getElementById("googleAuthButton").addEventListener("click", async () => {
+      const button = document.getElementById("googleAuthButton");
+      button.disabled = true;
+      try {
+        const { error } = await db.auth.signInWithOAuth({ provider: "google", options: { redirectTo: SITE_URL } });
+        if (error) throw error;
+      } catch (error) {
+        button.disabled = false;
+        setMessage(authMessage, error?.message || "Google sign-in could not be started.", "error");
+      }
+    });
 
-      openModal(
-        authModal
-      );
+    document.getElementById("forgotPasswordButton").addEventListener("click", () => {
+      closeModal(authModal);
+      clearMessage(forgotMessage);
+      document.getElementById("forgotEmail").value = authEmail.value.trim();
+      openModal(forgotPasswordModal);
+    });
+    document.getElementById("closeForgotModal").addEventListener("click", () => closeModal(forgotPasswordModal));
+    forgotPasswordModal.addEventListener("click", event => { if (event.target === forgotPasswordModal) closeModal(forgotPasswordModal); });
+    document.getElementById("forgotPasswordForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage(forgotMessage);
+      const button = document.getElementById("forgotSubmitButton");
+      const email = document.getElementById("forgotEmail").value.trim();
+      button.disabled = true;
+      try {
+        const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL });
+        if (error) throw error;
+        setMessage(forgotMessage, "If an eligible CareerPilot account exists for that email, a password reset message has been sent. Check your inbox.", "success");
+      } catch (error) {
+        console.error("Password reset request error:", error);
+        setMessage(forgotMessage, error?.message || "We couldn't send the reset email. Please try again.", "error");
+      } finally { button.disabled = false; }
+    });
 
-      setTimeout(
-        () => authEmail.focus(),
-        50
-      );
+    document.getElementById("newPasswordForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage(newPasswordMessage);
+      const password = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmNewPassword").value;
+      if (password.length < 8) { setMessage(newPasswordMessage, "Please use a password with at least 8 characters.", "error"); return; }
+      if (password !== confirmPassword) { setMessage(newPasswordMessage, "The passwords do not match.", "error"); return; }
+      const button = document.getElementById("newPasswordSubmit");
+      button.disabled = true;
+      try {
+        const { error } = await db.auth.updateUser({ password });
+        if (error) throw error;
+        setMessage(newPasswordMessage, "Your password has been updated successfully.", "success");
+        setTimeout(() => { closeModal(resetPasswordModal); showToast("Password updated successfully."); }, 1200);
+      } catch (error) {
+        console.error("Password update error:", error);
+        setMessage(newPasswordMessage, error?.message || "We couldn't update your password.", "error");
+      } finally { button.disabled = false; }
+    });
 
+    document.getElementById("signOutButton").addEventListener("click", async () => {
+      const { error } = await db.auth.signOut();
+      if (error) { showToast("We couldn't sign you out. Please try again."); return; }
+      showToast("You have been signed out.");
+    });
+
+    async function loadSavedJobIds() {
+      if (!currentSession?.user) { savedJobIds = new Set(); return; }
+      const { data, error } = await db.from("saved_jobs").select("job_id").eq("user_id", currentSession.user.id);
+      if (error) { console.error("Load saved jobs error:", error); return; }
+      savedJobIds = new Set((data || []).map(row => row.job_id));
+      document.getElementById("savedJobsCount").textContent = savedJobIds.size;
+      syncSaveButtons();
     }
 
-
-    document.getElementById(
-      "headerSignIn"
-    ).addEventListener(
-      "click",
-      () => openAuth("signin")
-    );
-
-
-    document.getElementById(
-      "headerCreateAccount"
-    ).addEventListener(
-      "click",
-      () => openAuth("signup")
-    );
-
-
-    signInTab.addEventListener(
-      "click",
-      () => setAuthMode("signin")
-    );
-
-
-    createAccountTab.addEventListener(
-      "click",
-      () => setAuthMode("signup")
-    );
-
-
-    document.getElementById(
-      "closeAuthModal"
-    ).addEventListener(
-      "click",
-      () => closeModal(authModal)
-    );
-
-
-    authModal.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target === authModal
-        ) {
-
-          closeModal(
-            authModal
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       EMAIL SIGN UP / SIGN IN
-    ========================================================= */
-
-    document.getElementById(
-      "authForm"
-    ).addEventListener(
-      "submit",
-      async event => {
-
-        event.preventDefault();
-
-        clearMessage(
-          authMessage
-        );
-
-
-        const email =
-          authEmail
-            .value
-            .trim();
-
-
-        const password =
-          authPassword
-            .value;
-
-
-        authSubmitButton.disabled =
-          true;
-
-
-        try {
-
-
-          /* SIGN UP */
-
-          if (
-            authMode === "signup"
-          ) {
-
-            const fullName =
-              authFullName
-                .value
-                .trim();
-
-
-            if (
-              !fullName
-            ) {
-
-              setMessage(
-                authMessage,
-                "Please enter your full name.",
-                "error"
-              );
-
-              return;
-
-            }
-
-
-            if (
-              password.length < 8
-            ) {
-
-              setMessage(
-                authMessage,
-                "Please use a password with at least 8 characters.",
-                "error"
-              );
-
-              return;
-
-            }
-
-
-            const {
-              data,
-              error
-            } =
-              await db.auth.signUp({
-
-                email,
-
-                password,
-
-                options: {
-
-                  data: {
-                    full_name:
-                      fullName
-                  },
-
-                  emailRedirectTo:
-                    SITE_URL
-
-                }
-
-              });
-
-
-            if (
-              error
-            ) {
-
-              throw error;
-
-            }
-
-
-            if (
-              data.session
-            ) {
-
-              setMessage(
-                authMessage,
-                "Your account was created and you are now signed in.",
-                "success"
-              );
-
-            }
-
-            else {
-
-              setMessage(
-                authMessage,
-                "Account created. Please check your email and click the confirmation link before signing in.",
-                "success"
-              );
-
-            }
-
-
-          }
-
-
-          /* SIGN IN */
-
-          else {
-
-            const {
-              error
-            } =
-              await db.auth
-                .signInWithPassword({
-
-                  email,
-
-                  password
-
-                });
-
-
-            if (
-              error
-            ) {
-
-              throw error;
-
-            }
-
-
-            closeModal(
-              authModal
-            );
-
-
-            showToast(
-              "Welcome back to CareerPilot."
-            );
-
-          }
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Authentication error:",
-            error
-          );
-
-
-          setMessage(
-            authMessage,
-            error?.message ||
-              "We couldn't complete that request. Please try again.",
-            "error"
-          );
-
-        }
-
-        finally {
-
-          authSubmitButton.disabled =
-            false;
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       GOOGLE SIGN IN
-    ========================================================= */
-
-    document.getElementById(
-      "googleAuthButton"
-    ).addEventListener(
-      "click",
-      async () => {
-
-        const button =
-          document.getElementById(
-            "googleAuthButton"
-          );
-
-        button.disabled =
-          true;
-
-
-        try {
-
-          const {
-            error
-          } =
-            await db.auth
-              .signInWithOAuth({
-
-                provider: "google",
-
-                options: {
-
-                  redirectTo:
-                    SITE_URL
-
-                }
-
-              });
-
-
-          if (
-            error
-          ) {
-
-            throw error;
-
-          }
-
-        }
-
-        catch (error) {
-
-          button.disabled =
-            false;
-
-
-          setMessage(
-            authMessage,
-            error?.message ||
-              "Google sign-in could not be started.",
-            "error"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       FORGOT PASSWORD
-    ========================================================= */
-
-    const forgotPasswordModal =
-      document.getElementById(
-        "forgotPasswordModal"
-      );
-
-    const forgotMessage =
-      document.getElementById(
-        "forgotMessage"
-      );
-
-
-    document.getElementById(
-      "forgotPasswordButton"
-    ).addEventListener(
-      "click",
-      () => {
-
-        closeModal(
-          authModal
-        );
-
-        clearMessage(
-          forgotMessage
-        );
-
-        document.getElementById(
-          "forgotEmail"
-        ).value =
-          authEmail.value.trim();
-
-        openModal(
-          forgotPasswordModal
-        );
-
-      }
-    );
-
-
-    document.getElementById(
-      "closeForgotModal"
-    ).addEventListener(
-      "click",
-      () => closeModal(
-        forgotPasswordModal
-      )
-    );
-
-
-    forgotPasswordModal.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target ===
-          forgotPasswordModal
-        ) {
-
-          closeModal(
-            forgotPasswordModal
-          );
-
-        }
-
-      }
-    );
-
-
-    document.getElementById(
-      "forgotPasswordForm"
-    ).addEventListener(
-      "submit",
-      async event => {
-
-        event.preventDefault();
-
-        clearMessage(
-          forgotMessage
-        );
-
-
-        const button =
-          document.getElementById(
-            "forgotSubmitButton"
-          );
-
-
-        const email =
-          document.getElementById(
-            "forgotEmail"
-          )
-          .value
-          .trim();
-
-
-        button.disabled =
-          true;
-
-
-        try {
-
-          const {
-            error
-          } =
-            await db.auth
-              .resetPasswordForEmail(
-                email,
-                {
-                  redirectTo:
-                    SITE_URL
-                }
-              );
-
-
-          if (
-            error
-          ) {
-
-            throw error;
-
-          }
-
-
-          setMessage(
-            forgotMessage,
-            "If an eligible CareerPilot account exists for that email, a password reset message has been sent. Check your inbox.",
-            "success"
-          );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Password reset request error:",
-            error
-          );
-
-
-          setMessage(
-            forgotMessage,
-            error?.message ||
-              "We couldn't send the reset email. Please try again.",
-            "error"
-          );
-
-        }
-
-        finally {
-
-          button.disabled =
-            false;
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       SET NEW PASSWORD
-    ========================================================= */
-
-    const resetPasswordModal =
-      document.getElementById(
-        "resetPasswordModal"
-      );
-
-    const newPasswordMessage =
-      document.getElementById(
-        "newPasswordMessage"
-      );
-
-
-    document.getElementById(
-      "newPasswordForm"
-    ).addEventListener(
-      "submit",
-      async event => {
-
-        event.preventDefault();
-
-        clearMessage(
-          newPasswordMessage
-        );
-
-
-        const password =
-          document.getElementById(
-            "newPassword"
-          ).value;
-
-
-        const confirmPassword =
-          document.getElementById(
-            "confirmNewPassword"
-          ).value;
-
-
-        if (
-          password.length < 8
-        ) {
-
-          setMessage(
-            newPasswordMessage,
-            "Please use a password with at least 8 characters.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        if (
-          password !==
-          confirmPassword
-        ) {
-
-          setMessage(
-            newPasswordMessage,
-            "The passwords do not match.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const button =
-          document.getElementById(
-            "newPasswordSubmit"
-          );
-
-
-        button.disabled =
-          true;
-
-
-        try {
-
-          const {
-            error
-          } =
-            await db.auth.updateUser({
-
-              password
-
-            });
-
-
-          if (
-            error
-          ) {
-
-            throw error;
-
-          }
-
-
-          setMessage(
-            newPasswordMessage,
-            "Your password has been updated successfully.",
-            "success"
-          );
-
-
-          setTimeout(
-            () => {
-
-              closeModal(
-                resetPasswordModal
-              );
-
-              showToast(
-                "Password updated successfully."
-              );
-
-            },
-            1200
-          );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Password update error:",
-            error
-          );
-
-
-          setMessage(
-            newPasswordMessage,
-            error?.message ||
-              "We couldn't update your password.",
-            "error"
-          );
-
-        }
-
-        finally {
-
-          button.disabled =
-            false;
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       SIGN OUT
-    ========================================================= */
-
-    document.getElementById(
-      "signOutButton"
-    ).addEventListener(
-      "click",
-      async () => {
-
-        const {
-          error
-        } =
-          await db.auth.signOut();
-
-
-        if (
-          error
-        ) {
-
-          showToast(
-            "We couldn't sign you out. Please try again."
-          );
-
-          return;
-
-        }
-
-
-        showToast(
-          "You have been signed out."
-        );
-
-      }
-    );
-
-
-    /* =========================================================
-       ACCOUNT NAVIGATION
-    ========================================================= */
-
-    function goToMemberSection() {
-
-      document.getElementById(
-        "memberSection"
-      )
-      .scrollIntoView({
-        behavior: "smooth"
+    function syncSaveButtons() {
+      document.querySelectorAll("[data-save-job-id]").forEach(button => {
+        const jobId = button.dataset.saveJobId;
+        const isSaved = savedJobIds.has(jobId);
+        button.classList.toggle("saved", isSaved);
+        button.textContent = isSaved ? "★ Saved" : "☆ Save Job";
+        button.setAttribute("aria-pressed", isSaved ? "true" : "false");
       });
-
     }
 
-
-    document.getElementById(
-      "myCareerPilotButton"
-    ).addEventListener(
-      "click",
-      goToMemberSection
-    );
-
-
-    document.getElementById(
-      "savedJobsButton"
-    ).addEventListener(
-      "click",
-      () => {
-
-        goToMemberSection();
-
-        showToast(
-          "Saved Jobs workspace is connected and will be expanded next."
-        );
-
+    async function saveJob(jobId) {
+      if (!currentSession?.user) {
+        pendingSaveJobId = jobId;
+        openAuth("signin", "Sign in or create a free account to save this job.");
+        return false;
       }
-    );
-
-
-    document.getElementById(
-      "applicationsButton"
-    ).addEventListener(
-      "click",
-      () => {
-
-        goToMemberSection();
-
-        showToast(
-          "Application tracking is connected and will be expanded next."
-        );
-
+      if (savedJobIds.has(jobId)) return true;
+      const { error } = await db.from("saved_jobs").insert({ user_id: currentSession.user.id, job_id: jobId, status: "saved" });
+      if (error) {
+        console.error("Save job error:", error);
+        showToast("We couldn't save that job. Please try again.");
+        return false;
       }
-    );
+      savedJobIds.add(jobId);
+      document.getElementById("savedJobsCount").textContent = savedJobIds.size;
+      syncSaveButtons();
+      showToast("Job saved to CareerPilot.");
+      if (savedJobsSection.style.display !== "none") await loadSavedJobsWorkspace();
+      return true;
+    }
 
-
-    document.getElementById(
-      "profileButton"
-    ).addEventListener(
-      "click",
-      () => {
-
-        goToMemberSection();
-
-        showToast(
-          "Career Profile and resume tools are coming next."
-        );
-
+    async function removeSavedJob(jobId) {
+      if (!currentSession?.user) return false;
+      const { error } = await db.from("saved_jobs").delete().eq("user_id", currentSession.user.id).eq("job_id", jobId);
+      if (error) {
+        console.error("Remove saved job error:", error);
+        showToast("We couldn't remove that saved job. Please try again.");
+        return false;
       }
-    );
+      savedJobIds.delete(jobId);
+      document.getElementById("savedJobsCount").textContent = savedJobIds.size;
+      syncSaveButtons();
+      showToast("Job removed from Saved Jobs.");
+      if (savedJobsSection.style.display !== "none") await loadSavedJobsWorkspace();
+      return true;
+    }
 
-
-    document.getElementById(
-      "heroSearchJobs"
-    ).addEventListener(
-      "click",
-      () => {
-
-        document.getElementById(
-          "job-search"
-        )
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-      }
-    );
-
-
-    heroAccountButton.addEventListener(
-      "click",
-      () => {
-
-        if (
-          currentSession?.user
-        ) {
-
-          goToMemberSection();
-
-        }
-
-        else {
-
-          openAuth(
-            "signup"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       AUTH STATE
-    ========================================================= */
-
-    db.auth.onAuthStateChange(
-      (
-        event,
-        session
-      ) => {
-
-        updateAuthUI(
-          session
-        );
-
-
-        if (
-          event ===
-          "PASSWORD_RECOVERY"
-        ) {
-
-          clearMessage(
-            newPasswordMessage
-          );
-
-          openModal(
-            resetPasswordModal
-          );
-
-        }
-
-
-        if (
-          event ===
-          "SIGNED_IN"
-        ) {
-
-          closeModal(
-            authModal
-          );
-
-        }
-
-      }
-    );
-
-
-    async function initializeAuth() {
-
-      const {
-        data,
-        error
-      } =
-        await db.auth.getSession();
-
-
-      if (
-        error
-      ) {
-
-        console.error(
-          "Initial session error:",
-          error
-        );
-
+    async function toggleSavedJob(jobId, button = null) {
+      if (!currentSession?.user) {
+        pendingSaveJobId = jobId;
+        openAuth("signin", "Sign in or create a free account to save this job.");
         return;
-
       }
-
-
-      updateAuthUI(
-        data.session
-      );
-
+      if (button) button.disabled = true;
+      try {
+        if (savedJobIds.has(jobId)) await removeSavedJob(jobId);
+        else await saveJob(jobId);
+      } finally { if (button) button.disabled = false; }
     }
 
+    async function loadSavedJobsWorkspace() {
+      const status = document.getElementById("savedJobsStatus");
+      const results = document.getElementById("savedJobsResults");
+      if (!currentSession?.user) {
+        savedJobsSection.style.display = "none";
+        openAuth("signin", "Sign in to view your saved jobs.");
+        return;
+      }
+      savedJobsSection.style.display = "block";
+      status.textContent = "Loading your saved jobs...";
+      results.innerHTML = "";
 
-    /* =========================================================
-       AUTOCOMPLETE
-    ========================================================= */
-
-    async function getSuggestions(
-      databaseField,
-      searchText
-    ) {
-
-      const term =
-        searchText
-          .trim()
-          .toLowerCase();
-
-
-      if (
-        term.length < 2
-      ) {
-
-        return [];
-
+      const { data: saves, error: saveError } = await db.from("saved_jobs").select("job_id,status").eq("user_id", currentSession.user.id);
+      if (saveError) {
+        console.error("Saved jobs list error:", saveError);
+        status.textContent = "There was a problem loading your saved jobs.";
+        return;
+      }
+      const rows = saves || [];
+      const jobIds = rows.map(row => row.job_id).filter(Boolean);
+      if (!jobIds.length) {
+        savedJobIds = new Set();
+        document.getElementById("savedJobsCount").textContent = "0";
+        status.textContent = "0 saved jobs";
+        const empty = document.createElement("div");
+        empty.className = "saved-empty";
+        empty.innerHTML = '<h3 style="margin-bottom:8px;color:#14213d;">No saved jobs yet</h3><p>When you find a job you like, click ☆ Save Job and it will appear here.</p>';
+        results.appendChild(empty);
+        return;
       }
 
+      const { data: jobs, error: jobsError } = await db.from("jobs").select(`
+        id,title,company_name,location_text,work_setting,salary_min,salary_max,
+        salary_currency,salary_period,employment_type,industry,posted_at,source_name,description,apply_url
+      `).in("id", jobIds).eq("is_active", true);
 
-      const {
-        data,
-        error
-      } =
-        await db
-
-          .from("jobs")
-
-          .select(
-            databaseField
-          )
-
-          .eq(
-            "is_active",
-            true
-          )
-
-          .ilike(
-            databaseField,
-            `%${term}%`
-          )
-
-          .limit(100);
-
-
-      if (
-        error
-      ) {
-
-        console.error(
-          "Autocomplete error:",
-          error
-        );
-
-        return [];
-
+      if (jobsError) {
+        console.error("Saved job details error:", jobsError);
+        status.textContent = "There was a problem loading saved job details.";
+        return;
       }
-
-
-      const uniqueValues =
-        [
-          ...new Set(
-            (data || [])
-
-              .map(
-                row =>
-                  row[
-                    databaseField
-                  ]
-              )
-
-              .filter(Boolean)
-          )
-        ];
-
-
-      /*
-        Google-style behavior:
-        only suggest values where the typed text
-        begins the whole value or begins a word.
-
-        Example:
-        reve -> Revenue Cycle
-        but NOT Prevention.
-      */
-
-      const ranked =
-        uniqueValues
-
-          .map(
-            value => {
-
-              const lower =
-                value
-                  .toLowerCase()
-                  .trim();
-
-
-              const words =
-                lower
-                  .split(
-                    /[\s\-\/(),]+/
-                  )
-                  .filter(Boolean);
-
-
-              let score =
-                99;
-
-
-              if (
-                lower.startsWith(
-                  term
-                )
-              ) {
-
-                score = 0;
-
-              }
-
-              else if (
-                words.some(
-                  word =>
-                    word.startsWith(
-                      term
-                    )
-                )
-              ) {
-
-                score = 1;
-
-              }
-
-
-              return {
-                value,
-                score
-              };
-
-            }
-          )
-
-          .filter(
-            item =>
-              item.score < 99
-          )
-
-          .sort(
-            (a, b) => {
-
-              if (
-                a.score !==
-                b.score
-              ) {
-
-                return (
-                  a.score -
-                  b.score
-                );
-
-              }
-
-              return a.value
-                .localeCompare(
-                  b.value
-                );
-
-            }
-          );
-
-
-      return ranked
-        .slice(0, 8)
-        .map(
-          item =>
-            item.value
-        );
-
+      savedJobIds = new Set(jobIds);
+      document.getElementById("savedJobsCount").textContent = savedJobIds.size;
+      status.textContent = `${savedJobIds.size} saved job${savedJobIds.size === 1 ? "" : "s"}`;
+      const order = new Map(jobIds.map((id,index) => [id,index]));
+      const sortedJobs = (jobs || []).sort((a,b) => (order.get(a.id) ?? 9999) - (order.get(b.id) ?? 9999));
+      renderJobs(sortedJobs, results, { savedWorkspace: true });
+      syncSaveButtons();
     }
 
+    function renderJobs(jobs, results = document.getElementById("jobResults"), options = {}) {
+      results.innerHTML = "";
+      if (!jobs.length) {
+        const message = document.createElement("p");
+        message.textContent = "No jobs matched your search.";
+        results.appendChild(message);
+        return;
+      }
 
-    function setupAutocomplete(
-      inputId,
-      suggestionBoxId,
-      databaseField
-    ) {
+      jobs.forEach(job => {
+        const card = document.createElement("div");
+        card.className = "job-card";
+        const title = document.createElement("h3");
+        title.textContent = job.title || "Untitled position";
+        card.appendChild(title);
+        const company = document.createElement("p");
+        company.className = "job-meta";
+        company.textContent = job.company_name || "Company not listed";
+        card.appendChild(company);
 
-      const input =
-        document.getElementById(
-          inputId
-        );
+        const details = [job.location_text, formatWorkSetting(job.work_setting), formatEmploymentType(job.employment_type), job.source_name ? `Source: ${job.source_name}` : null].filter(Boolean);
+        if (details.length) {
+          const detailLine = document.createElement("p");
+          detailLine.className = "job-meta";
+          detailLine.textContent = details.join(" • ");
+          card.appendChild(detailLine);
+        }
 
+        const salary = formatSalary(job);
+        if (salary) {
+          const salaryLine = document.createElement("p");
+          salaryLine.className = "job-meta";
+          salaryLine.textContent = salary;
+          card.appendChild(salaryLine);
+        }
 
-      const suggestionBox =
-        document.getElementById(
-          suggestionBoxId
-        );
+        if (job.posted_at) {
+          const postedDate = new Date(job.posted_at);
+          if (!Number.isNaN(postedDate.getTime())) {
+            const postedLine = document.createElement("p");
+            postedLine.className = "job-meta";
+            postedLine.textContent = `Posted ${postedDate.toLocaleDateString()}`;
+            card.appendChild(postedLine);
+          }
+        }
 
+        if (job.description) {
+          const description = document.createElement("p");
+          description.className = "job-description";
+          description.textContent = job.description.length > 300 ? job.description.substring(0,300) + "..." : job.description;
+          card.appendChild(description);
+        }
 
+        const actions = document.createElement("div");
+        actions.className = "job-actions";
+        const applyUrl = safeExternalUrl(job.apply_url);
+        if (applyUrl) {
+          const link = document.createElement("a");
+          link.href = applyUrl;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "View Job";
+          link.className = "view-job-button";
+          actions.appendChild(link);
+        }
+
+        if (options.savedWorkspace) {
+          const removeButton = document.createElement("button");
+          removeButton.type = "button";
+          removeButton.className = "remove-job-button";
+          removeButton.textContent = "Remove Saved Job";
+          removeButton.addEventListener("click", async () => {
+            removeButton.disabled = true;
+            await removeSavedJob(job.id);
+          });
+          actions.appendChild(removeButton);
+        } else {
+          const saveButton = document.createElement("button");
+          saveButton.type = "button";
+          saveButton.className = "save-job-button";
+          saveButton.dataset.saveJobId = job.id;
+          const isSaved = savedJobIds.has(job.id);
+          saveButton.classList.toggle("saved", isSaved);
+          saveButton.textContent = isSaved ? "★ Saved" : "☆ Save Job";
+          saveButton.setAttribute("aria-pressed", isSaved ? "true" : "false");
+          saveButton.addEventListener("click", () => toggleSavedJob(job.id, saveButton));
+          actions.appendChild(saveButton);
+        }
+        card.appendChild(actions);
+
+        if (!currentSession?.user && !options.savedWorkspace) {
+          const hint = document.createElement("div");
+          hint.className = "save-hint";
+          hint.textContent = "Sign in or create a free account to keep saved jobs across devices.";
+          card.appendChild(hint);
+        }
+        results.appendChild(card);
+      });
+    }
+
+    async function searchJobs() {
+      const keyword = document.getElementById("jobKeyword").value.trim();
+      const company = document.getElementById("jobCompany").value.trim();
+      const postedDays = document.getElementById("jobPosted").value;
+      const workSetting = document.getElementById("jobWorkSetting").value;
+      const minimumSalary = document.getElementById("jobMinimumSalary").value;
+      const industry = document.getElementById("jobIndustry").value.trim();
+      const location = document.getElementById("jobLocation").value.trim();
+      const includeSalaryUnknown = document.getElementById("includeSalaryUnknown").checked;
+      const includeWorkSettingUnknown = document.getElementById("includeWorkSettingUnknown").checked;
+      const status = document.getElementById("jobSearchStatus");
+      const results = document.getElementById("jobResults");
+      status.textContent = "Searching current jobs...";
+      results.innerHTML = "";
+
+      let query = db.from("jobs").select(`
+        id,title,company_name,location_text,work_setting,salary_min,salary_max,
+        salary_currency,salary_period,employment_type,industry,posted_at,source_name,description,apply_url
+      `, { count: "exact" }).eq("is_active", true);
+
+      if (keyword) query = query.textSearch("search_document", keyword, { type: "websearch", config: "english" });
+      if (company) query = query.ilike("company_name", `%${company}%`);
+      const cutoff = getPostedCutoff(postedDays);
+      if (cutoff) query = query.gte("posted_at", cutoff);
+      if (workSetting) {
+        let settings = workSetting === "remote-hybrid" ? ["remote","hybrid"] : [workSetting];
+        if (includeWorkSettingUnknown) settings.push("unclear");
+        query = query.in("work_setting", settings);
+      } else if (!includeWorkSettingUnknown) {
+        query = query.neq("work_setting", "unclear");
+      }
+      if (minimumSalary) {
+        const minimum = Number(minimumSalary);
+        if (includeSalaryUnknown) query = query.or(`salary_min.gte.${minimum},salary_max.gte.${minimum},and(salary_min.is.null,salary_max.is.null)`);
+        else query = query.or(`salary_min.gte.${minimum},salary_max.gte.${minimum}`);
+      }
+      if (industry) query = query.ilike("industry", `%${industry}%`);
+      if (location) query = query.ilike("location_text", `%${location}%`);
+      query = query.order("posted_at", { ascending: false, nullsFirst: false }).limit(50);
+
+      const { data, error, count } = await query;
+      if (error) {
+        console.error("Job search error:", error);
+        status.textContent = "There was a problem loading jobs.";
+        return;
+      }
+      const jobs = data || [];
+      const total = count ?? jobs.length;
+      status.textContent = total > jobs.length ? `${total} current jobs found • showing first ${jobs.length}` : `${total} current job${total === 1 ? "" : "s"} found`;
+      renderJobs(jobs);
+      syncSaveButtons();
+    }
+
+    async function getSuggestions(databaseField, searchText) {
+      const term = searchText.trim().toLowerCase();
+      if (term.length < 2) return [];
+      const { data, error } = await db.from("jobs").select(databaseField).eq("is_active", true).ilike(databaseField, `%${term}%`).limit(100);
+      if (error) { console.error("Autocomplete error:", error); return []; }
+      const uniqueValues = [...new Set((data || []).map(row => row[databaseField]).filter(Boolean))];
+      return uniqueValues.map(value => {
+        const lower = value.toLowerCase().trim();
+        const words = lower.split(/[\s\-\/(),]+/).filter(Boolean);
+        let score = 99;
+        if (lower.startsWith(term)) score = 0;
+        else if (words.some(word => word.startsWith(term))) score = 1;
+        return { value, score };
+      }).filter(item => item.score < 99).sort((a,b) => a.score !== b.score ? a.score - b.score : a.value.localeCompare(b.value)).slice(0,8).map(item => item.value);
+    }
+
+    function setupAutocomplete(inputId, suggestionBoxId, databaseField) {
+      const input = document.getElementById(inputId);
+      const suggestionBox = document.getElementById(suggestionBoxId);
       let items = [];
       let activeIndex = -1;
       let requestNumber = 0;
-
-
-      function closeSuggestions() {
-
-        suggestionBox.innerHTML =
-          "";
-
-        suggestionBox.classList.remove(
-          "open"
-        );
-
-        items = [];
-        activeIndex = -1;
-
-      }
-
-
-      function chooseSuggestion(
-        value
-      ) {
-
-        input.value =
-          value;
-
-        closeSuggestions();
-
-        input.focus();
-
-      }
-
-
+      function closeSuggestions() { suggestionBox.innerHTML = ""; suggestionBox.classList.remove("open"); items = []; activeIndex = -1; }
+      function chooseSuggestion(value) { input.value = value; closeSuggestions(); input.focus(); }
       function updateActiveItem() {
-
-        const buttons =
-          suggestionBox.querySelectorAll(
-            ".suggestion-item"
-          );
-
-
-        buttons.forEach(
-          (button, index) => {
-
-            button.classList.toggle(
-              "active",
-              index ===
-                activeIndex
-            );
-
-          }
-        );
-
+        suggestionBox.querySelectorAll(".suggestion-item").forEach((button,index) => button.classList.toggle("active", index === activeIndex));
       }
-
-
-      function showSuggestions(
-        suggestions
-      ) {
-
-        suggestionBox.innerHTML =
-          "";
-
-        items =
-          suggestions;
-
-        activeIndex =
-          -1;
-
-
-        if (
-          !suggestions.length
-        ) {
-
-          suggestionBox.classList.remove(
-            "open"
-          );
-
-          return;
-
-        }
-
-
-        suggestions.forEach(
-          value => {
-
-            const button =
-              document.createElement(
-                "button"
-              );
-
-
-            button.type =
-              "button";
-
-            button.className =
-              "suggestion-item";
-
-            button.textContent =
-              value;
-
-
-            button.addEventListener(
-              "click",
-              () =>
-                chooseSuggestion(
-                  value
-                )
-            );
-
-
-            suggestionBox.appendChild(
-              button
-            );
-
-          }
-        );
-
-
-        suggestionBox.classList.add(
-          "open"
-        );
-
+      function showSuggestions(suggestions) {
+        suggestionBox.innerHTML = "";
+        items = suggestions;
+        activeIndex = -1;
+        if (!suggestions.length) { suggestionBox.classList.remove("open"); return; }
+        suggestions.forEach(value => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "suggestion-item";
+          button.textContent = value;
+          button.addEventListener("click", () => chooseSuggestion(value));
+          suggestionBox.appendChild(button);
+        });
+        suggestionBox.classList.add("open");
       }
-
-
-      const searchSuggestions =
-        debounce(
-          async () => {
-
-            const currentRequest =
-              ++requestNumber;
-
-
-            const suggestions =
-              await getSuggestions(
-                databaseField,
-                input.value
-              );
-
-
-            if (
-              currentRequest !==
-              requestNumber
-            ) {
-
-              return;
-
-            }
-
-
-            showSuggestions(
-              suggestions
-            );
-
-          }
-        );
-
-
-      input.addEventListener(
-        "input",
-        searchSuggestions
-      );
-
-
-      input.addEventListener(
-        "keydown",
-        event => {
-
-
-          if (
-            event.key === "Escape"
-          ) {
-
-            closeSuggestions();
-
-            return;
-
-          }
-
-
-          if (
-            !items.length
-          ) {
-
-            return;
-
-          }
-
-
-          if (
-            event.key ===
-            "ArrowDown"
-          ) {
-
-            event.preventDefault();
-
-            activeIndex =
-              (
-                activeIndex + 1
-              ) %
-              items.length;
-
-            updateActiveItem();
-
-          }
-
-
-          if (
-            event.key ===
-            "ArrowUp"
-          ) {
-
-            event.preventDefault();
-
-            activeIndex =
-              activeIndex <= 0
-
-                ? items.length - 1
-
-                : activeIndex - 1;
-
-            updateActiveItem();
-
-          }
-
-
-          if (
-            event.key ===
-              "Enter" &&
-            activeIndex >= 0
-          ) {
-
-            event.preventDefault();
-
-            chooseSuggestion(
-              items[
-                activeIndex
-              ]
-            );
-
-          }
-
-        }
-      );
-
-
-      document.addEventListener(
-        "click",
-        event => {
-
-          if (
-            event.target !==
-              input &&
-            !suggestionBox.contains(
-              event.target
-            )
-          ) {
-
-            closeSuggestions();
-
-          }
-
-        }
-      );
-
+      const searchSuggestions = debounce(async () => {
+        const currentRequest = ++requestNumber;
+        const suggestions = await getSuggestions(databaseField, input.value);
+        if (currentRequest !== requestNumber) return;
+        showSuggestions(suggestions);
+      });
+      input.addEventListener("input", searchSuggestions);
+      input.addEventListener("keydown", event => {
+        if (event.key === "Escape") { closeSuggestions(); return; }
+        if (!items.length) return;
+        if (event.key === "ArrowDown") { event.preventDefault(); activeIndex = (activeIndex + 1) % items.length; updateActiveItem(); }
+        if (event.key === "ArrowUp") { event.preventDefault(); activeIndex = activeIndex <= 0 ? items.length - 1 : activeIndex - 1; updateActiveItem(); }
+        if (event.key === "Enter" && activeIndex >= 0) { event.preventDefault(); chooseSuggestion(items[activeIndex]); }
+      });
+      document.addEventListener("click", event => {
+        if (event.target !== input && !suggestionBox.contains(event.target)) closeSuggestions();
+      });
     }
 
+    setupAutocomplete("jobKeyword", "jobKeywordSuggestions", "title");
+    setupAutocomplete("jobCompany", "jobCompanySuggestions", "company_name");
+    setupAutocomplete("jobIndustry", "jobIndustrySuggestions", "industry");
+    setupAutocomplete("jobLocation", "jobLocationSuggestions", "location_text");
 
-    /* =========================================================
-       POSTED DATE
-    ========================================================= */
+    document.getElementById("jobSearchForm").addEventListener("submit", event => { event.preventDefault(); searchJobs(); });
+    document.getElementById("resetFiltersButton").addEventListener("click", () => {
+      document.getElementById("jobKeyword").value = "";
+      document.getElementById("jobCompany").value = "";
+      document.getElementById("jobPosted").value = "7";
+      document.getElementById("jobWorkSetting").value = "";
+      document.getElementById("jobMinimumSalary").value = "";
+      document.getElementById("jobIndustry").value = "";
+      document.getElementById("jobLocation").value = "";
+      document.getElementById("includeSalaryUnknown").checked = true;
+      document.getElementById("includeWorkSettingUnknown").checked = true;
+      searchJobs();
+    });
 
-    function getPostedCutoff(
-      days
-    ) {
+    function goToMemberSection() { document.getElementById("memberSection").scrollIntoView({ behavior: "smooth" }); }
+    document.getElementById("myCareerPilotButton").addEventListener("click", goToMemberSection);
+    document.getElementById("savedJobsButton").addEventListener("click", async () => {
+      await loadSavedJobsWorkspace();
+      savedJobsSection.scrollIntoView({ behavior: "smooth" });
+    });
+    document.getElementById("applicationsButton").addEventListener("click", () => { goToMemberSection(); showToast("Application tracking is connected and will be expanded next."); });
+    document.getElementById("profileButton").addEventListener("click", () => { goToMemberSection(); showToast("Career Profile and resume tools are coming next."); });
+    document.getElementById("heroSearchJobs").addEventListener("click", () => document.getElementById("job-search").scrollIntoView({ behavior: "smooth" }));
+    document.getElementById("backToSearchButton").addEventListener("click", () => document.getElementById("job-search").scrollIntoView({ behavior: "smooth" }));
+    heroAccountButton.addEventListener("click", () => { if (currentSession?.user) goToMemberSection(); else openAuth("signup"); });
 
-      if (!days) {
-        return null;
-      }
+    db.auth.onAuthStateChange((event, session) => {
+      setTimeout(async () => {
+        await updateAuthUI(session);
+        if (event === "PASSWORD_RECOVERY") { clearMessage(newPasswordMessage); openModal(resetPasswordModal); }
+        if (event === "SIGNED_IN") closeModal(authModal);
+      }, 0);
+    });
 
-
-      const date =
-        new Date();
-
-
-      date.setDate(
-        date.getDate() -
-        Number(days)
-      );
-
-
-      return date.toISOString();
-
+    async function initializeAuth() {
+      const { data, error } = await db.auth.getSession();
+      if (error) { console.error("Initial session error:", error); return; }
+      await updateAuthUI(data.session);
     }
 
-
-    /* =========================================================
-       SALARY
-    ========================================================= */
-
-    function formatSalary(
-      job
-    ) {
-
-      const min =
-        job.salary_min !== null &&
-        job.salary_min !== undefined
-
-          ? Number(
-              job.salary_min
-            )
-
-          : null;
-
-
-      const max =
-        job.salary_max !== null &&
-        job.salary_max !== undefined
-
-          ? Number(
-              job.salary_max
-            )
-
-          : null;
-
-
-      if (
-        min === null &&
-        max === null
-      ) {
-
-        return null;
-
-      }
-
-
-      let formatter;
-
-
-      try {
-
-        formatter =
-          new Intl.NumberFormat(
-            "en-US",
-            {
-              style: "currency",
-
-              currency:
-                job.salary_currency ||
-                "USD",
-
-              maximumFractionDigits: 0
-            }
-          );
-
-      }
-
-      catch {
-
-        formatter =
-          new Intl.NumberFormat(
-            "en-US",
-            {
-              maximumFractionDigits: 0
-            }
-          );
-
-      }
-
-
-      let salaryText;
-
-
-      if (
-        min !== null &&
-        max !== null &&
-        min === max
-      ) {
-
-        salaryText =
-          formatter.format(min);
-
-      }
-
-      else if (
-        min !== null &&
-        max !== null
-      ) {
-
-        salaryText =
-          `${formatter.format(min)} – ${formatter.format(max)}`;
-
-      }
-
-      else if (
-        min !== null
-      ) {
-
-        salaryText =
-          `From ${formatter.format(min)}`;
-
-      }
-
-      else {
-
-        salaryText =
-          `Up to ${formatter.format(max)}`;
-
-      }
-
-
-      if (
-        job.salary_period
-      ) {
-
-        salaryText +=
-          ` / ${job.salary_period}`;
-
-      }
-
-
-      return salaryText;
-
-    }
-
-
-    /* =========================================================
-       WORK SETTING
-    ========================================================= */
-
-    function formatWorkSetting(
-      value
-    ) {
-
-      if (!value) {
-        return null;
-      }
-
-
-      if (
-        value === "onsite"
-      ) {
-
-        return "On-site";
-
-      }
-
-
-      if (
-        value === "remote"
-      ) {
-
-        return "Remote";
-
-      }
-
-
-      if (
-        value === "hybrid"
-      ) {
-
-        return "Hybrid";
-
-      }
-
-
-      if (
-        value === "unclear"
-      ) {
-
-        return "Work setting unclear";
-
-      }
-
-
-      return value;
-
-    }
-
-
-    /* =========================================================
-       EMPLOYMENT TYPE
-    ========================================================= */
-
-    function formatEmploymentType(
-      value
-    ) {
-
-      if (!value) {
-        return null;
-      }
-
-
-      return value
-
-        .replaceAll(
-          "_",
-          " "
-        )
-
-        .replace(
-          /\b\w/g,
-          letter =>
-            letter.toUpperCase()
-        );
-
-    }
-
-
-    /* =========================================================
-       SAFE URL
-    ========================================================= */
-
-    function safeExternalUrl(
-      value
-    ) {
-
-      if (!value) {
-        return null;
-      }
-
-
-      try {
-
-        const url =
-          new URL(value);
-
-
-        if (
-          url.protocol !== "http:" &&
-          url.protocol !== "https:"
-        ) {
-
-          return null;
-
-        }
-
-
-        return url.href;
-
-      }
-
-      catch {
-
-        return null;
-
-      }
-
-    }
-
-
-    /* =========================================================
-       RENDER JOBS
-    ========================================================= */
-
-    function renderJobs(
-      jobs
-    ) {
-
-      const results =
-        document.getElementById(
-          "jobResults"
-        );
-
-
-      results.innerHTML =
-        "";
-
-
-      if (
-        !jobs.length
-      ) {
-
-        const message =
-          document.createElement(
-            "p"
-          );
-
-
-        message.textContent =
-          "No jobs matched your search.";
-
-
-        results.appendChild(
-          message
-        );
-
-
-        return;
-
-      }
-
-
-      jobs.forEach(
-        job => {
-
-
-          const card =
-            document.createElement(
-              "div"
-            );
-
-
-          card.className =
-            "job-card";
-
-
-          const title =
-            document.createElement(
-              "h3"
-            );
-
-
-          title.textContent =
-            job.title ||
-            "Untitled position";
-
-
-          card.appendChild(
-            title
-          );
-
-
-          const company =
-            document.createElement(
-              "p"
-            );
-
-
-          company.className =
-            "job-meta";
-
-
-          company.textContent =
-            job.company_name ||
-            "Company not listed";
-
-
-          card.appendChild(
-            company
-          );
-
-
-          const details = [
-
-            job.location_text,
-
-            formatWorkSetting(
-              job.work_setting
-            ),
-
-            formatEmploymentType(
-              job.employment_type
-            ),
-
-            job.source_name
-              ? `Source: ${job.source_name}`
-              : null
-
-          ].filter(Boolean);
-
-
-          if (
-            details.length
-          ) {
-
-            const detailLine =
-              document.createElement(
-                "p"
-              );
-
-
-            detailLine.className =
-              "job-meta";
-
-
-            detailLine.textContent =
-              details.join(" • ");
-
-
-            card.appendChild(
-              detailLine
-            );
-
-          }
-
-
-          const salary =
-            formatSalary(
-              job
-            );
-
-
-          if (
-            salary
-          ) {
-
-            const salaryLine =
-              document.createElement(
-                "p"
-              );
-
-
-            salaryLine.className =
-              "job-meta";
-
-
-            salaryLine.textContent =
-              salary;
-
-
-            card.appendChild(
-              salaryLine
-            );
-
-          }
-
-
-          if (
-            job.posted_at
-          ) {
-
-            const postedDate =
-              new Date(
-                job.posted_at
-              );
-
-
-            if (
-              !Number.isNaN(
-                postedDate.getTime()
-              )
-            ) {
-
-              const postedLine =
-                document.createElement(
-                  "p"
-                );
-
-
-              postedLine.className =
-                "job-meta";
-
-
-              postedLine.textContent =
-                `Posted ${postedDate.toLocaleDateString()}`;
-
-
-              card.appendChild(
-                postedLine
-              );
-
-            }
-
-          }
-
-
-          if (
-            job.description
-          ) {
-
-            const description =
-              document.createElement(
-                "p"
-              );
-
-
-            description.className =
-              "job-description";
-
-
-            description.textContent =
-              job.description.length > 300
-
-                ? (
-                    job.description.substring(
-                      0,
-                      300
-                    ) +
-                    "..."
-                  )
-
-                : job.description;
-
-
-            card.appendChild(
-              description
-            );
-
-          }
-
-
-          const applyUrl =
-            safeExternalUrl(
-              job.apply_url
-            );
-
-
-          if (
-            applyUrl
-          ) {
-
-            const link =
-              document.createElement(
-                "a"
-              );
-
-
-            link.href =
-              applyUrl;
-
-            link.target =
-              "_blank";
-
-            link.rel =
-              "noopener noreferrer";
-
-            link.textContent =
-              "View Job";
-
-            link.className =
-              "view-job-button";
-
-
-            card.appendChild(
-              link
-            );
-
-          }
-
-
-          results.appendChild(
-            card
-          );
-
-        }
-      );
-
-    }
-
-
-    /* =========================================================
-       SEARCH JOBS
-    ========================================================= */
-
-    async function searchJobs() {
-
-
-      const keyword =
-        document.getElementById(
-          "jobKeyword"
-        )
-        .value
-        .trim();
-
-
-      const company =
-        document.getElementById(
-          "jobCompany"
-        )
-        .value
-        .trim();
-
-
-      const postedDays =
-        document.getElementById(
-          "jobPosted"
-        )
-        .value;
-
-
-      const workSetting =
-        document.getElementById(
-          "jobWorkSetting"
-        )
-        .value;
-
-
-      const minimumSalary =
-        document.getElementById(
-          "jobMinimumSalary"
-        )
-        .value;
-
-
-      const industry =
-        document.getElementById(
-          "jobIndustry"
-        )
-        .value
-        .trim();
-
-
-      const location =
-        document.getElementById(
-          "jobLocation"
-        )
-        .value
-        .trim();
-
-
-      const includeSalaryUnknown =
-        document.getElementById(
-          "includeSalaryUnknown"
-        )
-        .checked;
-
-
-      const includeWorkSettingUnknown =
-        document.getElementById(
-          "includeWorkSettingUnknown"
-        )
-        .checked;
-
-
-      const status =
-        document.getElementById(
-          "jobSearchStatus"
-        );
-
-
-      const results =
-        document.getElementById(
-          "jobResults"
-        );
-
-
-      status.textContent =
-        "Searching current jobs...";
-
-
-      results.innerHTML =
-        "";
-
-
-      let query =
-        db
-
-          .from("jobs")
-
-          .select(
-            `
-              id,
-              title,
-              company_name,
-              location_text,
-              work_setting,
-              salary_min,
-              salary_max,
-              salary_currency,
-              salary_period,
-              employment_type,
-              industry,
-              posted_at,
-              source_name,
-              description,
-              apply_url
-            `,
-            {
-              count: "exact"
-            }
-          )
-
-          .eq(
-            "is_active",
-            true
-          );
-
-
-      /* KEYWORD */
-
-      if (
-        keyword
-      ) {
-
-        query =
-          query.textSearch(
-            "search_document",
-            keyword,
-            {
-              type: "websearch",
-              config: "english"
-            }
-          );
-
-      }
-
-
-      /* COMPANY */
-
-      if (
-        company
-      ) {
-
-        query =
-          query.ilike(
-            "company_name",
-            `%${company}%`
-          );
-
-      }
-
-
-      /* POSTED */
-
-      const cutoff =
-        getPostedCutoff(
-          postedDays
-        );
-
-
-      if (
-        cutoff
-      ) {
-
-        query =
-          query.gte(
-            "posted_at",
-            cutoff
-          );
-
-      }
-
-
-      /* WORK SETTING */
-
-      if (
-        workSetting
-      ) {
-
-        let settings;
-
-
-        if (
-          workSetting ===
-          "remote-hybrid"
-        ) {
-
-          settings = [
-            "remote",
-            "hybrid"
-          ];
-
-        }
-
-        else {
-
-          settings = [
-            workSetting
-          ];
-
-        }
-
-
-        if (
-          includeWorkSettingUnknown
-        ) {
-
-          settings.push(
-            "unclear"
-          );
-
-        }
-
-
-        query =
-          query.in(
-            "work_setting",
-            settings
-          );
-
-      }
-
-      else if (
-        !includeWorkSettingUnknown
-      ) {
-
-        query =
-          query.neq(
-            "work_setting",
-            "unclear"
-          );
-
-      }
-
-
-      /* SALARY */
-
-      if (
-        minimumSalary
-      ) {
-
-        const minimum =
-          Number(
-            minimumSalary
-          );
-
-
-        if (
-          includeSalaryUnknown
-        ) {
-
-          query =
-            query.or(
-              `salary_min.gte.${minimum},salary_max.gte.${minimum},and(salary_min.is.null,salary_max.is.null)`
-            );
-
-        }
-
-        else {
-
-          query =
-            query.or(
-              `salary_min.gte.${minimum},salary_max.gte.${minimum}`
-            );
-
-        }
-
-      }
-
-
-      /* INDUSTRY */
-
-      if (
-        industry
-      ) {
-
-        query =
-          query.ilike(
-            "industry",
-            `%${industry}%`
-          );
-
-      }
-
-
-      /* LOCATION */
-
-      if (
-        location
-      ) {
-
-        query =
-          query.ilike(
-            "location_text",
-            `%${location}%`
-          );
-
-      }
-
-
-      query =
-        query
-
-          .order(
-            "posted_at",
-            {
-              ascending: false,
-              nullsFirst: false
-            }
-          )
-
-          .limit(50);
-
-
-      const {
-        data,
-        error,
-        count
-      } =
-        await query;
-
-
-      if (
-        error
-      ) {
-
-        console.error(
-          "Job search error:",
-          error
-        );
-
-
-        status.textContent =
-          "There was a problem loading jobs.";
-
-
-        return;
-
-      }
-
-
-      const jobs =
-        data || [];
-
-
-      const total =
-        count ??
-        jobs.length;
-
-
-      if (
-        total >
-        jobs.length
-      ) {
-
-        status.textContent =
-          `${total} current jobs found • showing first ${jobs.length}`;
-
-      }
-
-      else {
-
-        status.textContent =
-          `${total} current job${total === 1 ? "" : "s"} found`;
-
-      }
-
-
-      renderJobs(
-        jobs
-      );
-
-    }
-
-
-    /* =========================================================
-       AUTOCOMPLETE SETUP
-    ========================================================= */
-
-    setupAutocomplete(
-      "jobKeyword",
-      "jobKeywordSuggestions",
-      "title"
-    );
-
-
-    setupAutocomplete(
-      "jobCompany",
-      "jobCompanySuggestions",
-      "company_name"
-    );
-
-
-    setupAutocomplete(
-      "jobIndustry",
-      "jobIndustrySuggestions",
-      "industry"
-    );
-
-
-    setupAutocomplete(
-      "jobLocation",
-      "jobLocationSuggestions",
-      "location_text"
-    );
-
-
-    /* =========================================================
-       SEARCH FORM
-    ========================================================= */
-
-    document.getElementById(
-      "jobSearchForm"
-    )
-    .addEventListener(
-      "submit",
-      event => {
-
-        event.preventDefault();
-
-        searchJobs();
-
-      }
-    );
-
-
-    /* =========================================================
-       RESET FILTERS
-    ========================================================= */
-
-    document.getElementById(
-      "resetFiltersButton"
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-
-        document.getElementById(
-          "jobKeyword"
-        ).value = "";
-
-
-        document.getElementById(
-          "jobCompany"
-        ).value = "";
-
-
-        document.getElementById(
-          "jobPosted"
-        ).value = "7";
-
-
-        document.getElementById(
-          "jobWorkSetting"
-        ).value = "";
-
-
-        document.getElementById(
-          "jobMinimumSalary"
-        ).value = "";
-
-
-        document.getElementById(
-          "jobIndustry"
-        ).value = "";
-
-
-        document.getElementById(
-          "jobLocation"
-        ).value = "";
-
-
-        document.getElementById(
-          "includeSalaryUnknown"
-        ).checked = true;
-
-
-        document.getElementById(
-          "includeWorkSettingUnknown"
-        ).checked = true;
-
-
-        searchJobs();
-
-      }
-    );
-
-
-    /* =========================================================
-       ESCAPE KEY CLOSES NORMAL MODALS
-    ========================================================= */
-
-    document.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-          event.key !==
-          "Escape"
-        ) {
-
-          return;
-
-        }
-
-
-        if (
-          authModal.classList.contains(
-            "open"
-          )
-        ) {
-
-          closeModal(
-            authModal
-          );
-
-        }
-
-
-        if (
-          forgotPasswordModal
-            .classList
-            .contains(
-              "open"
-            )
-        ) {
-
-          closeModal(
-            forgotPasswordModal
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       INITIALIZE
-    ========================================================= */
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape") return;
+      if (authModal.classList.contains("open")) closeModal(authModal);
+      if (forgotPasswordModal.classList.contains("open")) closeModal(forgotPasswordModal);
+    });
 
     initializeAuth();
-
     searchJobs();
-
-
   </script>
-
 </body>
-
 </html>
