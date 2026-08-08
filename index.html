@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>CareerPilot AI | Smarter Job Search</title>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -19,6 +25,11 @@
       color: #14213d;
       line-height: 1.6;
     }
+
+
+    /* =========================
+       HEADER
+    ========================= */
 
     header {
       background: #111827;
@@ -41,10 +52,20 @@
       font-size: 13px;
     }
 
+
+    /* =========================
+       HERO
+    ========================= */
+
     .hero {
       padding: 100px 8%;
       text-align: center;
-      background: linear-gradient(135deg, #eef2ff, #ffffff);
+      background:
+        linear-gradient(
+          135deg,
+          #eef2ff,
+          #ffffff
+        );
     }
 
     .hero h1 {
@@ -71,9 +92,14 @@
       font-weight: bold;
     }
 
+
+    /* =========================
+       GENERAL SECTIONS
+    ========================= */
+
     .section {
       padding: 80px 8%;
-      max-width: 1250px;
+      max-width: 1350px;
       margin: auto;
     }
 
@@ -90,9 +116,18 @@
       margin: 0 auto 50px;
     }
 
+
+    /* =========================
+       FEATURES
+    ========================= */
+
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(240px, 1fr)
+        );
       gap: 25px;
     }
 
@@ -101,7 +136,8 @@
       padding: 30px;
       border-radius: 16px;
       border: 1px solid #e3e7ef;
-      box-shadow: 0 8px 25px rgba(0,0,0,.04);
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, .04);
     }
 
     .feature h3 {
@@ -112,6 +148,11 @@
     .feature p {
       color: #667085;
     }
+
+
+    /* =========================
+       MISSION
+    ========================= */
 
     .mission {
       background: #111827;
@@ -132,6 +173,273 @@
       font-size: 18px;
     }
 
+
+    /* =========================
+       JOB SEARCH
+    ========================= */
+
+    .search-heading {
+      margin-bottom: 8px;
+      font-size: 32px;
+    }
+
+    .search-description {
+      color: #667085;
+      margin-bottom: 28px;
+    }
+
+    .search-panel {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      border: 1px solid #e3e7ef;
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, .04);
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .filter-field {
+      position: relative;
+    }
+
+    .filter-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #344054;
+    }
+
+    .filter-field input,
+    .filter-field select {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 13px;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      background: white;
+      color: #14213d;
+      font-size: 15px;
+    }
+
+    .filter-field input:focus,
+    .filter-field select:focus {
+      outline: 2px solid #315ee8;
+      outline-offset: 1px;
+      border-color: #315ee8;
+    }
+
+    .filter-field select:disabled {
+      background: #f2f4f7;
+      color: #98a2b3;
+      cursor: not-allowed;
+    }
+
+
+    /* =========================
+       AUTOCOMPLETE
+    ========================= */
+
+    .suggestions {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 4px);
+      z-index: 1000;
+      max-height: 280px;
+      overflow-y: auto;
+
+      background: white;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+
+      box-shadow:
+        0 12px 26px
+        rgba(15, 23, 42, .14);
+    }
+
+    .suggestions.open {
+      display: block;
+    }
+
+    .suggestion-item {
+      width: 100%;
+      display: block;
+
+      border: 0;
+      border-bottom:
+        1px solid #eef2f6;
+
+      padding: 11px 14px;
+
+      background: white;
+      text-align: left;
+
+      font-size: 14px;
+      color: #14213d;
+
+      cursor: pointer;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: 0;
+    }
+
+    .suggestion-item:hover,
+    .suggestion-item.active {
+      background: #eef2ff;
+    }
+
+
+    /* =========================
+       SEARCH OPTIONS
+    ========================= */
+
+    .search-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin-top: 22px;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      font-size: 14px;
+      color: #344054;
+    }
+
+    .checkbox-option input {
+      width: 17px;
+      height: 17px;
+    }
+
+
+    /* =========================
+       SEARCH BUTTONS
+    ========================= */
+
+    .search-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .search-button {
+      border: 1px solid #315ee8;
+      border-radius: 8px;
+
+      padding: 13px 22px;
+
+      background: #315ee8;
+      color: white;
+
+      font-size: 15px;
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    .search-button:hover {
+      background: #244bc5;
+    }
+
+    .reset-button {
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+
+      padding: 13px 22px;
+
+      background: white;
+      color: #14213d;
+
+      font-size: 15px;
+      font-weight: 600;
+
+      cursor: pointer;
+    }
+
+    .reset-button:hover {
+      background: #f8fafc;
+    }
+
+
+    /* =========================
+       RESULT STATUS
+    ========================= */
+
+    #jobSearchStatus {
+      margin-top: 28px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+
+    /* =========================
+       JOB CARDS
+    ========================= */
+
+    .job-card {
+      background: white;
+
+      border: 1px solid #d9e0ea;
+      border-radius: 14px;
+
+      padding: 24px;
+      margin: 18px 0;
+
+      text-align: left;
+    }
+
+    .job-card h3 {
+      margin-bottom: 6px;
+      font-size: 21px;
+    }
+
+    .job-meta {
+      margin: 3px 0;
+      color: #344054;
+    }
+
+    .job-description {
+      margin-top: 14px;
+      color: #344054;
+    }
+
+    .view-job-button {
+      display: inline-block;
+
+      margin-top: 15px;
+      padding: 10px 18px;
+
+      background: #315ee8;
+      color: white;
+
+      text-decoration: none;
+
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .view-job-button:hover {
+      background: #244bc5;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
     footer {
       text-align: center;
       padding: 35px;
@@ -139,7 +447,22 @@
       font-size: 14px;
     }
 
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width: 1000px) {
+
+      .filter-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+    }
+
     @media(max-width: 700px) {
+
       .hero h1 {
         font-size: 38px;
       }
@@ -147,365 +470,2148 @@
       .hero {
         padding: 70px 6%;
       }
+
+      .section {
+        padding: 55px 6%;
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-panel {
+        padding: 20px;
+      }
+
     }
+
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  </script>
+
 </head>
+
 
 <body>
 
-<header>
-  <div class="logo">CareerPilot AI</div>
-  <div class="badge">In Development</div>
-</header>
 
-<section class="hero">
+  <!-- =========================
+       HEADER
+  ========================== -->
 
-  <h1>A smarter way to search, match, and apply for jobs.</h1>
+  <header>
 
-  <p>
-    CareerPilot AI is an AI-powered career platform being developed to bring
-    job discovery, intelligent resume matching, resume optimization, and
-    application assistance together in one streamlined experience.
-  </p>
-
-  <div class="status">
-    Private Beta Development
-  </div>
-
-</section>
-
-<section class="section">
-
-  <h2 class="section-title">
-    One platform. A better job search.
-  </h2>
-
-  <p class="section-subtitle">
-    CareerPilot AI is designed to reduce the repetitive work involved in
-    finding relevant opportunities and completing job applications.
-  </p>
-
-  <div class="features">
-
-    <div class="feature">
-      <h3>Unified Job Search</h3>
-      <p>
-        Search and filter relevant opportunities from connected job sources
-        through one centralized Job Hub.
-      </p>
+    <div class="logo">
+      CareerPilot AI
     </div>
 
-    <div class="feature">
-      <h3>AI Job Matching</h3>
-      <p>
-        Compare job requirements against a verified candidate profile to
-        identify opportunities that align with real experience and skills.
-      </p>
+    <div class="badge">
+      In Development
     </div>
 
-    <div class="feature">
-      <h3>Resume Intelligence</h3>
-      <p>
-        Transform an existing resume into a structured candidate profile
-        that can power matching, resume optimization, and applications.
-      </p>
-    </div>
+  </header>
 
-    <div class="feature">
-      <h3>ATS Optimization</h3>
-      <p>
-        Analyze job descriptions and help tailor resumes using verified
-        candidate experience without inventing qualifications.
-      </p>
-    </div>
 
-    <div class="feature">
-      <h3>Powerful Filtering</h3>
-      <p>
-        Search by title, company, industry, location, work setting,
-        salary, posting age, and candidate match.
-      </p>
-    </div>
+  <!-- =========================
+       HERO
+  ========================== -->
 
-    <div class="feature">
-      <h3>Application Assistance</h3>
-      <p>
-        CareerPilot is being designed to reduce repetitive application
-        entry by using a candidate's verified profile to assist with forms.
-      </p>
-    </div>
+  <section class="hero">
 
-  </div>
+    <h1>
+      A smarter way to search, match,
+      and apply for jobs.
+    </h1>
 
-</section>
-
-<section class="mission">
-
-  <h2>Built to give job seekers their time back.</h2>
-
-  <p>
-    The CareerPilot AI project is focused on creating a user-friendly
-    career platform where candidates can discover relevant jobs,
-    understand why they match, prepare stronger applications, and spend
-    less time repeatedly entering the same information.
-  </p>
-
-</section>
-<section class="section" id="job-search">
-  <h2>Search Current Jobs</h2>
-
-  <p>
-    Search current opportunities collected from CareerPilot's connected job sources.
-  </p>
-
-  <div style="max-width: 1000px; margin: 30px auto;">
-    
-    <div style="
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    ">
-
-      <input
-        type="text"
-        id="jobKeyword"
-        placeholder="Job title or keyword"
-        style="padding: 14px; font-size: 16px;"
-      >
-
-      <input
-        type="text"
-        id="jobLocation"
-        placeholder="City, state, or remote"
-        style="padding: 14px; font-size: 16px;"
-      >
-
-      <select
-        id="jobWorkSetting"
-        style="padding: 14px; font-size: 16px;"
-      >
-        <option value="">Any work setting</option>
-        <option value="remote">Remote</option>
-        <option value="hybrid">Hybrid</option>
-        <option value="onsite">On-site</option>
-      </select>
-
-    </div>
-
-    <button
-      id="searchJobsButton"
-      style="
-        padding: 14px 24px;
-        font-size: 16px;
-        cursor: pointer;
-      "
-    >
-      Search Jobs
-    </button>
-
-    <p id="jobSearchStatus" style="margin-top: 20px;">
-      Loading current jobs...
+    <p>
+      CareerPilot AI is an AI-powered career platform
+      being developed to bring job discovery,
+      intelligent resume matching, resume optimization,
+      and application assistance together in one
+      streamlined experience.
     </p>
 
-    <div id="jobResults"></div>
+    <div class="status">
+      Private Beta Development
+    </div>
 
-  </div>
-</section>
-<footer>
-  © 2026 CareerPilot AI. Currently in development.
-</footer>
+  </section>
+
+
+  <!-- =========================
+       FEATURES
+  ========================== -->
+
+  <section class="section">
+
+    <h2 class="section-title">
+      One platform. A better job search.
+    </h2>
+
+    <p class="section-subtitle">
+      CareerPilot AI is designed to reduce the repetitive
+      work involved in finding relevant opportunities
+      and completing job applications.
+    </p>
+
+
+    <div class="features">
+
+      <div class="feature">
+
+        <h3>
+          Unified Job Search
+        </h3>
+
+        <p>
+          Search and filter relevant opportunities
+          from connected job sources through one
+          centralized Job Hub.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <h3>
+          AI Job Matching
+        </h3>
+
+        <p>
+          Compare job requirements against a verified
+          candidate profile to identify opportunities
+          that align with real experience and skills.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <h3>
+          Resume Intelligence
+        </h3>
+
+        <p>
+          Transform an existing resume into a structured
+          candidate profile that can power matching,
+          resume optimization, and applications.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <h3>
+          ATS Optimization
+        </h3>
+
+        <p>
+          Analyze job descriptions and help tailor
+          resumes using verified candidate experience
+          without inventing qualifications.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <h3>
+          Powerful Filtering
+        </h3>
+
+        <p>
+          Search by title, company, industry, location,
+          work setting, salary, posting age, and
+          candidate match.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <h3>
+          Application Assistance
+        </h3>
+
+        <p>
+          CareerPilot is being designed to reduce
+          repetitive application entry by using a
+          candidate's verified profile to assist
+          with forms.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       MISSION
+  ========================== -->
+
+  <section class="mission">
+
+    <h2>
+      Built to give job seekers their time back.
+    </h2>
+
+    <p>
+      The CareerPilot AI project is focused on creating
+      a user-friendly career platform where candidates
+      can discover relevant jobs, understand why they
+      match, prepare stronger applications, and spend
+      less time repeatedly entering the same information.
+    </p>
+
+  </section>
+
+
+  <!-- =========================
+       JOB SEARCH
+  ========================== -->
+
+  <section
+    class="section"
+    id="job-search"
+  >
+
+    <h2 class="search-heading">
+      Search Current Jobs
+    </h2>
+
+    <p class="search-description">
+      Search current opportunities collected from
+      CareerPilot's connected job sources.
+    </p>
+
+
+    <div class="search-panel">
+
+      <form id="jobSearchForm">
+
+
+        <div class="filter-grid">
+
+
+          <!-- TITLE / KEYWORD -->
+
+          <div class="filter-field">
+
+            <label for="jobKeyword">
+              Title / keyword
+            </label>
+
+            <input
+              type="text"
+              id="jobKeyword"
+              placeholder="e.g. Revenue Cycle"
+              autocomplete="off"
+            >
+
+            <div
+              id="jobKeywordSuggestions"
+              class="suggestions">
+            </div>
+
+          </div>
+
+
+          <!-- COMPANY -->
+
+          <div class="filter-field">
+
+            <label for="jobCompany">
+              Company
+            </label>
+
+            <input
+              type="text"
+              id="jobCompany"
+              placeholder="e.g. AdventHealth"
+              autocomplete="off"
+            >
+
+            <div
+              id="jobCompanySuggestions"
+              class="suggestions">
+            </div>
+
+          </div>
+
+
+          <!-- POSTED -->
+
+          <div class="filter-field">
+
+            <label for="jobPosted">
+              Posted
+            </label>
+
+            <select id="jobPosted">
+
+              <option value="">
+                Any time
+              </option>
+
+              <option value="1">
+                Last 24 hours
+              </option>
+
+              <option value="3">
+                Last 3 days
+              </option>
+
+              <option
+                value="7"
+                selected
+              >
+                Last 7 days
+              </option>
+
+              <option value="14">
+                Last 14 days
+              </option>
+
+              <option value="30">
+                Last 30 days
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- WORK SETTING -->
+
+          <div class="filter-field">
+
+            <label for="jobWorkSetting">
+              Work setting
+            </label>
+
+            <select id="jobWorkSetting">
+
+              <option value="">
+                Any work setting
+              </option>
+
+              <option value="remote-hybrid">
+                Remote + Hybrid
+              </option>
+
+              <option value="remote">
+                Remote
+              </option>
+
+              <option value="hybrid">
+                Hybrid
+              </option>
+
+              <option value="onsite">
+                On-site
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- MINIMUM SALARY -->
+
+          <div class="filter-field">
+
+            <label for="jobMinimumSalary">
+              Minimum salary
+            </label>
+
+            <select id="jobMinimumSalary">
+
+              <option value="">
+                Any salary
+              </option>
+
+              <option value="50000">
+                $50,000+
+              </option>
+
+              <option value="75000">
+                $75,000+
+              </option>
+
+              <option value="90000">
+                $90,000+
+              </option>
+
+              <option value="100000">
+                $100,000+
+              </option>
+
+              <option value="125000">
+                $125,000+
+              </option>
+
+              <option value="150000">
+                $150,000+
+              </option>
+
+              <option value="175000">
+                $175,000+
+              </option>
+
+              <option value="200000">
+                $200,000+
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- MINIMUM MATCH -->
+
+          <div class="filter-field">
+
+            <label for="jobMinimumMatch">
+              Minimum match
+            </label>
+
+            <select
+              id="jobMinimumMatch"
+              disabled
+              title="Available when CareerPilot AI matching is enabled"
+            >
+
+              <option>
+                Coming with AI matching
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- INDUSTRY -->
+
+          <div class="filter-field">
+
+            <label for="jobIndustry">
+              Industry
+            </label>
+
+            <input
+              type="text"
+              id="jobIndustry"
+              placeholder="e.g. Healthcare"
+              autocomplete="off"
+            >
+
+            <div
+              id="jobIndustrySuggestions"
+              class="suggestions">
+            </div>
+
+          </div>
+
+
+          <!-- LOCATION -->
+
+          <div class="filter-field">
+
+            <label for="jobLocation">
+              Location
+            </label>
+
+            <input
+              type="text"
+              id="jobLocation"
+              placeholder="e.g. Orlando, Florida"
+              autocomplete="off"
+            >
+
+            <div
+              id="jobLocationSuggestions"
+              class="suggestions">
+            </div>
+
+          </div>
+
+
+          <!-- DISTANCE -->
+
+          <div class="filter-field">
+
+            <label for="jobDistance">
+              Distance
+            </label>
+
+            <select
+              id="jobDistance"
+              disabled
+              title="Distance filtering will be enabled after geographic coordinates are added"
+            >
+
+              <option>
+                Coming soon
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- OPTIONAL FILTER RULES -->
+
+        <div class="search-options">
+
+          <label class="checkbox-option">
+
+            <input
+              type="checkbox"
+              id="includeSalaryUnknown"
+              checked
+            >
+
+            Include jobs with salary not listed
+
+          </label>
+
+
+          <label class="checkbox-option">
+
+            <input
+              type="checkbox"
+              id="includeWorkSettingUnknown"
+              checked
+            >
+
+            Include jobs where work setting is unclear
+
+          </label>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="search-actions">
+
+          <button
+            type="submit"
+            class="search-button"
+          >
+            Search Current Jobs
+          </button>
+
+
+          <button
+            type="button"
+            id="resetFiltersButton"
+            class="reset-button"
+          >
+            Reset Filters
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <p id="jobSearchStatus">
+        Loading current jobs...
+      </p>
+
+
+      <div id="jobResults">
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+    © 2026 CareerPilot AI.
+    Currently in development.
+  </footer>
+
+
+  <!-- =========================
+       CAREERPILOT JAVASCRIPT
+  ========================== -->
 
   <script>
-  const SUPABASE_URL = "https://jebakbovivznzcmtyvcc.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
 
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL =
+      "https://jebakbovivznzcmtyvcc.supabase.co";
 
-  async function searchJobs() {
-  const keyword = document
-    .getElementById("jobKeyword")
-    .value
-    .trim();
+    const SUPABASE_KEY =
+      "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
 
-  const location = document
-    .getElementById("jobLocation")
-    .value
-    .trim();
 
-  const workSetting = document
-    .getElementById("jobWorkSetting")
-    .value;
+    const db =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
-  const status = document.getElementById("jobSearchStatus");
-  const results = document.getElementById("jobResults");
 
-  status.textContent = "Searching current jobs...";
-  results.innerHTML = "";
+    /* =========================
+       DEBOUNCE
+    ========================= */
 
-  let query = db
-    .from("jobs")
-    .select(`
-      id,
-      title,
-      company_name,
-      location_text,
-      work_setting,
-      salary_min,
-      salary_max,
-      posted_at,
-      source_name,
-      description,
-      apply_url
-    `)
-    .eq("is_active", true)
-    .order("posted_at", { ascending: false })
-    .limit(50);
+    function debounce(
+      func,
+      delay = 250
+    ) {
 
-  if (keyword) {
-    query = query.or(
-      `title.ilike.%${keyword}%,company_name.ilike.%${keyword}%,description.ilike.%${keyword}%`
-    );
-  }
+      let timer;
 
-  if (location) {
-    query = query.ilike(
-      "location_text",
-      `%${location}%`
-    );
-  }
+      return (...args) => {
 
-  if (workSetting) {
-    query = query.eq(
-      "work_setting",
-      workSetting
-    );
-  }
+        clearTimeout(timer);
 
-  const { data, error } = await query;
+        timer =
+          setTimeout(
+            () => func(...args),
+            delay
+          );
 
-  if (error) {
-    console.error("Job search error:", error);
-    status.textContent =
-      "There was a problem loading jobs.";
-    return;
-  }
+      };
 
-  status.textContent =
-    `${data.length} current job${data.length === 1 ? "" : "s"} found`;
-
-  if (data.length === 0) {
-    results.innerHTML =
-      "<p>No jobs matched your search.</p>";
-    return;
-  }
-
-  data.forEach((job) => {
-    const card = document.createElement("div");
-
-    card.style.cssText = `
-      border: 1px solid #d9deea;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 18px 0;
-      text-align: left;
-      background: white;
-    `;
-
-    const title = document.createElement("h3");
-    title.textContent = job.title || "Untitled position";
-
-    const company = document.createElement("p");
-    company.textContent =
-      job.company_name || "Company not listed";
-
-    const details = document.createElement("p");
-
-    const detailParts = [
-      job.location_text,
-      job.work_setting
-        ? job.work_setting.charAt(0).toUpperCase() +
-          job.work_setting.slice(1)
-        : null,
-      job.source_name
-        ? `Source: ${job.source_name}`
-        : null
-    ].filter(Boolean);
-
-    details.textContent = detailParts.join(" • ");
-
-    if (job.salary_min || job.salary_max) {
-      const salary = document.createElement("p");
-
-      const min = job.salary_min
-        ? Number(job.salary_min).toLocaleString()
-        : null;
-
-      const max = job.salary_max
-        ? Number(job.salary_max).toLocaleString()
-        : null;
-
-      salary.textContent =
-        min && max
-          ? `$${min} – $${max}`
-          : `$${min || max}`;
-
-      card.appendChild(title);
-      card.appendChild(company);
-      card.appendChild(details);
-      card.appendChild(salary);
-    } else {
-      card.appendChild(title);
-      card.appendChild(company);
-      card.appendChild(details);
     }
 
-    if (job.description) {
-      const description = document.createElement("p");
 
-      description.textContent =
-        job.description.length > 250
-          ? job.description.substring(0, 250) + "..."
-          : job.description;
+    /* =========================
+       AUTOCOMPLETE DATA
+    ========================= */
 
-      description.style.marginTop = "12px";
+    async function getSuggestions(
+      databaseField,
+      searchText
+    ) {
 
-      card.appendChild(description);
+      const term =
+        searchText.trim();
+
+      if (term.length < 2) {
+        return [];
+      }
+
+
+      const {
+        data,
+        error
+      } = await db
+
+        .from("jobs")
+
+        .select(databaseField)
+
+        .eq(
+          "is_active",
+          true
+        )
+
+        .ilike(
+          databaseField,
+          `%${term}%`
+        )
+
+        .limit(50);
+
+
+      if (error) {
+
+        console.error(
+          "Autocomplete error:",
+          error
+        );
+
+        return [];
+
+      }
+
+
+      const values =
+        (data || [])
+
+          .map(
+            row =>
+              row[databaseField]
+          )
+
+          .filter(Boolean);
+
+
+      const uniqueValues =
+        [...new Set(values)];
+
+
+      const lowerTerm =
+        term.toLowerCase();
+
+
+      uniqueValues.sort(
+        (a, b) => {
+
+          const aLower =
+            a.toLowerCase();
+
+          const bLower =
+            b.toLowerCase();
+
+
+          const aStarts =
+            aLower.startsWith(
+              lowerTerm
+            );
+
+          const bStarts =
+            bLower.startsWith(
+              lowerTerm
+            );
+
+
+          if (
+            aStarts &&
+            !bStarts
+          ) {
+            return -1;
+          }
+
+
+          if (
+            !aStarts &&
+            bStarts
+          ) {
+            return 1;
+          }
+
+
+          return a.localeCompare(b);
+
+        }
+      );
+
+
+      return uniqueValues.slice(
+        0,
+        8
+      );
+
     }
 
-    if (job.apply_url) {
-      const link = document.createElement("a");
 
-      link.href = job.apply_url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = "View Job";
+    /* =========================
+       AUTOCOMPLETE UI
+    ========================= */
 
-      link.style.cssText = `
-        display: inline-block;
-        margin-top: 14px;
-        padding: 10px 18px;
-        background: #315ee8;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: bold;
-      `;
+    function setupAutocomplete(
+      inputId,
+      suggestionBoxId,
+      databaseField
+    ) {
 
-      card.appendChild(link);
+      const input =
+        document.getElementById(
+          inputId
+        );
+
+
+      const suggestionBox =
+        document.getElementById(
+          suggestionBoxId
+        );
+
+
+      let items = [];
+
+      let activeIndex = -1;
+
+      let requestNumber = 0;
+
+
+      function closeSuggestions() {
+
+        suggestionBox.innerHTML =
+          "";
+
+        suggestionBox.classList.remove(
+          "open"
+        );
+
+        items = [];
+
+        activeIndex = -1;
+
+      }
+
+
+      function chooseSuggestion(
+        value
+      ) {
+
+        input.value =
+          value;
+
+        closeSuggestions();
+
+        input.focus();
+
+      }
+
+
+      function updateActiveItem() {
+
+        const buttons =
+          suggestionBox.querySelectorAll(
+            ".suggestion-item"
+          );
+
+
+        buttons.forEach(
+          (button, index) => {
+
+            button.classList.toggle(
+              "active",
+              index === activeIndex
+            );
+
+          }
+        );
+
+      }
+
+
+      function showSuggestions(
+        suggestions
+      ) {
+
+        suggestionBox.innerHTML =
+          "";
+
+        items =
+          suggestions;
+
+        activeIndex =
+          -1;
+
+
+        if (
+          !suggestions.length
+        ) {
+
+          suggestionBox
+            .classList
+            .remove("open");
+
+          return;
+
+        }
+
+
+        suggestions.forEach(
+          value => {
+
+            const button =
+              document.createElement(
+                "button"
+              );
+
+
+            button.type =
+              "button";
+
+            button.className =
+              "suggestion-item";
+
+            button.textContent =
+              value;
+
+
+            button.addEventListener(
+              "click",
+              () =>
+                chooseSuggestion(
+                  value
+                )
+            );
+
+
+            suggestionBox.appendChild(
+              button
+            );
+
+          }
+        );
+
+
+        suggestionBox
+          .classList
+          .add("open");
+
+      }
+
+
+      const searchSuggestions =
+        debounce(
+          async () => {
+
+            const currentRequest =
+              ++requestNumber;
+
+
+            const suggestions =
+              await getSuggestions(
+                databaseField,
+                input.value
+              );
+
+
+            if (
+              currentRequest !==
+              requestNumber
+            ) {
+              return;
+            }
+
+
+            showSuggestions(
+              suggestions
+            );
+
+          }
+        );
+
+
+      input.addEventListener(
+        "input",
+        searchSuggestions
+      );
+
+
+      input.addEventListener(
+        "keydown",
+        event => {
+
+
+          if (
+            event.key ===
+            "Escape"
+          ) {
+
+            closeSuggestions();
+
+            return;
+
+          }
+
+
+          if (
+            !items.length
+          ) {
+            return;
+          }
+
+
+          if (
+            event.key ===
+            "ArrowDown"
+          ) {
+
+            event.preventDefault();
+
+            activeIndex =
+              (
+                activeIndex + 1
+              ) %
+              items.length;
+
+            updateActiveItem();
+
+          }
+
+
+          if (
+            event.key ===
+            "ArrowUp"
+          ) {
+
+            event.preventDefault();
+
+            activeIndex =
+              activeIndex <= 0
+
+                ? items.length - 1
+
+                : activeIndex - 1;
+
+            updateActiveItem();
+
+          }
+
+
+          if (
+            event.key ===
+              "Enter" &&
+            activeIndex >= 0
+          ) {
+
+            event.preventDefault();
+
+            chooseSuggestion(
+              items[
+                activeIndex
+              ]
+            );
+
+          }
+
+        }
+      );
+
+
+      document.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target !== input &&
+            !suggestionBox.contains(
+              event.target
+            )
+          ) {
+
+            closeSuggestions();
+
+          }
+
+        }
+      );
+
     }
 
-    results.appendChild(card);
-  });
-}
 
-document
-  .getElementById("searchJobsButton")
-  .addEventListener("click", searchJobs);
+    /* =========================
+       POSTED DATE
+    ========================= */
 
-searchJobs();
-</script>
-  
+    function getPostedCutoff(
+      days
+    ) {
+
+      if (!days) {
+        return null;
+      }
+
+
+      const date =
+        new Date();
+
+
+      date.setDate(
+        date.getDate() -
+        Number(days)
+      );
+
+
+      return date.toISOString();
+
+    }
+
+
+    /* =========================
+       FORMAT SALARY
+    ========================= */
+
+    function formatSalary(
+      job
+    ) {
+
+      const min =
+        job.salary_min !== null &&
+        job.salary_min !== undefined
+
+          ? Number(
+              job.salary_min
+            )
+
+          : null;
+
+
+      const max =
+        job.salary_max !== null &&
+        job.salary_max !== undefined
+
+          ? Number(
+              job.salary_max
+            )
+
+          : null;
+
+
+      if (
+        min === null &&
+        max === null
+      ) {
+
+        return null;
+
+      }
+
+
+      const formatter =
+        new Intl.NumberFormat(
+          "en-US",
+          {
+            style: "currency",
+
+            currency:
+              job.salary_currency ||
+              "USD",
+
+            maximumFractionDigits: 0
+          }
+        );
+
+
+      let salaryText;
+
+
+      if (
+        min !== null &&
+        max !== null &&
+        min === max
+      ) {
+
+        salaryText =
+          formatter.format(min);
+
+      }
+
+      else if (
+        min !== null &&
+        max !== null
+      ) {
+
+        salaryText =
+          `${formatter.format(min)} – ${formatter.format(max)}`;
+
+      }
+
+      else if (
+        min !== null
+      ) {
+
+        salaryText =
+          `From ${formatter.format(min)}`;
+
+      }
+
+      else {
+
+        salaryText =
+          `Up to ${formatter.format(max)}`;
+
+      }
+
+
+      if (
+        job.salary_period
+      ) {
+
+        salaryText +=
+          ` / ${job.salary_period}`;
+
+      }
+
+
+      return salaryText;
+
+    }
+
+
+    /* =========================
+       FORMAT WORK SETTING
+    ========================= */
+
+    function formatWorkSetting(
+      value
+    ) {
+
+      if (!value) {
+        return null;
+      }
+
+
+      if (
+        value === "onsite"
+      ) {
+
+        return "On-site";
+
+      }
+
+
+      if (
+        value === "remote"
+      ) {
+
+        return "Remote";
+
+      }
+
+
+      if (
+        value === "hybrid"
+      ) {
+
+        return "Hybrid";
+
+      }
+
+
+      if (
+        value === "unclear"
+      ) {
+
+        return "Work setting unclear";
+
+      }
+
+
+      return value;
+
+    }
+
+
+    /* =========================
+       FORMAT EMPLOYMENT TYPE
+    ========================= */
+
+    function formatEmploymentType(
+      value
+    ) {
+
+      if (!value) {
+        return null;
+      }
+
+
+      return value
+
+        .replaceAll(
+          "_",
+          " "
+        )
+
+        .replace(
+          /\b\w/g,
+          letter =>
+            letter.toUpperCase()
+        );
+
+    }
+
+
+    /* =========================
+       SAFE EXTERNAL LINK
+    ========================= */
+
+    function safeExternalUrl(
+      value
+    ) {
+
+      if (!value) {
+        return null;
+      }
+
+
+      try {
+
+        const url =
+          new URL(value);
+
+
+        if (
+          url.protocol !== "http:" &&
+          url.protocol !== "https:"
+        ) {
+
+          return null;
+
+        }
+
+
+        return url.href;
+
+      }
+
+      catch {
+
+        return null;
+
+      }
+
+    }
+
+
+    /* =========================
+       DISPLAY RESULTS
+    ========================= */
+
+    function renderJobs(
+      jobs
+    ) {
+
+      const results =
+        document.getElementById(
+          "jobResults"
+        );
+
+
+      results.innerHTML =
+        "";
+
+
+      if (
+        !jobs.length
+      ) {
+
+        const message =
+          document.createElement(
+            "p"
+          );
+
+
+        message.textContent =
+          "No jobs matched your search.";
+
+
+        results.appendChild(
+          message
+        );
+
+
+        return;
+
+      }
+
+
+      jobs.forEach(
+        job => {
+
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+
+          card.className =
+            "job-card";
+
+
+          /* TITLE */
+
+          const title =
+            document.createElement(
+              "h3"
+            );
+
+
+          title.textContent =
+            job.title ||
+            "Untitled position";
+
+
+          card.appendChild(
+            title
+          );
+
+
+          /* COMPANY */
+
+          const company =
+            document.createElement(
+              "p"
+            );
+
+
+          company.className =
+            "job-meta";
+
+
+          company.textContent =
+            job.company_name ||
+            "Company not listed";
+
+
+          card.appendChild(
+            company
+          );
+
+
+          /* JOB DETAILS */
+
+          const details = [
+
+            job.location_text,
+
+            formatWorkSetting(
+              job.work_setting
+            ),
+
+            formatEmploymentType(
+              job.employment_type
+            ),
+
+            job.source_name
+              ? `Source: ${job.source_name}`
+              : null
+
+          ].filter(Boolean);
+
+
+          if (
+            details.length
+          ) {
+
+            const detailLine =
+              document.createElement(
+                "p"
+              );
+
+
+            detailLine.className =
+              "job-meta";
+
+
+            detailLine.textContent =
+              details.join(" • ");
+
+
+            card.appendChild(
+              detailLine
+            );
+
+          }
+
+
+          /* SALARY */
+
+          const salary =
+            formatSalary(job);
+
+
+          if (salary) {
+
+            const salaryLine =
+              document.createElement(
+                "p"
+              );
+
+
+            salaryLine.className =
+              "job-meta";
+
+
+            salaryLine.textContent =
+              salary;
+
+
+            card.appendChild(
+              salaryLine
+            );
+
+          }
+
+
+          /* POSTED */
+
+          if (
+            job.posted_at
+          ) {
+
+            const postedDate =
+              new Date(
+                job.posted_at
+              );
+
+
+            if (
+              !Number.isNaN(
+                postedDate.getTime()
+              )
+            ) {
+
+              const postedLine =
+                document.createElement(
+                  "p"
+                );
+
+
+              postedLine.className =
+                "job-meta";
+
+
+              postedLine.textContent =
+                `Posted ${postedDate.toLocaleDateString()}`;
+
+
+              card.appendChild(
+                postedLine
+              );
+
+            }
+
+          }
+
+
+          /* DESCRIPTION */
+
+          if (
+            job.description
+          ) {
+
+            const description =
+              document.createElement(
+                "p"
+              );
+
+
+            description.className =
+              "job-description";
+
+
+            description.textContent =
+              job.description.length > 300
+
+                ? (
+                    job.description
+                      .substring(
+                        0,
+                        300
+                      ) +
+                    "..."
+                  )
+
+                : job.description;
+
+
+            card.appendChild(
+              description
+            );
+
+          }
+
+
+          /* VIEW JOB */
+
+          const applyUrl =
+            safeExternalUrl(
+              job.apply_url
+            );
+
+
+          if (
+            applyUrl
+          ) {
+
+            const link =
+              document.createElement(
+                "a"
+              );
+
+
+            link.href =
+              applyUrl;
+
+
+            link.target =
+              "_blank";
+
+
+            link.rel =
+              "noopener noreferrer";
+
+
+            link.textContent =
+              "View Job";
+
+
+            link.className =
+              "view-job-button";
+
+
+            card.appendChild(
+              link
+            );
+
+          }
+
+
+          results.appendChild(
+            card
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================
+       SEARCH JOBS
+    ========================= */
+
+    async function searchJobs() {
+
+
+      const keyword =
+        document
+          .getElementById(
+            "jobKeyword"
+          )
+          .value
+          .trim();
+
+
+      const company =
+        document
+          .getElementById(
+            "jobCompany"
+          )
+          .value
+          .trim();
+
+
+      const postedDays =
+        document
+          .getElementById(
+            "jobPosted"
+          )
+          .value;
+
+
+      const workSetting =
+        document
+          .getElementById(
+            "jobWorkSetting"
+          )
+          .value;
+
+
+      const minimumSalary =
+        document
+          .getElementById(
+            "jobMinimumSalary"
+          )
+          .value;
+
+
+      const industry =
+        document
+          .getElementById(
+            "jobIndustry"
+          )
+          .value
+          .trim();
+
+
+      const location =
+        document
+          .getElementById(
+            "jobLocation"
+          )
+          .value
+          .trim();
+
+
+      const includeSalaryUnknown =
+        document
+          .getElementById(
+            "includeSalaryUnknown"
+          )
+          .checked;
+
+
+      const includeWorkSettingUnknown =
+        document
+          .getElementById(
+            "includeWorkSettingUnknown"
+          )
+          .checked;
+
+
+      const status =
+        document.getElementById(
+          "jobSearchStatus"
+        );
+
+
+      const results =
+        document.getElementById(
+          "jobResults"
+        );
+
+
+      status.textContent =
+        "Searching current jobs...";
+
+
+      results.innerHTML =
+        "";
+
+
+      let query =
+        db
+
+          .from("jobs")
+
+          .select(
+            `
+              id,
+              title,
+              company_name,
+              location_text,
+              work_setting,
+              salary_min,
+              salary_max,
+              salary_currency,
+              salary_period,
+              employment_type,
+              industry,
+              posted_at,
+              source_name,
+              description,
+              apply_url
+            `,
+            {
+              count: "exact"
+            }
+          )
+
+          .eq(
+            "is_active",
+            true
+          );
+
+
+      /* KEYWORD */
+
+      if (
+        keyword
+      ) {
+
+        query =
+          query.textSearch(
+            "search_document",
+            keyword,
+            {
+              type: "websearch",
+              config: "english"
+            }
+          );
+
+      }
+
+
+      /* COMPANY */
+
+      if (
+        company
+      ) {
+
+        query =
+          query.ilike(
+            "company_name",
+            `%${company}%`
+          );
+
+      }
+
+
+      /* POSTED */
+
+      const cutoff =
+        getPostedCutoff(
+          postedDays
+        );
+
+
+      if (
+        cutoff
+      ) {
+
+        query =
+          query.gte(
+            "posted_at",
+            cutoff
+          );
+
+      }
+
+
+      /* WORK SETTING */
+
+      if (
+        workSetting
+      ) {
+
+        let settings;
+
+
+        if (
+          workSetting ===
+          "remote-hybrid"
+        ) {
+
+          settings = [
+            "remote",
+            "hybrid"
+          ];
+
+        }
+
+        else {
+
+          settings = [
+            workSetting
+          ];
+
+        }
+
+
+        if (
+          includeWorkSettingUnknown
+        ) {
+
+          settings.push(
+            "unclear"
+          );
+
+        }
+
+
+        query =
+          query.in(
+            "work_setting",
+            settings
+          );
+
+      }
+
+      else if (
+        !includeWorkSettingUnknown
+      ) {
+
+        query =
+          query.neq(
+            "work_setting",
+            "unclear"
+          );
+
+      }
+
+
+      /* SALARY */
+
+      if (
+        minimumSalary
+      ) {
+
+        const minimum =
+          Number(
+            minimumSalary
+          );
+
+
+        if (
+          includeSalaryUnknown
+        ) {
+
+          query =
+            query.or(
+              `salary_min.gte.${minimum},salary_max.gte.${minimum},and(salary_min.is.null,salary_max.is.null)`
+            );
+
+        }
+
+        else {
+
+          query =
+            query.or(
+              `salary_min.gte.${minimum},salary_max.gte.${minimum}`
+            );
+
+        }
+
+      }
+
+
+      /* INDUSTRY */
+
+      if (
+        industry
+      ) {
+
+        query =
+          query.ilike(
+            "industry",
+            `%${industry}%`
+          );
+
+      }
+
+
+      /* LOCATION */
+
+      if (
+        location
+      ) {
+
+        query =
+          query.ilike(
+            "location_text",
+            `%${location}%`
+          );
+
+      }
+
+
+      /* SORT / LIMIT */
+
+      query =
+        query
+
+          .order(
+            "posted_at",
+            {
+              ascending: false,
+              nullsFirst: false
+            }
+          )
+
+          .limit(50);
+
+
+      const {
+        data,
+        error,
+        count
+      } = await query;
+
+
+      if (
+        error
+      ) {
+
+        console.error(
+          "Job search error:",
+          error
+        );
+
+
+        status.textContent =
+          "There was a problem loading jobs.";
+
+
+        return;
+
+      }
+
+
+      const jobs =
+        data || [];
+
+
+      const total =
+        count ?? jobs.length;
+
+
+      if (
+        total > jobs.length
+      ) {
+
+        status.textContent =
+          `${total} current jobs found • showing first ${jobs.length}`;
+
+      }
+
+      else {
+
+        status.textContent =
+          `${total} current job${total === 1 ? "" : "s"} found`;
+
+      }
+
+
+      renderJobs(
+        jobs
+      );
+
+    }
+
+
+    /* =========================
+       AUTOCOMPLETE SETUP
+    ========================= */
+
+    setupAutocomplete(
+      "jobKeyword",
+      "jobKeywordSuggestions",
+      "title"
+    );
+
+
+    setupAutocomplete(
+      "jobCompany",
+      "jobCompanySuggestions",
+      "company_name"
+    );
+
+
+    setupAutocomplete(
+      "jobIndustry",
+      "jobIndustrySuggestions",
+      "industry"
+    );
+
+
+    setupAutocomplete(
+      "jobLocation",
+      "jobLocationSuggestions",
+      "location_text"
+    );
+
+
+    /* =========================
+       SEARCH SUBMIT
+    ========================= */
+
+    document
+      .getElementById(
+        "jobSearchForm"
+      )
+      .addEventListener(
+        "submit",
+        event => {
+
+          event.preventDefault();
+
+          searchJobs();
+
+        }
+      );
+
+
+    /* =========================
+       RESET FILTERS
+    ========================= */
+
+    document
+      .getElementById(
+        "resetFiltersButton"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+
+          document
+            .getElementById(
+              "jobKeyword"
+            )
+            .value = "";
+
+
+          document
+            .getElementById(
+              "jobCompany"
+            )
+            .value = "";
+
+
+          document
+            .getElementById(
+              "jobPosted"
+            )
+            .value = "7";
+
+
+          document
+            .getElementById(
+              "jobWorkSetting"
+            )
+            .value = "";
+
+
+          document
+            .getElementById(
+              "jobMinimumSalary"
+            )
+            .value = "";
+
+
+          document
+            .getElementById(
+              "jobIndustry"
+            )
+            .value = "";
+
+
+          document
+            .getElementById(
+              "jobLocation"
+            )
+            .value = "";
+
+
+          document
+            .getElementById(
+              "includeSalaryUnknown"
+            )
+            .checked = true;
+
+
+          document
+            .getElementById(
+              "includeWorkSettingUnknown"
+            )
+            .checked = true;
+
+
+          searchJobs();
+
+        }
+      );
+
+
+    /* =========================
+       INITIAL JOB LOAD
+    ========================= */
+
+    searchJobs();
+
+  </script>
+
+
 </body>
+
 </html>
