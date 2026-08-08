@@ -149,6 +149,7 @@
       }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -256,5 +257,29 @@
   © 2026 CareerPilot AI. Currently in development.
 </footer>
 
+  <script>
+  const SUPABASE_URL = "https://jebakbovivznzcmtyvcc.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
+
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function testDatabaseConnection() {
+    const { data, error } = await db
+      .from("job_sources")
+      .select("name, source_type, active")
+      .limit(20);
+
+    if (error) {
+      console.error("Supabase connection error:", error);
+      return;
+    }
+
+    console.log("Supabase connected successfully!");
+    console.table(data);
+  }
+
+  testDatabaseConnection();
+</script>
+  
 </body>
 </html>
