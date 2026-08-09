@@ -1183,7 +1183,7 @@
 
             <div class="review-actions">
               <button type="button" class="review-primary-button" id="saveResumeReviewButton">Save Review</button>
-              <button type="button" class="review-secondary-button" id="approveResumeReviewButton">Approve for Profile Import</button>
+              <button type="button" class="review-secondary-button" id="approveResumeReviewButton">Approve & Import to Career Profile</button>
               <span id="resumeReviewStatus"></span>
             </div>
           </div>
@@ -1852,18 +1852,24 @@
 
       document.getElementById("careerHistoryPlaceholders").style.display = "none";
       document.getElementById("careerAnalysisSummary").classList.add("show");
-      document.getElementById("careerHistoryIntro").textContent = "CareerPilot has analyzed your resume. Review the structured information before using it to build your permanent Career Profile.";
+      document.getElementById("careerHistoryIntro").textContent = status === "imported"
+        ? "CareerPilot has imported the reviewed resume information into your permanent Career Profile."
+        : "CareerPilot has analyzed your resume. Review the structured information before using it to build your permanent Career Profile.";
       document.getElementById("careerAnalysisTitle").textContent = `${selected.resume_name || selected.original_filename || "Resume"} analysis`;
-      document.getElementById("careerAnalysisSubtitle").textContent = status === "approved"
-        ? "You approved this analysis for profile import. You can reopen it and make additional corrections at any time."
-        : "Review what CareerPilot found before it is added to your Career Profile.";
+      document.getElementById("careerAnalysisSubtitle").textContent = status === "imported"
+        ? "This reviewed information is now part of your Career Profile. Reopen the review anytime to make corrections and update the profile."
+        : status === "approved"
+          ? "You approved this analysis. CareerPilot is ready to complete the permanent profile import."
+          : "Review what CareerPilot found before it is added to your Career Profile.";
       document.getElementById("analysisExperienceCount").textContent = counts.experience;
       document.getElementById("analysisEducationCount").textContent = counts.education;
       document.getElementById("analysisSkillsCount").textContent = counts.skills;
       document.getElementById("analysisCertificationsCount").textContent = counts.certifications;
-      document.getElementById("careerAnalysisStatus").textContent = status === "approved"
-        ? "Approved for profile import. Permanent Career Profile import is the next backend step."
-        : "Ready for review. Nothing has been copied into your permanent Career Profile yet.";
+      document.getElementById("careerAnalysisStatus").textContent = status === "imported"
+        ? "✓ Imported to Career Profile. Your reviewed Experience, Education, Skills, and Certifications are saved."
+        : status === "approved"
+          ? "Approved. Click Review Imported Resume and import again to complete or retry the permanent Career Profile import."
+          : "Ready for review. Nothing has been copied into your permanent Career Profile yet.";
 
       if (currentReviewResumeId === selected.id && document.getElementById("resumeReviewPanel").classList.contains("show")) {
         currentReviewAnalysis = deepClone(analysisNode.data);
@@ -1949,8 +1955,16 @@
 
         if (analysisNode) {
           const aiBadge = document.createElement("span");
-          aiBadge.className = analysisNode.status === "approved" ? "approved-badge" : "ai-badge";
-          aiBadge.textContent = analysisNode.status === "approved" ? "Approved" : "AI Analyzed";
+          if (analysisNode.status === "imported") {
+            aiBadge.className = "approved-badge";
+            aiBadge.textContent = "Profile Imported";
+          } else if (analysisNode.status === "approved") {
+            aiBadge.className = "approved-badge";
+            aiBadge.textContent = "Approved";
+          } else {
+            aiBadge.className = "ai-badge";
+            aiBadge.textContent = "AI Analyzed";
+          }
           title.appendChild(aiBadge);
         }
 
@@ -2174,6 +2188,10 @@
 
       document.getElementById("resumeReviewTitle").textContent = `Review Imported Resume — ${currentReviewResumeName}`;
       document.getElementById("resumeReviewStatus").textContent = "";
+      const approveButton = document.getElementById("approveResumeReviewButton");
+      approveButton.textContent = analysisNode?.status === "imported"
+        ? "Update Career Profile"
+        : "Approve & Import to Career Profile";
       renderResumeReviewFields();
       document.getElementById("resumeReviewPanel").classList.add("show");
     }
@@ -2448,9 +2466,11 @@
       const status = document.getElementById("resumeReviewStatus");
       saveButton.disabled = true;
       approveButton.disabled = true;
-      status.textContent = approve ? "Approving review..." : "Saving review...";
+      status.textContent = approve ? "Saving review and importing Career Profile..." : "Saving review...";
 
       try {
+        // IMPORTANT: the permanent import always uses what is currently in the
+        // review form, including any corrections the user made after AI analysis.
         currentReviewAnalysis = collectResumeReviewForm();
 
         const { data: row, error: readError } = await db
@@ -2470,6 +2490,8 @@
           : {};
         const now = new Date().toISOString();
 
+        // Save the reviewed version first. If this is an import, mark it approved
+        // so the database RPC can verify the user explicitly approved it.
         parsedData.analysis = {
           ...previousAnalysis,
           status: approve ? "approved" : "ready_for_review",
@@ -2485,15 +2507,47 @@
 
         if (updateError) throw updateError;
 
-        status.textContent = approve
-          ? "Approved. CareerPilot is ready to import this information into your permanent Career Profile in the next backend step."
-          : "Review saved.";
-        showToast(approve ? "Resume analysis approved." : "Resume review saved.");
+        if (!approve) {
+          status.textContent = "Review saved.";
+          showToast("Resume review saved.");
+          await loadResumes();
+          return;
+        }
+
+        // The database function performs the permanent Career Profile import
+        // atomically and only for the signed-in user's approved resume.
+        const { data: importResult, error: importError } = await db.rpc(
+          "import_resume_to_profile",
+          { p_resume_id: currentReviewResumeId }
+        );
+
+        if (importError) throw importError;
+        if (!importResult?.success) {
+          throw new Error("CareerPilot could not complete the permanent Career Profile import.");
+        }
+
+        const exp = Number(importResult.experience || 0);
+        const edu = Number(importResult.education || 0);
+        const skills = Number(importResult.skills || 0);
+        const certs = Number(importResult.certifications || 0);
+
+        status.textContent =
+          `Imported to Career Profile — ${exp} experience entries, ${edu} education entries, ` +
+          `${skills} skills, and ${certs} certifications saved.`;
+
+        showToast("Career Profile imported successfully.");
+
+        // Refresh both the editable Profile fields and the resume/analysis badges.
+        await loadCareerProfile(currentSession.user.id);
         await loadResumes();
+        await loadMemberDashboard(currentSession.user.id);
+
+        approveButton.textContent = "Update Career Profile";
       } catch (error) {
-        console.error("Save resume review error:", error);
-        status.textContent = error?.message || "We couldn't save your review.";
-        showToast("We couldn't save your review.");
+        console.error("Save/import resume review error:", error);
+        const message = error?.message || "We couldn't save and import your reviewed resume.";
+        status.textContent = message;
+        showToast("We couldn't complete the Career Profile import.");
       } finally {
         saveButton.disabled = false;
         approveButton.disabled = false;
