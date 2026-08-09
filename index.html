@@ -138,7 +138,6 @@
       max-width: 760px;
       margin: 0 auto 45px;
     }
-
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -273,7 +272,6 @@
       color: #98a2b3;
       cursor: not-allowed;
     }
-
     .suggestions {
       display: none;
       position: absolute;
@@ -303,7 +301,6 @@
     }
     .suggestion-item:last-child { border-bottom: 0; }
     .suggestion-item:hover, .suggestion-item.active { background: #eef2ff; }
-
     .search-options { display: flex; flex-wrap: wrap; gap: 25px; margin-top: 22px; }
     .checkbox-option {
       display: flex;
@@ -386,7 +383,6 @@
     .remove-job-button:hover { background: #fef3f2; }
     .save-hint { margin-top: 10px; color: #667085; font-size: 13px; }
 
-    /* CAREER PROFILE */
     #profileSection { display: none; }
     .profile-shell {
       background: white;
@@ -495,6 +491,7 @@
     .profile-save-button:disabled,
     .resume-action-button:disabled { opacity: .6; cursor: wait; }
     #profileSaveStatus { color: #667085; font-size: 14px; }
+
     .resume-upload-box {
       border: 1px dashed #98a2b3;
       background: #f8fafc;
@@ -524,16 +521,23 @@
     .resume-card-main { min-width: 220px; flex: 1; }
     .resume-card-title { font-weight: 800; margin-bottom: 3px; }
     .resume-card-meta { color: #667085; font-size: 13px; }
-    .primary-badge {
+    .primary-badge, .imported-badge {
       display: inline-block;
       margin-left: 7px;
-      background: #ecfdf3;
-      color: #067647;
-      border: 1px solid #abefc6;
       border-radius: 999px;
       padding: 2px 8px;
       font-size: 11px;
       font-weight: 800;
+    }
+    .primary-badge {
+      background: #ecfdf3;
+      color: #067647;
+      border: 1px solid #abefc6;
+    }
+    .imported-badge {
+      background: #eef2ff;
+      color: #244bc5;
+      border: 1px solid #c7d2fe;
     }
     .resume-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .resume-small-button {
@@ -549,6 +553,7 @@
     .resume-small-button.danger { color: #b42318; border-color: #fda29b; }
     .resume-small-button.danger:hover { background: #fef3f2; }
     .resume-small-button:disabled { opacity: .6; cursor: wait; }
+
     .profile-placeholder-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
@@ -832,10 +837,26 @@
         </div>
       </div>
       <div class="member-grid">
-        <div class="member-card"><h3>Saved Jobs</h3><div class="member-number" id="savedJobsCount">0</div><div class="member-small">Jobs saved to your account</div></div>
-        <div class="member-card"><h3>Applications</h3><div class="member-number" id="applicationsCount">0</div><div class="member-small">Applications being tracked</div></div>
-        <div class="member-card"><h3>Job Matches</h3><div class="member-number" id="jobMatchesCount">0</div><div class="member-small">AI matching will be connected next</div></div>
-        <div class="member-card"><h3>Career Profile</h3><div class="member-number" id="profileStatus" style="font-size:18px;">Getting started</div><div class="member-small">Resume and profile tools are coming next</div></div>
+        <div class="member-card">
+          <h3>Saved Jobs</h3>
+          <div class="member-number" id="savedJobsCount">0</div>
+          <div class="member-small">Jobs saved to your account</div>
+        </div>
+        <div class="member-card">
+          <h3>Applications</h3>
+          <div class="member-number" id="applicationsCount">0</div>
+          <div class="member-small">Applications being tracked</div>
+        </div>
+        <div class="member-card">
+          <h3>Job Matches</h3>
+          <div class="member-number" id="jobMatchesCount">0</div>
+          <div class="member-small">AI matching will be connected next</div>
+        </div>
+        <div class="member-card">
+          <h3>Career Profile</h3>
+          <div class="member-number" id="profileStatus" style="font-size:18px;">Getting started</div>
+          <div class="member-small">Complete your profile to improve future job matching.</div>
+        </div>
       </div>
     </div>
   </section>
@@ -848,14 +869,19 @@
           <p>Tell CareerPilot what you have done and what you want next.</p>
         </div>
         <div class="profile-progress-wrap">
-          <div class="profile-progress-label"><span>Profile completion</span><span id="profileProgressText">0%</span></div>
-          <div class="profile-progress-track"><div class="profile-progress-bar" id="profileProgressBar"></div></div>
+          <div class="profile-progress-label">
+            <span>Profile completion</span>
+            <span id="profileProgressText">0%</span>
+          </div>
+          <div class="profile-progress-track">
+            <div class="profile-progress-bar" id="profileProgressBar"></div>
+          </div>
         </div>
       </div>
 
       <form id="careerProfileForm">
         <div class="profile-block">
-          <h3>Personal & contact</h3>
+          <h3>Personal &amp; contact</h3>
           <p class="profile-block-subtitle">Your CareerPilot display name can be different from the name supplied by Google.</p>
           <div class="profile-grid">
             <div class="profile-field"><label for="profileDisplayName">Display name</label><input id="profileDisplayName" type="text" placeholder="How your name should appear in CareerPilot"></div>
@@ -885,8 +911,27 @@
             <div class="profile-field full"><label for="profileTargetTitles">Target job titles</label><textarea id="profileTargetTitles" placeholder="Revenue Cycle Director, Operations Director, Patient Access Director"></textarea><span class="field-help">These will later power job recommendations and autocomplete.</span></div>
             <div class="profile-field"><label for="profileTargetIndustries">Target industries</label><textarea id="profileTargetIndustries" placeholder="Healthcare, Health Tech, Insurance"></textarea></div>
             <div class="profile-field"><label for="profileTargetLocations">Target locations</label><textarea id="profileTargetLocations" placeholder="Orlando, FL; Remote; Tampa, FL"></textarea></div>
-            <div class="profile-field full"><label>Preferred work setting</label><div class="choice-row"><label><input type="checkbox" name="workSettingPreference" value="remote">Remote</label><label><input type="checkbox" name="workSettingPreference" value="hybrid">Hybrid</label><label><input type="checkbox" name="workSettingPreference" value="onsite">On-site</label></div></div>
-            <div class="profile-field full"><label>Employment type</label><div class="choice-row"><label><input type="checkbox" name="employmentTypePreference" value="full_time">Full-time</label><label><input type="checkbox" name="employmentTypePreference" value="part_time">Part-time</label><label><input type="checkbox" name="employmentTypePreference" value="contract">Contract</label><label><input type="checkbox" name="employmentTypePreference" value="temporary">Temporary</label><label><input type="checkbox" name="employmentTypePreference" value="internship">Internship</label></div></div>
+
+            <div class="profile-field full">
+              <label>Preferred work setting</label>
+              <div class="choice-row">
+                <label><input type="checkbox" name="workSettingPreference" value="remote">Remote</label>
+                <label><input type="checkbox" name="workSettingPreference" value="hybrid">Hybrid</label>
+                <label><input type="checkbox" name="workSettingPreference" value="onsite">On-site</label>
+              </div>
+            </div>
+
+            <div class="profile-field full">
+              <label>Employment type</label>
+              <div class="choice-row">
+                <label><input type="checkbox" name="employmentTypePreference" value="full_time">Full-time</label>
+                <label><input type="checkbox" name="employmentTypePreference" value="part_time">Part-time</label>
+                <label><input type="checkbox" name="employmentTypePreference" value="contract">Contract</label>
+                <label><input type="checkbox" name="employmentTypePreference" value="temporary">Temporary</label>
+                <label><input type="checkbox" name="employmentTypePreference" value="internship">Internship</label>
+              </div>
+            </div>
+
             <div class="profile-field"><label for="profileSalaryMin">Desired salary minimum</label><input id="profileSalaryMin" type="number" min="0" step="1000" placeholder="e.g. 90000"></div>
             <div class="profile-field"><label for="profileSalaryMax">Desired salary maximum</label><input id="profileSalaryMax" type="number" min="0" step="1000" placeholder="e.g. 125000"></div>
             <div class="profile-field"><label for="profileSalaryCurrency">Salary currency</label><select id="profileSalaryCurrency"><option value="USD">USD — US Dollar</option><option value="CAD">CAD — Canadian Dollar</option><option value="GBP">GBP — British Pound</option><option value="EUR">EUR — Euro</option><option value="AUD">AUD — Australian Dollar</option></select></div>
@@ -902,15 +947,21 @@
           </div>
         </div>
 
-        <div class="profile-save-row"><button type="submit" class="profile-save-button" id="profileSaveButton">Save Career Profile</button><span id="profileSaveStatus"></span></div>
+        <div class="profile-save-row">
+          <button type="submit" class="profile-save-button" id="profileSaveButton">Save Career Profile</button>
+          <span id="profileSaveStatus"></span>
+        </div>
       </form>
 
       <div class="profile-block">
         <h3>Resume</h3>
-        <p class="profile-block-subtitle">Upload your resume now. Automatic PDF reading and AI analysis will be connected in the next backend step.</p>
+        <p class="profile-block-subtitle">Upload your resume and let CareerPilot securely read it, build your career profile, and prepare it for job matching and tailored resumes.</p>
         <div class="resume-upload-box">
           <strong>Upload a PDF resume</strong>
-          <div class="resume-upload-row"><input type="file" id="resumeFileInput" accept="application/pdf,.pdf"><button type="button" class="resume-action-button" id="uploadResumeButton">Upload Resume</button></div>
+          <div class="resume-upload-row">
+            <input type="file" id="resumeFileInput" accept="application/pdf,.pdf">
+            <button type="button" class="resume-action-button" id="uploadResumeButton">Upload Resume</button>
+          </div>
           <div class="resume-note">PDF only • Maximum 10 MB • Stored privately under your CareerPilot account.</div>
           <div id="resumeUploadStatus" class="resume-note"></div>
         </div>
@@ -919,11 +970,11 @@
 
       <div class="profile-block">
         <h3>Career history</h3>
-        <p class="profile-block-subtitle">The secure database tables are ready. We'll connect these editors after the profile and resume upload are proven stable.</p>
+        <p class="profile-block-subtitle">Import your resume first. Structured Experience, Education, Skills, and Certifications review is the next backend step.</p>
         <div class="profile-placeholder-grid">
-          <div class="profile-placeholder-card"><strong>Experience</strong><span>Add employers, roles, dates, and accomplishments next.</span></div>
-          <div class="profile-placeholder-card"><strong>Education</strong><span>Add schools, degrees, and fields of study next.</span></div>
-          <div class="profile-placeholder-card"><strong>Skills</strong><span>Build a reusable skill inventory for matching.</span></div>
+          <div class="profile-placeholder-card"><strong>Experience</strong><span>Resume import will help populate employers, roles, dates, and accomplishments.</span></div>
+          <div class="profile-placeholder-card"><strong>Education</strong><span>Resume import will help identify schools, degrees, and fields of study.</span></div>
+          <div class="profile-placeholder-card"><strong>Skills</strong><span>Build a reusable skill inventory for matching and tailoring.</span></div>
           <div class="profile-placeholder-card"><strong>Certifications</strong><span>Track licenses, credentials, and expiration dates.</span></div>
         </div>
       </div>
@@ -956,11 +1007,13 @@
             <input type="text" id="jobKeyword" placeholder="e.g. Revenue Cycle" autocomplete="off">
             <div id="jobKeywordSuggestions" class="suggestions"></div>
           </div>
+
           <div class="filter-field">
             <label for="jobCompany">Company</label>
             <input type="text" id="jobCompany" placeholder="e.g. AdventHealth" autocomplete="off">
             <div id="jobCompanySuggestions" class="suggestions"></div>
           </div>
+
           <div class="filter-field">
             <label for="jobPosted">Posted</label>
             <select id="jobPosted">
@@ -972,6 +1025,7 @@
               <option value="30">Last 30 days</option>
             </select>
           </div>
+
           <div class="filter-field">
             <label for="jobWorkSetting">Work setting</label>
             <select id="jobWorkSetting">
@@ -982,6 +1036,7 @@
               <option value="onsite">On-site</option>
             </select>
           </div>
+
           <div class="filter-field">
             <label for="jobMinimumSalary">Minimum salary</label>
             <select id="jobMinimumSalary">
@@ -996,20 +1051,26 @@
               <option value="200000">$200,000+</option>
             </select>
           </div>
+
           <div class="filter-field">
             <label for="jobMinimumMatch">Minimum match</label>
-            <select id="jobMinimumMatch" disabled title="Available when CareerPilot AI matching is enabled"><option>Coming with AI matching</option></select>
+            <select id="jobMinimumMatch" disabled title="Available when CareerPilot AI matching is enabled">
+              <option>Coming with AI matching</option>
+            </select>
           </div>
+
           <div class="filter-field">
             <label for="jobIndustry">Industry</label>
             <input type="text" id="jobIndustry" placeholder="e.g. Healthcare" autocomplete="off">
             <div id="jobIndustrySuggestions" class="suggestions"></div>
           </div>
+
           <div class="filter-field">
             <label for="jobLocation">Location</label>
             <input type="text" id="jobLocation" placeholder="e.g. Orlando, Florida" autocomplete="off">
             <div id="jobLocationSuggestions" class="suggestions"></div>
           </div>
+
           <div class="filter-field">
             <label for="jobDistance">Distance</label>
             <select id="jobDistance" disabled><option>Coming soon</option></select>
@@ -1097,6 +1158,7 @@
     const SUPABASE_URL = "https://jebakbovivznzcmtyvcc.supabase.co";
     const SUPABASE_KEY = "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
     const SITE_URL = "https://chdw265.github.io/careerpilot-ai/";
+
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentSession = null;
@@ -1124,11 +1186,22 @@
       element.textContent = message;
       element.className = `auth-message ${type}`;
     }
-    function clearMessage(element) { element.textContent = ""; element.className = "auth-message"; }
-    function openModal(element) { element.classList.add("open"); document.body.classList.add("modal-open"); }
+
+    function clearMessage(element) {
+      element.textContent = "";
+      element.className = "auth-message";
+    }
+
+    function openModal(element) {
+      element.classList.add("open");
+      document.body.classList.add("modal-open");
+    }
+
     function closeModal(element) {
       element.classList.remove("open");
-      if (!document.querySelector(".modal-backdrop.open")) document.body.classList.remove("modal-open");
+      if (!document.querySelector(".modal-backdrop.open")) {
+        document.body.classList.remove("modal-open");
+      }
     }
 
     function getUserDisplayName(user) {
@@ -1136,26 +1209,37 @@
       const metadata = user.user_metadata || {};
       return metadata.full_name || metadata.name || metadata.first_name || user.email?.split("@")[0] || "User";
     }
+
     function getInitials(value) {
       if (!value) return "U";
       const parts = value.trim().split(/\s+/).filter(Boolean);
       if (!parts.length) return "U";
       if (parts.length === 1) return parts[0].substring(0,1).toUpperCase();
-      return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
+
     function parseList(value) {
       return [...new Set(String(value || "").split(/[\n,;]+/).map(item => item.trim()).filter(Boolean))];
     }
-    function formatList(values) { return Array.isArray(values) ? values.join(", ") : ""; }
+
+    function formatList(values) {
+      return Array.isArray(values) ? values.join(", ") : "";
+    }
+
     function numberOrNull(value) {
       if (value === "" || value === null || value === undefined) return null;
       const number = Number(value);
       return Number.isFinite(number) ? number : null;
     }
+
     function sanitizeFilename(filename) {
-      const cleaned = String(filename || "resume.pdf").replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+      const cleaned = String(filename || "resume.pdf")
+        .replace(/[^a-zA-Z0-9._-]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
       return cleaned || "resume.pdf";
     }
+
     function formatBytes(bytes) {
       const value = Number(bytes || 0);
       if (!value) return "0 KB";
@@ -1169,8 +1253,11 @@
         const url = new URL(value);
         if (url.protocol !== "http:" && url.protocol !== "https:") return null;
         return url.href;
-      } catch { return null; }
+      } catch {
+        return null;
+      }
     }
+
     function formatWorkSetting(value) {
       if (!value) return null;
       if (value === "onsite") return "On-site";
@@ -1179,28 +1266,38 @@
       if (value === "unclear") return "Work setting unclear";
       return value;
     }
+
     function formatEmploymentType(value) {
       if (!value) return null;
       return value.replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
     }
+
     function formatSalary(job) {
       const min = job.salary_min !== null && job.salary_min !== undefined ? Number(job.salary_min) : null;
       const max = job.salary_max !== null && job.salary_max !== undefined ? Number(job.salary_max) : null;
       if (min === null && max === null) return null;
+
       let formatter;
       try {
-        formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: job.salary_currency || "USD", maximumFractionDigits: 0 });
+        formatter = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: job.salary_currency || "USD",
+          maximumFractionDigits: 0
+        });
       } catch {
         formatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
       }
+
       let text;
       if (min !== null && max !== null && min === max) text = formatter.format(min);
       else if (min !== null && max !== null) text = `${formatter.format(min)} – ${formatter.format(max)}`;
       else if (min !== null) text = `From ${formatter.format(min)}`;
       else text = `Up to ${formatter.format(max)}`;
+
       if (job.salary_period) text += ` / ${job.salary_period}`;
       return text;
     }
+
     function getPostedCutoff(days) {
       if (!days) return null;
       const date = new Date();
@@ -1242,6 +1339,7 @@
       if (user) {
         currentProfile = await getCareerProfile(user.id);
         const displayName = profileDisplayName(currentProfile, user);
+
         signedOutNav.style.display = "none";
         signedInNav.style.display = "flex";
         userPill.style.display = "flex";
@@ -1250,9 +1348,15 @@
         heroAccountButton.textContent = "My CareerPilot";
         memberWelcome.textContent = `Welcome, ${displayName}`;
         memberSection.style.display = "block";
+
         populateProfileForm(currentProfile, user);
 
-        await Promise.all([loadSavedJobIds(), loadMemberDashboard(user.id), loadResumes()]);
+        await loadSavedJobIds();
+        await Promise.all([
+          loadMemberDashboard(user.id),
+          loadResumes()
+        ]);
+
         syncSaveButtons();
 
         if (pendingSaveJobId) {
@@ -1285,11 +1389,14 @@
           db.from("applications").select("id", { count: "exact", head: true }).eq("user_id", userId),
           db.from("job_matches").select("id", { count: "exact", head: true }).eq("user_id", userId)
         ]);
+
         document.getElementById("savedJobsCount").textContent = savedJobIds.size;
         document.getElementById("applicationsCount").textContent = applicationResult.count ?? 0;
         document.getElementById("jobMatchesCount").textContent = matchResult.count ?? 0;
         updateProfileCompletion(currentProfile);
-      } catch (error) { console.error("Dashboard load error:", error); }
+      } catch (error) {
+        console.error("Dashboard load error:", error);
+      }
     }
 
     async function getCareerProfile(userId) {
@@ -1301,7 +1408,12 @@
         desired_salary_max,salary_currency,willing_to_relocate,linkedin_url,
         portfolio_url,onboarding_completed
       `).eq("id", userId).maybeSingle();
-      if (error) { console.error("Profile load error:", error); return null; }
+
+      if (error) {
+        console.error("Profile load error:", error);
+        return null;
+      }
+
       return data || null;
     }
 
@@ -1311,7 +1423,9 @@
 
     function setCheckedValues(name, values) {
       const selected = new Set(Array.isArray(values) ? values : []);
-      document.querySelectorAll(`input[name="${name}"]`).forEach(input => { input.checked = selected.has(input.value); });
+      document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+        input.checked = selected.has(input.value);
+      });
     }
 
     function getCheckedValues(name) {
@@ -1377,7 +1491,11 @@
 
     document.getElementById("careerProfileForm").addEventListener("submit", async event => {
       event.preventDefault();
-      if (!currentSession?.user) { openAuth("signin", "Sign in to edit your CareerPilot profile."); return; }
+
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to edit your CareerPilot profile.");
+        return;
+      }
 
       const button = document.getElementById("profileSaveButton");
       const status = document.getElementById("profileSaveStatus");
@@ -1412,6 +1530,7 @@
       try {
         const { error } = await db.from("profiles").update(payload).eq("id", currentSession.user.id);
         if (error) throw error;
+
         currentProfile = { ...(currentProfile || {}), ...payload };
         const displayName = profileDisplayName(currentProfile, currentSession.user);
         headerUserName.textContent = displayName;
@@ -1424,17 +1543,42 @@
         console.error("Profile save error:", error);
         status.textContent = "Could not save profile.";
         showToast("We couldn't save your profile. Please try again.");
-      } finally { button.disabled = false; }
+      } finally {
+        button.disabled = false;
+      }
     });
 
     async function loadResumes() {
       const list = document.getElementById("resumeList");
-      if (!currentSession?.user) { list.innerHTML = ""; return []; }
-      const { data, error } = await db.from("resumes")
-        .select("id,resume_name,original_filename,storage_path,mime_type,file_size_bytes,is_primary,created_at")
+
+      if (!currentSession?.user) {
+        list.innerHTML = "";
+        return [];
+      }
+
+      const { data, error } = await db
+        .from("resumes")
+        .select(`
+          id,
+          resume_name,
+          original_filename,
+          storage_path,
+          mime_type,
+          file_size_bytes,
+          is_primary,
+          resume_text,
+          parsed_data,
+          created_at
+        `)
         .eq("user_id", currentSession.user.id)
         .order("created_at", { ascending: false });
-      if (error) { console.error("Resume list error:", error); list.innerHTML = '<div class="saved-empty">We could not load your resumes.</div>'; return []; }
+
+      if (error) {
+        console.error("Resume list error:", error);
+        list.innerHTML = '<div class="saved-empty">We could not load your resumes.</div>';
+        return [];
+      }
+
       renderResumeList(data || []);
       return data || [];
     }
@@ -1442,6 +1586,7 @@
     function renderResumeList(resumes) {
       const list = document.getElementById("resumeList");
       list.innerHTML = "";
+
       if (!resumes.length) {
         const empty = document.createElement("div");
         empty.className = "saved-empty";
@@ -1451,59 +1596,214 @@
       }
 
       resumes.forEach(resume => {
-        const card = document.createElement("div"); card.className = "resume-card";
-        const main = document.createElement("div"); main.className = "resume-card-main";
-        const title = document.createElement("div"); title.className = "resume-card-title"; title.textContent = resume.resume_name || resume.original_filename || "Resume";
-        if (resume.is_primary) { const badge = document.createElement("span"); badge.className = "primary-badge"; badge.textContent = "Primary"; title.appendChild(badge); }
-        const meta = document.createElement("div"); meta.className = "resume-card-meta";
+        const card = document.createElement("div");
+        card.className = "resume-card";
+
+        const main = document.createElement("div");
+        main.className = "resume-card-main";
+
+        const title = document.createElement("div");
+        title.className = "resume-card-title";
+        title.textContent = resume.resume_name || resume.original_filename || "Resume";
+
+        if (resume.is_primary) {
+          const badge = document.createElement("span");
+          badge.className = "primary-badge";
+          badge.textContent = "Primary";
+          title.appendChild(badge);
+        }
+
+        if (resume.resume_text?.trim()) {
+          const importedBadge = document.createElement("span");
+          importedBadge.className = "imported-badge";
+          importedBadge.textContent = "Imported";
+          title.appendChild(importedBadge);
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "resume-card-meta";
         const uploaded = resume.created_at ? new Date(resume.created_at).toLocaleDateString() : "";
         meta.textContent = `${resume.original_filename || "PDF"} • ${formatBytes(resume.file_size_bytes)}${uploaded ? ` • Uploaded ${uploaded}` : ""}`;
-        main.appendChild(title); main.appendChild(meta);
 
-        const actions = document.createElement("div"); actions.className = "resume-card-actions";
-        const openButton = document.createElement("button"); openButton.type = "button"; openButton.className = "resume-small-button"; openButton.textContent = "Open PDF"; openButton.addEventListener("click", () => openResume(resume.storage_path, openButton)); actions.appendChild(openButton);
-        if (!resume.is_primary) { const primaryButton = document.createElement("button"); primaryButton.type = "button"; primaryButton.className = "resume-small-button"; primaryButton.textContent = "Make Primary"; primaryButton.addEventListener("click", () => setPrimaryResume(resume.id, primaryButton)); actions.appendChild(primaryButton); }
-        const deleteButton = document.createElement("button"); deleteButton.type = "button"; deleteButton.className = "resume-small-button danger"; deleteButton.textContent = "Delete"; deleteButton.addEventListener("click", () => deleteResume(resume, deleteButton)); actions.appendChild(deleteButton);
-        card.appendChild(main); card.appendChild(actions); list.appendChild(card);
+        main.appendChild(title);
+        main.appendChild(meta);
+
+        const actions = document.createElement("div");
+        actions.className = "resume-card-actions";
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.className = "resume-small-button";
+        openButton.textContent = "Open PDF";
+        openButton.addEventListener("click", () => openResume(resume.storage_path, openButton));
+        actions.appendChild(openButton);
+
+        const importButton = document.createElement("button");
+        importButton.type = "button";
+        importButton.className = "resume-small-button";
+        importButton.textContent = resume.resume_text?.trim() ? "Re-import Resume" : "Import Resume";
+        importButton.addEventListener("click", () => importResume(resume, importButton));
+        actions.appendChild(importButton);
+
+        if (!resume.is_primary) {
+          const primaryButton = document.createElement("button");
+          primaryButton.type = "button";
+          primaryButton.className = "resume-small-button";
+          primaryButton.textContent = "Make Primary";
+          primaryButton.addEventListener("click", () => setPrimaryResume(resume.id, primaryButton));
+          actions.appendChild(primaryButton);
+        }
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "resume-small-button danger";
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", () => deleteResume(resume, deleteButton));
+        actions.appendChild(deleteButton);
+
+        card.appendChild(main);
+        card.appendChild(actions);
+        list.appendChild(card);
       });
     }
 
+    async function importResume(resume, button) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to import your resume.");
+        return;
+      }
+
+      const status = document.getElementById("resumeUploadStatus");
+      const originalButtonText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Reading...";
+      status.textContent = `CareerPilot is reading ${resume.original_filename || "your resume"}...`;
+
+      try {
+        const { data, error } = await db.functions.invoke("parse-resume", {
+          body: { resume_id: resume.id }
+        });
+
+        if (error) {
+          let message = error.message || "CareerPilot could not read this resume.";
+
+          if (error.context && typeof error.context.json === "function") {
+            try {
+              const details = await error.context.json();
+              if (details?.error) message = details.error;
+            } catch (_) {
+              // Keep the original Functions error message.
+            }
+          }
+
+          throw new Error(message);
+        }
+
+        if (!data?.success) {
+          throw new Error(data?.error || "CareerPilot could not read this resume.");
+        }
+
+        const pages = Number(data.total_pages || 0);
+        const characters = Number(data.characters_extracted || 0);
+        const pageText = pages === 1 ? "1 page" : `${pages} pages`;
+
+        status.textContent = `Resume imported successfully — ${pageText} and ${characters.toLocaleString()} characters were read.`;
+        showToast("Resume imported successfully.");
+        console.log("CareerPilot resume import:", data);
+
+        await loadResumes();
+      } catch (error) {
+        console.error("Resume import error:", error);
+        status.textContent = error?.message || "CareerPilot could not import that resume.";
+        showToast("We couldn't import that resume.");
+      } finally {
+        button.disabled = false;
+        button.textContent = originalButtonText;
+      }
+    }
+
     async function uploadResume() {
-      if (!currentSession?.user) { openAuth("signin", "Sign in to upload a resume."); return; }
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to upload a resume.");
+        return;
+      }
+
       const input = document.getElementById("resumeFileInput");
       const button = document.getElementById("uploadResumeButton");
       const status = document.getElementById("resumeUploadStatus");
       const file = input.files?.[0];
-      if (!file) { status.textContent = "Choose a PDF file first."; return; }
+
+      if (!file) {
+        status.textContent = "Choose a PDF file first.";
+        return;
+      }
+
       const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-      if (!isPdf) { status.textContent = "CareerPilot currently accepts PDF resumes only."; return; }
-      if (file.size > 10 * 1024 * 1024) { status.textContent = "That file is larger than the 10 MB limit."; return; }
+      if (!isPdf) {
+        status.textContent = "CareerPilot currently accepts PDF resumes only.";
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        status.textContent = "That file is larger than the 10 MB limit.";
+        return;
+      }
 
       button.disabled = true;
       status.textContent = "Uploading securely...";
+
       const safeName = sanitizeFilename(file.name);
       const storagePath = `${currentSession.user.id}/${Date.now()}-${safeName}`;
 
       try {
-        const { error: uploadError } = await db.storage.from("resumes").upload(storagePath, file, { cacheControl: "3600", upsert: false, contentType: "application/pdf" });
+        const { error: uploadError } = await db.storage
+          .from("resumes")
+          .upload(storagePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: "application/pdf"
+          });
+
         if (uploadError) throw uploadError;
 
-        const existing = await db.from("resumes").select("id", { count: "exact", head: true }).eq("user_id", currentSession.user.id);
+        const existing = await db
+          .from("resumes")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", currentSession.user.id);
+
         if (existing.error) throw existing.error;
+
         const shouldBePrimary = (existing.count ?? 0) === 0;
         const resumeName = safeName.replace(/\.pdf$/i, "").replace(/[-_]+/g, " ").trim() || "Resume";
 
-        const { error: insertError } = await db.from("resumes").insert({ user_id: currentSession.user.id, resume_name: resumeName, original_filename: file.name, storage_path: storagePath, mime_type: "application/pdf", file_size_bytes: file.size, is_primary: shouldBePrimary });
-        if (insertError) { await db.storage.from("resumes").remove([storagePath]); throw insertError; }
+        const { error: insertError } = await db.from("resumes").insert({
+          user_id: currentSession.user.id,
+          resume_name: resumeName,
+          original_filename: file.name,
+          storage_path: storagePath,
+          mime_type: "application/pdf",
+          file_size_bytes: file.size,
+          is_primary: shouldBePrimary
+        });
+
+        if (insertError) {
+          await db.storage.from("resumes").remove([storagePath]);
+          throw insertError;
+        }
 
         input.value = "";
-        status.textContent = shouldBePrimary ? "Resume uploaded and set as your primary resume." : "Resume uploaded successfully.";
+        status.textContent = shouldBePrimary
+          ? "Resume uploaded and set as your primary resume. Click Import Resume to let CareerPilot read it."
+          : "Resume uploaded successfully. Click Import Resume to let CareerPilot read it.";
+
         showToast("Resume uploaded securely.");
         await loadResumes();
       } catch (error) {
         console.error("Resume upload error:", error);
         status.textContent = error?.message || "We couldn't upload that resume.";
-      } finally { button.disabled = false; }
+      } finally {
+        button.disabled = false;
+      }
     }
 
     async function openResume(storagePath, button) {
@@ -1511,46 +1811,93 @@
       try {
         const { data, error } = await db.storage.from("resumes").createSignedUrl(storagePath, 60);
         if (error) throw error;
+
         const url = data?.signedUrl || data?.signedURL;
         if (!url) throw new Error("No signed resume URL was returned.");
+
         window.open(url, "_blank", "noopener,noreferrer");
-      } catch (error) { console.error("Open resume error:", error); showToast("We couldn't open that resume."); }
-      finally { button.disabled = false; }
+      } catch (error) {
+        console.error("Open resume error:", error);
+        showToast("We couldn't open that resume.");
+      } finally {
+        button.disabled = false;
+      }
     }
 
     async function setPrimaryResume(resumeId, button) {
       if (!currentSession?.user) return;
       button.disabled = true;
+
       try {
-        const { error: clearError } = await db.from("resumes").update({ is_primary: false, updated_at: new Date().toISOString() }).eq("user_id", currentSession.user.id).eq("is_primary", true);
+        const { error: clearError } = await db
+          .from("resumes")
+          .update({ is_primary: false, updated_at: new Date().toISOString() })
+          .eq("user_id", currentSession.user.id)
+          .eq("is_primary", true);
+
         if (clearError) throw clearError;
-        const { error: setError } = await db.from("resumes").update({ is_primary: true, updated_at: new Date().toISOString() }).eq("user_id", currentSession.user.id).eq("id", resumeId);
+
+        const { error: setError } = await db
+          .from("resumes")
+          .update({ is_primary: true, updated_at: new Date().toISOString() })
+          .eq("user_id", currentSession.user.id)
+          .eq("id", resumeId);
+
         if (setError) throw setError;
+
         showToast("Primary resume updated.");
         await loadResumes();
-      } catch (error) { console.error("Primary resume error:", error); showToast("We couldn't change the primary resume."); }
-      finally { button.disabled = false; }
+      } catch (error) {
+        console.error("Primary resume error:", error);
+        showToast("We couldn't change the primary resume.");
+      } finally {
+        button.disabled = false;
+      }
     }
 
     async function deleteResume(resume, button) {
       if (!currentSession?.user) return;
       if (!window.confirm(`Delete ${resume.original_filename || "this resume"}?`)) return;
+
       button.disabled = true;
+
       try {
         const { error: storageError } = await db.storage.from("resumes").remove([resume.storage_path]);
         if (storageError) throw storageError;
-        const { error: rowError } = await db.from("resumes").delete().eq("user_id", currentSession.user.id).eq("id", resume.id);
+
+        const { error: rowError } = await db
+          .from("resumes")
+          .delete()
+          .eq("user_id", currentSession.user.id)
+          .eq("id", resume.id);
+
         if (rowError) throw rowError;
 
         if (resume.is_primary) {
-          const { data: newest } = await db.from("resumes").select("id").eq("user_id", currentSession.user.id).order("created_at", { ascending: false }).limit(1);
-          if (newest?.length) await db.from("resumes").update({ is_primary: true, updated_at: new Date().toISOString() }).eq("user_id", currentSession.user.id).eq("id", newest[0].id);
+          const { data: newest } = await db
+            .from("resumes")
+            .select("id")
+            .eq("user_id", currentSession.user.id)
+            .order("created_at", { ascending: false })
+            .limit(1);
+
+          if (newest?.length) {
+            await db
+              .from("resumes")
+              .update({ is_primary: true, updated_at: new Date().toISOString() })
+              .eq("user_id", currentSession.user.id)
+              .eq("id", newest[0].id);
+          }
         }
 
         showToast("Resume deleted.");
         await loadResumes();
-      } catch (error) { console.error("Delete resume error:", error); showToast("We couldn't delete that resume."); }
-      finally { button.disabled = false; }
+      } catch (error) {
+        console.error("Delete resume error:", error);
+        showToast("We couldn't delete that resume.");
+      } finally {
+        button.disabled = false;
+      }
     }
 
     document.getElementById("uploadResumeButton").addEventListener("click", uploadResume);
@@ -1558,6 +1905,7 @@
     function setAuthMode(mode) {
       authMode = mode;
       clearMessage(authMessage);
+
       if (mode === "signup") {
         signInTab.classList.remove("active");
         createAccountTab.classList.add("active");
@@ -1580,6 +1928,7 @@
         authSubtitle.textContent = "Sign in to your CareerPilot account.";
       }
     }
+
     function openAuth(mode, message = "") {
       setAuthMode(mode);
       if (message) setMessage(authMessage, message, "info");
@@ -1592,23 +1941,49 @@
     signInTab.addEventListener("click", () => setAuthMode("signin"));
     createAccountTab.addEventListener("click", () => setAuthMode("signup"));
     document.getElementById("closeAuthModal").addEventListener("click", () => closeModal(authModal));
-    authModal.addEventListener("click", event => { if (event.target === authModal) closeModal(authModal); });
+
+    authModal.addEventListener("click", event => {
+      if (event.target === authModal) closeModal(authModal);
+    });
 
     document.getElementById("authForm").addEventListener("submit", async event => {
       event.preventDefault();
       clearMessage(authMessage);
+
       const email = authEmail.value.trim();
       const password = authPassword.value;
       authSubmitButton.disabled = true;
+
       try {
         if (authMode === "signup") {
           const fullName = authFullName.value.trim();
-          if (!fullName) { setMessage(authMessage, "Please enter your full name.", "error"); return; }
-          if (password.length < 8) { setMessage(authMessage, "Please use a password with at least 8 characters.", "error"); return; }
-          const { data, error } = await db.auth.signUp({ email, password, options: { data: { full_name: fullName }, emailRedirectTo: SITE_URL } });
+
+          if (!fullName) {
+            setMessage(authMessage, "Please enter your full name.", "error");
+            return;
+          }
+
+          if (password.length < 8) {
+            setMessage(authMessage, "Please use a password with at least 8 characters.", "error");
+            return;
+          }
+
+          const { data, error } = await db.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName },
+              emailRedirectTo: SITE_URL
+            }
+          });
+
           if (error) throw error;
-          if (data.session) setMessage(authMessage, "Your account was created and you are now signed in.", "success");
-          else setMessage(authMessage, "Account created. Please check your email and click the confirmation link before signing in.", "success");
+
+          if (data.session) {
+            setMessage(authMessage, "Your account was created and you are now signed in.", "success");
+          } else {
+            setMessage(authMessage, "Account created. Please check your email and click the confirmation link before signing in.", "success");
+          }
         } else {
           const { error } = await db.auth.signInWithPassword({ email, password });
           if (error) throw error;
@@ -1618,14 +1993,20 @@
       } catch (error) {
         console.error("Authentication error:", error);
         setMessage(authMessage, error?.message || "We couldn't complete that request. Please try again.", "error");
-      } finally { authSubmitButton.disabled = false; }
+      } finally {
+        authSubmitButton.disabled = false;
+      }
     });
 
     document.getElementById("googleAuthButton").addEventListener("click", async () => {
       const button = document.getElementById("googleAuthButton");
       button.disabled = true;
+
       try {
-        const { error } = await db.auth.signInWithOAuth({ provider: "google", options: { redirectTo: SITE_URL } });
+        const { error } = await db.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: SITE_URL }
+        });
         if (error) throw error;
       } catch (error) {
         button.disabled = false;
@@ -1639,14 +2020,21 @@
       document.getElementById("forgotEmail").value = authEmail.value.trim();
       openModal(forgotPasswordModal);
     });
+
     document.getElementById("closeForgotModal").addEventListener("click", () => closeModal(forgotPasswordModal));
-    forgotPasswordModal.addEventListener("click", event => { if (event.target === forgotPasswordModal) closeModal(forgotPasswordModal); });
+
+    forgotPasswordModal.addEventListener("click", event => {
+      if (event.target === forgotPasswordModal) closeModal(forgotPasswordModal);
+    });
+
     document.getElementById("forgotPasswordForm").addEventListener("submit", async event => {
       event.preventDefault();
       clearMessage(forgotMessage);
+
       const button = document.getElementById("forgotSubmitButton");
       const email = document.getElementById("forgotEmail").value.trim();
       button.disabled = true;
+
       try {
         const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL });
         if (error) throw error;
@@ -1654,39 +2042,72 @@
       } catch (error) {
         console.error("Password reset request error:", error);
         setMessage(forgotMessage, error?.message || "We couldn't send the reset email. Please try again.", "error");
-      } finally { button.disabled = false; }
+      } finally {
+        button.disabled = false;
+      }
     });
 
     document.getElementById("newPasswordForm").addEventListener("submit", async event => {
       event.preventDefault();
       clearMessage(newPasswordMessage);
+
       const password = document.getElementById("newPassword").value;
       const confirmPassword = document.getElementById("confirmNewPassword").value;
-      if (password.length < 8) { setMessage(newPasswordMessage, "Please use a password with at least 8 characters.", "error"); return; }
-      if (password !== confirmPassword) { setMessage(newPasswordMessage, "The passwords do not match.", "error"); return; }
+
+      if (password.length < 8) {
+        setMessage(newPasswordMessage, "Please use a password with at least 8 characters.", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setMessage(newPasswordMessage, "The passwords do not match.", "error");
+        return;
+      }
+
       const button = document.getElementById("newPasswordSubmit");
       button.disabled = true;
+
       try {
         const { error } = await db.auth.updateUser({ password });
         if (error) throw error;
         setMessage(newPasswordMessage, "Your password has been updated successfully.", "success");
-        setTimeout(() => { closeModal(resetPasswordModal); showToast("Password updated successfully."); }, 1200);
+        setTimeout(() => {
+          closeModal(resetPasswordModal);
+          showToast("Password updated successfully.");
+        }, 1200);
       } catch (error) {
         console.error("Password update error:", error);
         setMessage(newPasswordMessage, error?.message || "We couldn't update your password.", "error");
-      } finally { button.disabled = false; }
+      } finally {
+        button.disabled = false;
+      }
     });
 
     document.getElementById("signOutButton").addEventListener("click", async () => {
       const { error } = await db.auth.signOut();
-      if (error) { showToast("We couldn't sign you out. Please try again."); return; }
+      if (error) {
+        showToast("We couldn't sign you out. Please try again.");
+        return;
+      }
       showToast("You have been signed out.");
     });
 
     async function loadSavedJobIds() {
-      if (!currentSession?.user) { savedJobIds = new Set(); return; }
-      const { data, error } = await db.from("saved_jobs").select("job_id").eq("user_id", currentSession.user.id);
-      if (error) { console.error("Load saved jobs error:", error); return; }
+      if (!currentSession?.user) {
+        savedJobIds = new Set();
+        return;
+      }
+
+      const { data, error } = await db
+        .from("saved_jobs")
+        .select("job_id")
+        .eq("user_id", currentSession.user.id);
+
+      if (error) {
+        console.error("Load saved jobs error:", error);
+        return;
+      }
+
       savedJobIds = new Set((data || []).map(row => row.job_id));
       document.getElementById("savedJobsCount").textContent = savedJobIds.size;
       syncSaveButtons();
@@ -1708,34 +2129,57 @@
         openAuth("signin", "Sign in or create a free account to save this job.");
         return false;
       }
+
       if (savedJobIds.has(jobId)) return true;
-      const { error } = await db.from("saved_jobs").insert({ user_id: currentSession.user.id, job_id: jobId, status: "saved" });
+
+      const { error } = await db.from("saved_jobs").insert({
+        user_id: currentSession.user.id,
+        job_id: jobId,
+        status: "saved"
+      });
+
       if (error) {
         console.error("Save job error:", error);
         showToast("We couldn't save that job. Please try again.");
         return false;
       }
+
       savedJobIds.add(jobId);
       document.getElementById("savedJobsCount").textContent = savedJobIds.size;
       syncSaveButtons();
       showToast("Job saved to CareerPilot.");
-      if (savedJobsSection.style.display !== "none") await loadSavedJobsWorkspace();
+
+      if (savedJobsSection.style.display !== "none") {
+        await loadSavedJobsWorkspace();
+      }
+
       return true;
     }
 
     async function removeSavedJob(jobId) {
       if (!currentSession?.user) return false;
-      const { error } = await db.from("saved_jobs").delete().eq("user_id", currentSession.user.id).eq("job_id", jobId);
+
+      const { error } = await db
+        .from("saved_jobs")
+        .delete()
+        .eq("user_id", currentSession.user.id)
+        .eq("job_id", jobId);
+
       if (error) {
         console.error("Remove saved job error:", error);
         showToast("We couldn't remove that saved job. Please try again.");
         return false;
       }
+
       savedJobIds.delete(jobId);
       document.getElementById("savedJobsCount").textContent = savedJobIds.size;
       syncSaveButtons();
       showToast("Job removed from Saved Jobs.");
-      if (savedJobsSection.style.display !== "none") await loadSavedJobsWorkspace();
+
+      if (savedJobsSection.style.display !== "none") {
+        await loadSavedJobsWorkspace();
+      }
+
       return true;
     }
 
@@ -1745,37 +2189,50 @@
         openAuth("signin", "Sign in or create a free account to save this job.");
         return;
       }
+
       if (button) button.disabled = true;
+
       try {
         if (savedJobIds.has(jobId)) await removeSavedJob(jobId);
         else await saveJob(jobId);
-      } finally { if (button) button.disabled = false; }
+      } finally {
+        if (button) button.disabled = false;
+      }
     }
 
     async function loadSavedJobsWorkspace() {
       const status = document.getElementById("savedJobsStatus");
       const results = document.getElementById("savedJobsResults");
+
       if (!currentSession?.user) {
         savedJobsSection.style.display = "none";
         openAuth("signin", "Sign in to view your saved jobs.");
         return;
       }
+
       savedJobsSection.style.display = "block";
       status.textContent = "Loading your saved jobs...";
       results.innerHTML = "";
 
-      const { data: saves, error: saveError } = await db.from("saved_jobs").select("job_id,status").eq("user_id", currentSession.user.id);
+      const { data: saves, error: saveError } = await db
+        .from("saved_jobs")
+        .select("job_id,status")
+        .eq("user_id", currentSession.user.id);
+
       if (saveError) {
         console.error("Saved jobs list error:", saveError);
         status.textContent = "There was a problem loading your saved jobs.";
         return;
       }
+
       const rows = saves || [];
       const jobIds = rows.map(row => row.job_id).filter(Boolean);
+
       if (!jobIds.length) {
         savedJobIds = new Set();
         document.getElementById("savedJobsCount").textContent = "0";
         status.textContent = "0 saved jobs";
+
         const empty = document.createElement("div");
         empty.className = "saved-empty";
         empty.innerHTML = '<h3 style="margin-bottom:8px;color:#14213d;">No saved jobs yet</h3><p>When you find a job you like, click ☆ Save Job and it will appear here.</p>';
@@ -1785,7 +2242,8 @@
 
       const { data: jobs, error: jobsError } = await db.from("jobs").select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
-        salary_currency,salary_period,employment_type,industry,posted_at,source_name,description,apply_url
+        salary_currency,salary_period,employment_type,industry,posted_at,
+        source_name,description,apply_url
       `).in("id", jobIds).eq("is_active", true);
 
       if (jobsError) {
@@ -1793,17 +2251,21 @@
         status.textContent = "There was a problem loading saved job details.";
         return;
       }
+
       savedJobIds = new Set(jobIds);
       document.getElementById("savedJobsCount").textContent = savedJobIds.size;
       status.textContent = `${savedJobIds.size} saved job${savedJobIds.size === 1 ? "" : "s"}`;
-      const order = new Map(jobIds.map((id,index) => [id,index]));
-      const sortedJobs = (jobs || []).sort((a,b) => (order.get(a.id) ?? 9999) - (order.get(b.id) ?? 9999));
+
+      const order = new Map(jobIds.map((id, index) => [id, index]));
+      const sortedJobs = (jobs || []).sort((a, b) => (order.get(a.id) ?? 9999) - (order.get(b.id) ?? 9999));
+
       renderJobs(sortedJobs, results, { savedWorkspace: true });
       syncSaveButtons();
     }
 
     function renderJobs(jobs, results = document.getElementById("jobResults"), options = {}) {
       results.innerHTML = "";
+
       if (!jobs.length) {
         const message = document.createElement("p");
         message.textContent = "No jobs matched your search.";
@@ -1814,15 +2276,23 @@
       jobs.forEach(job => {
         const card = document.createElement("div");
         card.className = "job-card";
+
         const title = document.createElement("h3");
         title.textContent = job.title || "Untitled position";
         card.appendChild(title);
+
         const company = document.createElement("p");
         company.className = "job-meta";
         company.textContent = job.company_name || "Company not listed";
         card.appendChild(company);
 
-        const details = [job.location_text, formatWorkSetting(job.work_setting), formatEmploymentType(job.employment_type), job.source_name ? `Source: ${job.source_name}` : null].filter(Boolean);
+        const details = [
+          job.location_text,
+          formatWorkSetting(job.work_setting),
+          formatEmploymentType(job.employment_type),
+          job.source_name ? `Source: ${job.source_name}` : null
+        ].filter(Boolean);
+
         if (details.length) {
           const detailLine = document.createElement("p");
           detailLine.className = "job-meta";
@@ -1851,12 +2321,15 @@
         if (job.description) {
           const description = document.createElement("p");
           description.className = "job-description";
-          description.textContent = job.description.length > 300 ? job.description.substring(0,300) + "..." : job.description;
+          description.textContent = job.description.length > 300
+            ? job.description.substring(0, 300) + "..."
+            : job.description;
           card.appendChild(description);
         }
 
         const actions = document.createElement("div");
         actions.className = "job-actions";
+
         const applyUrl = safeExternalUrl(job.apply_url);
         if (applyUrl) {
           const link = document.createElement("a");
@@ -1883,6 +2356,7 @@
           saveButton.type = "button";
           saveButton.className = "save-job-button";
           saveButton.dataset.saveJobId = job.id;
+
           const isSaved = savedJobIds.has(job.id);
           saveButton.classList.toggle("saved", isSaved);
           saveButton.textContent = isSaved ? "★ Saved" : "☆ Save Job";
@@ -1890,6 +2364,7 @@
           saveButton.addEventListener("click", () => toggleSavedJob(job.id, saveButton));
           actions.appendChild(saveButton);
         }
+
         card.appendChild(actions);
 
         if (!currentSession?.user && !options.savedWorkspace) {
@@ -1898,6 +2373,7 @@
           hint.textContent = "Sign in or create a free account to keep saved jobs across devices.";
           card.appendChild(hint);
         }
+
         results.appendChild(card);
       });
     }
@@ -1914,43 +2390,65 @@
       const includeWorkSettingUnknown = document.getElementById("includeWorkSettingUnknown").checked;
       const status = document.getElementById("jobSearchStatus");
       const results = document.getElementById("jobResults");
+
       status.textContent = "Searching current jobs...";
       results.innerHTML = "";
 
       let query = db.from("jobs").select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
-        salary_currency,salary_period,employment_type,industry,posted_at,source_name,description,apply_url
+        salary_currency,salary_period,employment_type,industry,posted_at,
+        source_name,description,apply_url
       `, { count: "exact" }).eq("is_active", true);
 
-      if (keyword) query = query.textSearch("search_document", keyword, { type: "websearch", config: "english" });
+      if (keyword) {
+        query = query.textSearch("search_document", keyword, {
+          type: "websearch",
+          config: "english"
+        });
+      }
+
       if (company) query = query.ilike("company_name", `%${company}%`);
+
       const cutoff = getPostedCutoff(postedDays);
       if (cutoff) query = query.gte("posted_at", cutoff);
+
       if (workSetting) {
-        let settings = workSetting === "remote-hybrid" ? ["remote","hybrid"] : [workSetting];
+        let settings = workSetting === "remote-hybrid" ? ["remote", "hybrid"] : [workSetting];
         if (includeWorkSettingUnknown) settings.push("unclear");
         query = query.in("work_setting", settings);
       } else if (!includeWorkSettingUnknown) {
         query = query.neq("work_setting", "unclear");
       }
+
       if (minimumSalary) {
         const minimum = Number(minimumSalary);
-        if (includeSalaryUnknown) query = query.or(`salary_min.gte.${minimum},salary_max.gte.${minimum},and(salary_min.is.null,salary_max.is.null)`);
-        else query = query.or(`salary_min.gte.${minimum},salary_max.gte.${minimum}`);
+        if (includeSalaryUnknown) {
+          query = query.or(`salary_min.gte.${minimum},salary_max.gte.${minimum},and(salary_min.is.null,salary_max.is.null)`);
+        } else {
+          query = query.or(`salary_min.gte.${minimum},salary_max.gte.${minimum}`);
+        }
       }
+
       if (industry) query = query.ilike("industry", `%${industry}%`);
       if (location) query = query.ilike("location_text", `%${location}%`);
+
       query = query.order("posted_at", { ascending: false, nullsFirst: false }).limit(50);
 
       const { data, error, count } = await query;
+
       if (error) {
         console.error("Job search error:", error);
         status.textContent = "There was a problem loading jobs.";
         return;
       }
+
       const jobs = data || [];
       const total = count ?? jobs.length;
-      status.textContent = total > jobs.length ? `${total} current jobs found • showing first ${jobs.length}` : `${total} current job${total === 1 ? "" : "s"} found`;
+
+      status.textContent = total > jobs.length
+        ? `${total} current jobs found • showing first ${jobs.length}`
+        : `${total} current job${total === 1 ? "" : "s"} found`;
+
       renderJobs(jobs);
       syncSaveButtons();
     }
@@ -1958,17 +2456,34 @@
     async function getSuggestions(databaseField, searchText) {
       const term = searchText.trim().toLowerCase();
       if (term.length < 2) return [];
-      const { data, error } = await db.from("jobs").select(databaseField).eq("is_active", true).ilike(databaseField, `%${term}%`).limit(100);
-      if (error) { console.error("Autocomplete error:", error); return []; }
+
+      const { data, error } = await db
+        .from("jobs")
+        .select(databaseField)
+        .eq("is_active", true)
+        .ilike(databaseField, `%${term}%`)
+        .limit(100);
+
+      if (error) {
+        console.error("Autocomplete error:", error);
+        return [];
+      }
+
       const uniqueValues = [...new Set((data || []).map(row => row[databaseField]).filter(Boolean))];
-      return uniqueValues.map(value => {
-        const lower = value.toLowerCase().trim();
-        const words = lower.split(/[\s\-\/(),]+/).filter(Boolean);
-        let score = 99;
-        if (lower.startsWith(term)) score = 0;
-        else if (words.some(word => word.startsWith(term))) score = 1;
-        return { value, score };
-      }).filter(item => item.score < 99).sort((a,b) => a.score !== b.score ? a.score - b.score : a.value.localeCompare(b.value)).slice(0,8).map(item => item.value);
+
+      return uniqueValues
+        .map(value => {
+          const lower = value.toLowerCase().trim();
+          const words = lower.split(/[\s\-\/(),]+/).filter(Boolean);
+          let score = 99;
+          if (lower.startsWith(term)) score = 0;
+          else if (words.some(word => word.startsWith(term))) score = 1;
+          return { value, score };
+        })
+        .filter(item => item.score < 99)
+        .sort((a, b) => a.score !== b.score ? a.score - b.score : a.value.localeCompare(b.value))
+        .slice(0, 8)
+        .map(item => item.value);
     }
 
     function setupAutocomplete(inputId, suggestionBoxId, databaseField) {
@@ -1977,16 +2492,36 @@
       let items = [];
       let activeIndex = -1;
       let requestNumber = 0;
-      function closeSuggestions() { suggestionBox.innerHTML = ""; suggestionBox.classList.remove("open"); items = []; activeIndex = -1; }
-      function chooseSuggestion(value) { input.value = value; closeSuggestions(); input.focus(); }
-      function updateActiveItem() {
-        suggestionBox.querySelectorAll(".suggestion-item").forEach((button,index) => button.classList.toggle("active", index === activeIndex));
+
+      function closeSuggestions() {
+        suggestionBox.innerHTML = "";
+        suggestionBox.classList.remove("open");
+        items = [];
+        activeIndex = -1;
       }
+
+      function chooseSuggestion(value) {
+        input.value = value;
+        closeSuggestions();
+        input.focus();
+      }
+
+      function updateActiveItem() {
+        suggestionBox.querySelectorAll(".suggestion-item").forEach((button, index) => {
+          button.classList.toggle("active", index === activeIndex);
+        });
+      }
+
       function showSuggestions(suggestions) {
         suggestionBox.innerHTML = "";
         items = suggestions;
         activeIndex = -1;
-        if (!suggestions.length) { suggestionBox.classList.remove("open"); return; }
+
+        if (!suggestions.length) {
+          suggestionBox.classList.remove("open");
+          return;
+        }
+
         suggestions.forEach(value => {
           const button = document.createElement("button");
           button.type = "button";
@@ -1995,24 +2530,49 @@
           button.addEventListener("click", () => chooseSuggestion(value));
           suggestionBox.appendChild(button);
         });
+
         suggestionBox.classList.add("open");
       }
+
       const searchSuggestions = debounce(async () => {
         const currentRequest = ++requestNumber;
         const suggestions = await getSuggestions(databaseField, input.value);
         if (currentRequest !== requestNumber) return;
         showSuggestions(suggestions);
       });
+
       input.addEventListener("input", searchSuggestions);
+
       input.addEventListener("keydown", event => {
-        if (event.key === "Escape") { closeSuggestions(); return; }
+        if (event.key === "Escape") {
+          closeSuggestions();
+          return;
+        }
+
         if (!items.length) return;
-        if (event.key === "ArrowDown") { event.preventDefault(); activeIndex = (activeIndex + 1) % items.length; updateActiveItem(); }
-        if (event.key === "ArrowUp") { event.preventDefault(); activeIndex = activeIndex <= 0 ? items.length - 1 : activeIndex - 1; updateActiveItem(); }
-        if (event.key === "Enter" && activeIndex >= 0) { event.preventDefault(); chooseSuggestion(items[activeIndex]); }
+
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          activeIndex = (activeIndex + 1) % items.length;
+          updateActiveItem();
+        }
+
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+          activeIndex = activeIndex <= 0 ? items.length - 1 : activeIndex - 1;
+          updateActiveItem();
+        }
+
+        if (event.key === "Enter" && activeIndex >= 0) {
+          event.preventDefault();
+          chooseSuggestion(items[activeIndex]);
+        }
       });
+
       document.addEventListener("click", event => {
-        if (event.target !== input && !suggestionBox.contains(event.target)) closeSuggestions();
+        if (event.target !== input && !suggestionBox.contains(event.target)) {
+          closeSuggestions();
+        }
       });
     }
 
@@ -2021,7 +2581,11 @@
     setupAutocomplete("jobIndustry", "jobIndustrySuggestions", "industry");
     setupAutocomplete("jobLocation", "jobLocationSuggestions", "location_text");
 
-    document.getElementById("jobSearchForm").addEventListener("submit", event => { event.preventDefault(); searchJobs(); });
+    document.getElementById("jobSearchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      searchJobs();
+    });
+
     document.getElementById("resetFiltersButton").addEventListener("click", () => {
       document.getElementById("jobKeyword").value = "";
       document.getElementById("jobCompany").value = "";
@@ -2035,35 +2599,64 @@
       searchJobs();
     });
 
-    function goToMemberSection() { document.getElementById("memberSection").scrollIntoView({ behavior: "smooth" }); }
+    function goToMemberSection() {
+      document.getElementById("memberSection").scrollIntoView({ behavior: "smooth" });
+    }
+
     document.getElementById("myCareerPilotButton").addEventListener("click", goToMemberSection);
+
     document.getElementById("savedJobsButton").addEventListener("click", async () => {
       await loadSavedJobsWorkspace();
       savedJobsSection.scrollIntoView({ behavior: "smooth" });
     });
-    document.getElementById("applicationsButton").addEventListener("click", () => { goToMemberSection(); showToast("Application tracking is connected and will be expanded next."); });
+
+    document.getElementById("applicationsButton").addEventListener("click", () => {
+      goToMemberSection();
+      showToast("Application tracking is connected and will be expanded next.");
+    });
+
     document.getElementById("profileButton").addEventListener("click", async () => {
-      if (!currentSession?.user) { openAuth("signin", "Sign in to view your Career Profile."); return; }
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to view your Career Profile.");
+        return;
+      }
+
       profileSection.style.display = "block";
       await loadCareerProfile(currentSession.user.id);
       await loadResumes();
       profileSection.scrollIntoView({ behavior: "smooth" });
     });
-    document.getElementById("heroSearchJobs").addEventListener("click", () => document.getElementById("job-search").scrollIntoView({ behavior: "smooth" }));
-    document.getElementById("backToSearchButton").addEventListener("click", () => document.getElementById("job-search").scrollIntoView({ behavior: "smooth" }));
-    heroAccountButton.addEventListener("click", () => { if (currentSession?.user) goToMemberSection(); else openAuth("signup"); });
+
+    document.getElementById("heroSearchJobs").addEventListener("click", () => {
+      document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("backToSearchButton").addEventListener("click", () => {
+      document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
+    });
+
+    heroAccountButton.addEventListener("click", () => {
+      if (currentSession?.user) goToMemberSection();
+      else openAuth("signup");
+    });
 
     db.auth.onAuthStateChange((event, session) => {
       setTimeout(async () => {
         await updateAuthUI(session);
-        if (event === "PASSWORD_RECOVERY") { clearMessage(newPasswordMessage); openModal(resetPasswordModal); }
+        if (event === "PASSWORD_RECOVERY") {
+          clearMessage(newPasswordMessage);
+          openModal(resetPasswordModal);
+        }
         if (event === "SIGNED_IN") closeModal(authModal);
       }, 0);
     });
 
     async function initializeAuth() {
       const { data, error } = await db.auth.getSession();
-      if (error) { console.error("Initial session error:", error); return; }
+      if (error) {
+        console.error("Initial session error:", error);
+        return;
+      }
       await updateAuthUI(data.session);
     }
 
