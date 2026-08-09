@@ -554,6 +554,180 @@
     .resume-small-button.danger:hover { background: #fef3f2; }
     .resume-small-button:disabled { opacity: .6; cursor: wait; }
 
+    .ai-badge, .approved-badge {
+      display: inline-block;
+      margin-left: 7px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .ai-badge {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+    }
+    .approved-badge {
+      background: #eff8ff;
+      color: #175cd3;
+      border: 1px solid #b2ddff;
+    }
+
+    .career-analysis-summary {
+      display: none;
+      border: 1px solid #c7d2fe;
+      background: #f8faff;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+    .career-analysis-summary.show { display: block; }
+    .career-analysis-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .career-analysis-title { font-weight: 800; color: #14213d; }
+    .career-analysis-subtitle { color: #667085; font-size: 13px; margin-top: 3px; }
+    .analysis-count-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .analysis-count-card {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .analysis-count-card strong { display: block; font-size: 21px; color: #14213d; }
+    .analysis-count-card span { color: #667085; font-size: 12px; }
+    .analysis-status { color: #667085; font-size: 13px; margin-top: 10px; }
+
+    .resume-review-panel {
+      display: none;
+      margin-top: 18px;
+      border: 1px solid #d9e0ea;
+      border-radius: 14px;
+      background: white;
+      overflow: hidden;
+    }
+    .resume-review-panel.show { display: block; }
+    .resume-review-header {
+      padding: 18px 20px;
+      background: #111827;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .resume-review-header h4 { font-size: 20px; margin-bottom: 3px; }
+    .resume-review-header p { color: #d1d5db; font-size: 13px; }
+    .resume-review-body { padding: 20px; }
+    .review-section {
+      border-top: 1px solid #eaecf0;
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+    .review-section:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+    .review-section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .review-section-heading h5 { font-size: 18px; }
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+    .review-field { display: flex; flex-direction: column; gap: 5px; }
+    .review-field.full { grid-column: 1 / -1; }
+    .review-field label { font-size: 12px; font-weight: 800; color: #475467; }
+    .review-field input,
+    .review-field textarea {
+      width: 100%;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 10px 11px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .review-field textarea { min-height: 92px; resize: vertical; }
+    .review-field input:focus,
+    .review-field textarea:focus {
+      outline: 2px solid #315ee8;
+      outline-offset: 1px;
+      border-color: #315ee8;
+    }
+    .review-entry {
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 10px;
+      background: #fafbfc;
+    }
+    .review-entry:first-of-type { margin-top: 0; }
+    .review-entry-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .review-entry-head strong { color: #14213d; }
+    .review-remove-button, .review-add-button, .review-secondary-button {
+      border: 1px solid #cfd6e1;
+      background: white;
+      color: #14213d;
+      border-radius: 7px;
+      padding: 7px 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .review-remove-button { color: #b42318; border-color: #fda29b; }
+    .review-remove-button:hover { background: #fef3f2; }
+    .review-add-button:hover, .review-secondary-button:hover { background: #f8fafc; }
+    .review-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid #eaecf0;
+    }
+    .review-primary-button {
+      border: 1px solid #315ee8;
+      background: #315ee8;
+      color: white;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .review-primary-button:hover { background: #244bc5; }
+    .review-primary-button:disabled,
+    .review-secondary-button:disabled { opacity: .6; cursor: wait; }
+    #resumeReviewStatus { color: #667085; font-size: 13px; }
+    .review-note {
+      background: #fffaeb;
+      border: 1px solid #fedf89;
+      color: #7a2e0e;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
     .profile-placeholder-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
@@ -755,6 +929,9 @@
       .profile-grid { grid-template-columns: 1fr; }
       .profile-field.full { grid-column: auto; }
       .profile-placeholder-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .analysis-count-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .review-grid { grid-template-columns: 1fr; }
+      .review-field.full { grid-column: auto; }
     }
     @media(max-width: 540px) {
       header { position: static; flex-direction: column; }
@@ -968,14 +1145,55 @@
         <div class="resume-list" id="resumeList"></div>
       </div>
 
-      <div class="profile-block">
+      <div class="profile-block" id="careerHistoryBlock">
         <h3>Career history</h3>
-        <p class="profile-block-subtitle">Import your resume first. Structured Experience, Education, Skills, and Certifications review is the next backend step.</p>
-        <div class="profile-placeholder-grid">
-          <div class="profile-placeholder-card"><strong>Experience</strong><span>Resume import will help populate employers, roles, dates, and accomplishments.</span></div>
-          <div class="profile-placeholder-card"><strong>Education</strong><span>Resume import will help identify schools, degrees, and fields of study.</span></div>
-          <div class="profile-placeholder-card"><strong>Skills</strong><span>Build a reusable skill inventory for matching and tailoring.</span></div>
-          <div class="profile-placeholder-card"><strong>Certifications</strong><span>Track licenses, credentials, and expiration dates.</span></div>
+        <p class="profile-block-subtitle" id="careerHistoryIntro">Import your resume first. CareerPilot will then analyze it and prepare Experience, Education, Skills, and Certifications for your review.</p>
+
+        <div class="career-analysis-summary" id="careerAnalysisSummary">
+          <div class="career-analysis-top">
+            <div>
+              <div class="career-analysis-title" id="careerAnalysisTitle">Resume analysis ready</div>
+              <div class="career-analysis-subtitle" id="careerAnalysisSubtitle">Review what CareerPilot found before it is added to your Career Profile.</div>
+            </div>
+            <button type="button" class="resume-action-button" id="reviewAnalyzedResumeButton">Review Imported Resume</button>
+          </div>
+
+          <div class="analysis-count-grid">
+            <div class="analysis-count-card"><strong id="analysisExperienceCount">0</strong><span>Experience</span></div>
+            <div class="analysis-count-card"><strong id="analysisEducationCount">0</strong><span>Education</span></div>
+            <div class="analysis-count-card"><strong id="analysisSkillsCount">0</strong><span>Skills</span></div>
+            <div class="analysis-count-card"><strong id="analysisCertificationsCount">0</strong><span>Certifications</span></div>
+          </div>
+
+          <div class="analysis-status" id="careerAnalysisStatus"></div>
+        </div>
+
+        <div class="resume-review-panel" id="resumeReviewPanel">
+          <div class="resume-review-header">
+            <div>
+              <h4 id="resumeReviewTitle">Review Imported Resume</h4>
+              <p>Correct or remove anything that was not interpreted accurately. CareerPilot will not add this information to your permanent Career Profile until you approve it.</p>
+            </div>
+            <button type="button" class="review-secondary-button" id="closeResumeReviewButton">Close Review</button>
+          </div>
+
+          <div class="resume-review-body">
+            <div class="review-note">AI extraction can make mistakes. Verify names, employers, dates, education, certifications, and skills before approving.</div>
+            <div id="resumeReviewFields"></div>
+
+            <div class="review-actions">
+              <button type="button" class="review-primary-button" id="saveResumeReviewButton">Save Review</button>
+              <button type="button" class="review-secondary-button" id="approveResumeReviewButton">Approve for Profile Import</button>
+              <span id="resumeReviewStatus"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-placeholder-grid" id="careerHistoryPlaceholders">
+          <div class="profile-placeholder-card"><strong>Experience</strong><span>Import and analyze a resume to identify employers, roles, dates, and accomplishments.</span></div>
+          <div class="profile-placeholder-card"><strong>Education</strong><span>CareerPilot will identify schools, degrees, fields of study, and dates.</span></div>
+          <div class="profile-placeholder-card"><strong>Skills</strong><span>CareerPilot will build a reusable skill inventory for matching and tailoring.</span></div>
+          <div class="profile-placeholder-card"><strong>Certifications</strong><span>CareerPilot will identify licenses, credentials, issuing organizations, and expiration information.</span></div>
         </div>
       </div>
     </div>
@@ -1166,6 +1384,10 @@
     let savedJobIds = new Set();
     let pendingSaveJobId = null;
     let currentProfile = null;
+    let analyzedResumeForSummary = null;
+    let currentReviewResumeId = null;
+    let currentReviewResumeName = "";
+    let currentReviewAnalysis = null;
 
     function debounce(func, delay = 250) {
       let timer;
@@ -1245,6 +1467,20 @@
       if (!value) return "0 KB";
       if (value < 1024 * 1024) return `${Math.max(1, Math.round(value / 1024))} KB`;
       return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
+
+    function deepClone(value) {
+      return JSON.parse(JSON.stringify(value ?? null));
     }
 
     function safeExternalUrl(value) {
@@ -1379,6 +1615,7 @@
         document.getElementById("jobMatchesCount").textContent = "0";
         document.getElementById("profileStatus").textContent = "Getting started";
         document.getElementById("resumeList").innerHTML = "";
+        resetCareerAnalysisUI();
         syncSaveButtons();
       }
     }
@@ -1548,11 +1785,98 @@
       }
     });
 
+    function getResumeAnalysisNode(resume) {
+      const node = resume?.parsed_data?.analysis;
+      if (!node || typeof node !== "object" || !node.data || typeof node.data !== "object") return null;
+      return node;
+    }
+
+    function analysisCounts(analysis) {
+      return {
+        experience: Array.isArray(analysis?.experience) ? analysis.experience.length : 0,
+        education: Array.isArray(analysis?.education) ? analysis.education.length : 0,
+        skills: Array.isArray(analysis?.skills) ? analysis.skills.length : 0,
+        certifications: Array.isArray(analysis?.certifications) ? analysis.certifications.length : 0
+      };
+    }
+
+    function resetCareerAnalysisUI() {
+      analyzedResumeForSummary = null;
+      currentReviewResumeId = null;
+      currentReviewResumeName = "";
+      currentReviewAnalysis = null;
+
+      document.getElementById("careerAnalysisSummary").classList.remove("show");
+      document.getElementById("resumeReviewPanel").classList.remove("show");
+      document.getElementById("careerHistoryPlaceholders").style.display = "grid";
+      document.getElementById("careerHistoryIntro").textContent = "Import your resume first. CareerPilot will then analyze it and prepare Experience, Education, Skills, and Certifications for your review.";
+      document.getElementById("careerAnalysisStatus").textContent = "";
+      document.getElementById("resumeReviewStatus").textContent = "";
+      document.getElementById("resumeReviewFields").innerHTML = "";
+    }
+
+    function renderCareerHistoryFromResumes(resumes) {
+      if (!Array.isArray(resumes) || !resumes.length) {
+        resetCareerAnalysisUI();
+        return;
+      }
+
+      let selected = null;
+
+      if (currentReviewResumeId) {
+        selected = resumes.find(resume => resume.id === currentReviewResumeId && getResumeAnalysisNode(resume));
+      }
+
+      if (!selected) {
+        selected = resumes.find(resume => resume.is_primary && getResumeAnalysisNode(resume))
+          || resumes.find(resume => getResumeAnalysisNode(resume));
+      }
+
+      if (!selected) {
+        analyzedResumeForSummary = null;
+        document.getElementById("careerAnalysisSummary").classList.remove("show");
+        document.getElementById("resumeReviewPanel").classList.remove("show");
+        document.getElementById("careerHistoryPlaceholders").style.display = "grid";
+
+        const imported = resumes.some(resume => resume.resume_text?.trim());
+        document.getElementById("careerHistoryIntro").textContent = imported
+          ? "Your resume is imported. Click Analyze with AI to prepare Experience, Education, Skills, and Certifications for review."
+          : "Import your resume first. CareerPilot will then analyze it and prepare Experience, Education, Skills, and Certifications for your review.";
+        return;
+      }
+
+      const analysisNode = getResumeAnalysisNode(selected);
+      const counts = analysisCounts(analysisNode.data);
+      const status = String(analysisNode.status || "ready_for_review");
+      analyzedResumeForSummary = selected;
+
+      document.getElementById("careerHistoryPlaceholders").style.display = "none";
+      document.getElementById("careerAnalysisSummary").classList.add("show");
+      document.getElementById("careerHistoryIntro").textContent = "CareerPilot has analyzed your resume. Review the structured information before using it to build your permanent Career Profile.";
+      document.getElementById("careerAnalysisTitle").textContent = `${selected.resume_name || selected.original_filename || "Resume"} analysis`;
+      document.getElementById("careerAnalysisSubtitle").textContent = status === "approved"
+        ? "You approved this analysis for profile import. You can reopen it and make additional corrections at any time."
+        : "Review what CareerPilot found before it is added to your Career Profile.";
+      document.getElementById("analysisExperienceCount").textContent = counts.experience;
+      document.getElementById("analysisEducationCount").textContent = counts.education;
+      document.getElementById("analysisSkillsCount").textContent = counts.skills;
+      document.getElementById("analysisCertificationsCount").textContent = counts.certifications;
+      document.getElementById("careerAnalysisStatus").textContent = status === "approved"
+        ? "Approved for profile import. Permanent Career Profile import is the next backend step."
+        : "Ready for review. Nothing has been copied into your permanent Career Profile yet.";
+
+      if (currentReviewResumeId === selected.id && document.getElementById("resumeReviewPanel").classList.contains("show")) {
+        currentReviewAnalysis = deepClone(analysisNode.data);
+        renderResumeReviewFields();
+      }
+    }
+
     async function loadResumes() {
       const list = document.getElementById("resumeList");
 
       if (!currentSession?.user) {
         list.innerHTML = "";
+        resetCareerAnalysisUI();
         return [];
       }
 
@@ -1579,8 +1903,10 @@
         return [];
       }
 
-      renderResumeList(data || []);
-      return data || [];
+      const resumes = data || [];
+      renderResumeList(resumes);
+      renderCareerHistoryFromResumes(resumes);
+      return resumes;
     }
 
     function renderResumeList(resumes) {
@@ -1596,6 +1922,7 @@
       }
 
       resumes.forEach(resume => {
+        const analysisNode = getResumeAnalysisNode(resume);
         const card = document.createElement("div");
         card.className = "resume-card";
 
@@ -1620,6 +1947,13 @@
           title.appendChild(importedBadge);
         }
 
+        if (analysisNode) {
+          const aiBadge = document.createElement("span");
+          aiBadge.className = analysisNode.status === "approved" ? "approved-badge" : "ai-badge";
+          aiBadge.textContent = analysisNode.status === "approved" ? "Approved" : "AI Analyzed";
+          title.appendChild(aiBadge);
+        }
+
         const meta = document.createElement("div");
         meta.className = "resume-card-meta";
         const uploaded = resume.created_at ? new Date(resume.created_at).toLocaleDateString() : "";
@@ -1637,6 +1971,24 @@
         openButton.textContent = "Open PDF";
         openButton.addEventListener("click", () => openResume(resume.storage_path, openButton));
         actions.appendChild(openButton);
+
+        if (resume.resume_text?.trim()) {
+          const analyzeButton = document.createElement("button");
+          analyzeButton.type = "button";
+          analyzeButton.className = "resume-small-button";
+          analyzeButton.textContent = analysisNode ? "Re-analyze with AI" : "Analyze with AI";
+          analyzeButton.addEventListener("click", () => analyzeResume(resume, analyzeButton));
+          actions.appendChild(analyzeButton);
+
+          if (analysisNode) {
+            const reviewButton = document.createElement("button");
+            reviewButton.type = "button";
+            reviewButton.className = "resume-small-button";
+            reviewButton.textContent = "Review Analysis";
+            reviewButton.addEventListener("click", () => openResumeReview(resume));
+            actions.appendChild(reviewButton);
+          }
+        }
 
         const importButton = document.createElement("button");
         importButton.type = "button";
@@ -1667,6 +2019,21 @@
       });
     }
 
+    async function getFunctionErrorMessage(error, fallback) {
+      let message = error?.message || fallback;
+
+      if (error?.context && typeof error.context.json === "function") {
+        try {
+          const details = await error.context.json();
+          if (details?.error) message = details.error;
+        } catch (_) {
+          // Keep the original Functions error message.
+        }
+      }
+
+      return message;
+    }
+
     async function importResume(resume, button) {
       if (!currentSession?.user) {
         openAuth("signin", "Sign in to import your resume.");
@@ -1684,30 +2051,43 @@
           body: { resume_id: resume.id }
         });
 
-        if (error) {
-          let message = error.message || "CareerPilot could not read this resume.";
+        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot could not read this resume."));
+        if (!data?.success) throw new Error(data?.error || "CareerPilot could not read this resume.");
 
-          if (error.context && typeof error.context.json === "function") {
-            try {
-              const details = await error.context.json();
-              if (details?.error) message = details.error;
-            } catch (_) {
-              // Keep the original Functions error message.
-            }
-          }
+        // A re-import may change the text, so any older AI analysis must be invalidated.
+        const { data: refreshedResume, error: refreshError } = await db
+          .from("resumes")
+          .select("parsed_data")
+          .eq("user_id", currentSession.user.id)
+          .eq("id", resume.id)
+          .single();
 
-          throw new Error(message);
+        if (refreshError) throw refreshError;
+
+        if (refreshedResume?.parsed_data?.analysis) {
+          const nextParsedData = { ...(refreshedResume.parsed_data || {}) };
+          delete nextParsedData.analysis;
+
+          const { error: clearAnalysisError } = await db
+            .from("resumes")
+            .update({ parsed_data: nextParsedData, updated_at: new Date().toISOString() })
+            .eq("user_id", currentSession.user.id)
+            .eq("id", resume.id);
+
+          if (clearAnalysisError) throw clearAnalysisError;
         }
 
-        if (!data?.success) {
-          throw new Error(data?.error || "CareerPilot could not read this resume.");
+        if (currentReviewResumeId === resume.id) {
+          currentReviewResumeId = null;
+          currentReviewAnalysis = null;
+          document.getElementById("resumeReviewPanel").classList.remove("show");
         }
 
         const pages = Number(data.total_pages || 0);
         const characters = Number(data.characters_extracted || 0);
         const pageText = pages === 1 ? "1 page" : `${pages} pages`;
 
-        status.textContent = `Resume imported successfully — ${pageText} and ${characters.toLocaleString()} characters were read.`;
+        status.textContent = `Resume imported successfully — ${pageText} and ${characters.toLocaleString()} characters were read. Click Analyze with AI to structure your career history.`;
         showToast("Resume imported successfully.");
         console.log("CareerPilot resume import:", data);
 
@@ -1719,6 +2099,404 @@
       } finally {
         button.disabled = false;
         button.textContent = originalButtonText;
+      }
+    }
+
+    async function analyzeResume(resume, button) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to analyze your resume.");
+        return;
+      }
+
+      if (!resume.resume_text?.trim()) {
+        showToast("Import the resume before running AI analysis.");
+        return;
+      }
+
+      const uploadStatus = document.getElementById("resumeUploadStatus");
+      const careerStatus = document.getElementById("careerAnalysisStatus");
+      const originalButtonText = button.textContent;
+
+      button.disabled = true;
+      button.textContent = "Analyzing...";
+      uploadStatus.textContent = `CareerPilot AI is analyzing ${resume.original_filename || "your resume"}...`;
+      careerStatus.textContent = "AI analysis is running. This can take a little while.";
+
+      try {
+        const { data, error } = await db.functions.invoke("analyze-resume", {
+          body: { resume_id: resume.id }
+        });
+
+        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot AI could not analyze this resume."));
+        if (!data?.success) throw new Error(data?.error || "CareerPilot AI could not analyze this resume.");
+
+        const counts = data.counts || analysisCounts(data.analysis);
+        uploadStatus.textContent = `AI analysis complete — ${counts.experience || 0} experience entries, ${counts.education || 0} education entries, ${counts.skills || 0} skills, and ${counts.certifications || 0} certifications found.`;
+        showToast("Resume analysis complete.");
+
+        currentReviewResumeId = resume.id;
+        currentReviewResumeName = data.resume_name || resume.resume_name || resume.original_filename || "Resume";
+        currentReviewAnalysis = deepClone(data.analysis || {});
+
+        await loadResumes();
+
+        const refreshed = analyzedResumeForSummary && analyzedResumeForSummary.id === resume.id
+          ? analyzedResumeForSummary
+          : { ...resume, parsed_data: { ...(resume.parsed_data || {}), analysis: { status: "ready_for_review", data: data.analysis } } };
+
+        openResumeReview(refreshed, data.analysis);
+        document.getElementById("careerHistoryBlock").scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (error) {
+        console.error("Resume AI analysis error:", error);
+        const message = error?.message || "CareerPilot AI could not analyze this resume.";
+        uploadStatus.textContent = message;
+        careerStatus.textContent = message;
+        showToast("We couldn't analyze that resume.");
+      } finally {
+        button.disabled = false;
+        button.textContent = originalButtonText;
+      }
+    }
+
+    function openResumeReview(resume, analysisOverride = null) {
+      const analysisNode = getResumeAnalysisNode(resume);
+      const analysis = analysisOverride || analysisNode?.data;
+
+      if (!analysis) {
+        showToast("Analyze this resume first.");
+        return;
+      }
+
+      currentReviewResumeId = resume.id;
+      currentReviewResumeName = resume.resume_name || resume.original_filename || "Resume";
+      currentReviewAnalysis = deepClone(analysis);
+      analyzedResumeForSummary = resume;
+
+      document.getElementById("resumeReviewTitle").textContent = `Review Imported Resume — ${currentReviewResumeName}`;
+      document.getElementById("resumeReviewStatus").textContent = "";
+      renderResumeReviewFields();
+      document.getElementById("resumeReviewPanel").classList.add("show");
+    }
+
+    function reviewField(label, value, attributes = "", full = false, textarea = false) {
+      const safeValue = escapeHTML(value || "");
+      return `
+        <div class="review-field${full ? " full" : ""}">
+          <label>${escapeHTML(label)}</label>
+          ${textarea
+            ? `<textarea ${attributes}>${safeValue}</textarea>`
+            : `<input type="text" value="${safeValue}" ${attributes}>`}
+        </div>
+      `;
+    }
+
+    function renderResumeReviewFields() {
+      const container = document.getElementById("resumeReviewFields");
+      const analysis = currentReviewAnalysis || {};
+      const contact = analysis.contact || {};
+      const experience = Array.isArray(analysis.experience) ? analysis.experience : [];
+      const education = Array.isArray(analysis.education) ? analysis.education : [];
+      const skills = Array.isArray(analysis.skills) ? analysis.skills : [];
+      const certifications = Array.isArray(analysis.certifications) ? analysis.certifications : [];
+
+      const experienceHtml = experience.length
+        ? experience.map((item, index) => `
+          <div class="review-entry">
+            <div class="review-entry-head">
+              <strong>Experience ${index + 1}</strong>
+              <button type="button" class="review-remove-button" data-remove-experience="${index}">Remove</button>
+            </div>
+            <div class="review-grid">
+              ${reviewField("Job title", item.job_title, `data-exp-field="job_title" data-exp-index="${index}"`)}
+              ${reviewField("Company", item.company, `data-exp-field="company" data-exp-index="${index}"`)}
+              ${reviewField("Location", item.location, `data-exp-field="location" data-exp-index="${index}"`)}
+              ${reviewField("Start date", item.start_date, `data-exp-field="start_date" data-exp-index="${index}"`)}
+              ${reviewField("End date", item.end_date, `data-exp-field="end_date" data-exp-index="${index}"`)}
+              <div class="review-field">
+                <label>Current role</label>
+                <label style="display:flex;align-items:center;gap:8px;min-height:42px;font-size:14px;font-weight:600;">
+                  <input type="checkbox" style="width:17px;height:17px;" data-exp-current="${index}" ${item.is_current ? "checked" : ""}>
+                  I currently work here
+                </label>
+              </div>
+              ${reviewField("Description", item.description, `data-exp-field="description" data-exp-index="${index}"`, true, true)}
+              ${reviewField("Accomplishments — one per line", (item.accomplishments || []).join("\n"), `data-exp-accomplishments="${index}"`, true, true)}
+            </div>
+          </div>
+        `).join("")
+        : '<div class="saved-empty">No experience entries were identified. You can add one below.</div>';
+
+      const educationHtml = education.length
+        ? education.map((item, index) => `
+          <div class="review-entry">
+            <div class="review-entry-head">
+              <strong>Education ${index + 1}</strong>
+              <button type="button" class="review-remove-button" data-remove-education="${index}">Remove</button>
+            </div>
+            <div class="review-grid">
+              ${reviewField("School", item.school_name, `data-edu-field="school_name" data-edu-index="${index}"`)}
+              ${reviewField("Degree", item.degree, `data-edu-field="degree" data-edu-index="${index}"`)}
+              ${reviewField("Field of study", item.field_of_study, `data-edu-field="field_of_study" data-edu-index="${index}"`)}
+              ${reviewField("Location", item.location, `data-edu-field="location" data-edu-index="${index}"`)}
+              ${reviewField("Start date", item.start_date, `data-edu-field="start_date" data-edu-index="${index}"`)}
+              ${reviewField("End date", item.end_date, `data-edu-field="end_date" data-edu-index="${index}"`)}
+              ${reviewField("Description", item.description, `data-edu-field="description" data-edu-index="${index}"`, true, true)}
+            </div>
+          </div>
+        `).join("")
+        : '<div class="saved-empty">No education entries were identified. You can add one below.</div>';
+
+      const certificationsHtml = certifications.length
+        ? certifications.map((item, index) => `
+          <div class="review-entry">
+            <div class="review-entry-head">
+              <strong>Certification ${index + 1}</strong>
+              <button type="button" class="review-remove-button" data-remove-certification="${index}">Remove</button>
+            </div>
+            <div class="review-grid">
+              ${reviewField("Certification", item.certification_name, `data-cert-field="certification_name" data-cert-index="${index}"`)}
+              ${reviewField("Issuing organization", item.issuing_organization, `data-cert-field="issuing_organization" data-cert-index="${index}"`)}
+              ${reviewField("Credential ID", item.credential_id, `data-cert-field="credential_id" data-cert-index="${index}"`)}
+              ${reviewField("Credential URL", item.credential_url, `data-cert-field="credential_url" data-cert-index="${index}"`)}
+              ${reviewField("Issue date", item.issue_date, `data-cert-field="issue_date" data-cert-index="${index}"`)}
+              ${reviewField("Expiration date", item.expiration_date, `data-cert-field="expiration_date" data-cert-index="${index}"`)}
+              <div class="review-field full">
+                <label style="display:flex;align-items:center;gap:8px;min-height:42px;font-size:14px;font-weight:600;">
+                  <input type="checkbox" style="width:17px;height:17px;" data-cert-no-expire="${index}" ${item.does_not_expire ? "checked" : ""}>
+                  This certification does not expire
+                </label>
+              </div>
+            </div>
+          </div>
+        `).join("")
+        : '<div class="saved-empty">No certifications were identified. You can add one below.</div>';
+
+      container.innerHTML = `
+        <div class="review-section">
+          <div class="review-section-heading"><h5>Contact information</h5></div>
+          <div class="review-grid">
+            ${reviewField("Full name", contact.full_name, 'data-contact-field="full_name"')}
+            ${reviewField("Email", contact.email, 'data-contact-field="email"')}
+            ${reviewField("Phone", contact.phone, 'data-contact-field="phone"')}
+            ${reviewField("City", contact.city, 'data-contact-field="city"')}
+            ${reviewField("State / region", contact.state, 'data-contact-field="state"')}
+            ${reviewField("Country", contact.country, 'data-contact-field="country"')}
+            ${reviewField("LinkedIn URL", contact.linkedin_url, 'data-contact-field="linkedin_url"')}
+            ${reviewField("Portfolio URL", contact.portfolio_url, 'data-contact-field="portfolio_url"')}
+          </div>
+        </div>
+
+        <div class="review-section">
+          <div class="review-section-heading"><h5>Career overview</h5></div>
+          <div class="review-grid">
+            ${reviewField("Professional headline", analysis.professional_headline, 'data-review-headline="true"', true)}
+            ${reviewField("Professional summary", analysis.professional_summary, 'data-review-summary="true"', true, true)}
+          </div>
+        </div>
+
+        <div class="review-section">
+          <div class="review-section-heading">
+            <h5>Experience</h5>
+            <button type="button" class="review-add-button" id="addReviewExperience">+ Add experience</button>
+          </div>
+          <div id="reviewExperienceEntries">${experienceHtml}</div>
+        </div>
+
+        <div class="review-section">
+          <div class="review-section-heading">
+            <h5>Education</h5>
+            <button type="button" class="review-add-button" id="addReviewEducation">+ Add education</button>
+          </div>
+          <div id="reviewEducationEntries">${educationHtml}</div>
+        </div>
+
+        <div class="review-section">
+          <div class="review-section-heading"><h5>Skills</h5></div>
+          <div class="review-field full">
+            <label>Skills — one per line</label>
+            <textarea id="reviewSkillsText" style="min-height:150px;">${escapeHTML(skills.join("\n"))}</textarea>
+          </div>
+        </div>
+
+        <div class="review-section">
+          <div class="review-section-heading">
+            <h5>Certifications</h5>
+            <button type="button" class="review-add-button" id="addReviewCertification">+ Add certification</button>
+          </div>
+          <div id="reviewCertificationEntries">${certificationsHtml}</div>
+        </div>
+      `;
+
+      container.querySelectorAll("[data-remove-experience]").forEach(button => {
+        button.addEventListener("click", () => {
+          currentReviewAnalysis = collectResumeReviewForm();
+          currentReviewAnalysis.experience.splice(Number(button.dataset.removeExperience), 1);
+          renderResumeReviewFields();
+        });
+      });
+
+      container.querySelectorAll("[data-remove-education]").forEach(button => {
+        button.addEventListener("click", () => {
+          currentReviewAnalysis = collectResumeReviewForm();
+          currentReviewAnalysis.education.splice(Number(button.dataset.removeEducation), 1);
+          renderResumeReviewFields();
+        });
+      });
+
+      container.querySelectorAll("[data-remove-certification]").forEach(button => {
+        button.addEventListener("click", () => {
+          currentReviewAnalysis = collectResumeReviewForm();
+          currentReviewAnalysis.certifications.splice(Number(button.dataset.removeCertification), 1);
+          renderResumeReviewFields();
+        });
+      });
+
+      document.getElementById("addReviewExperience").addEventListener("click", () => {
+        currentReviewAnalysis = collectResumeReviewForm();
+        currentReviewAnalysis.experience.push({
+          job_title: "", company: "", location: "", start_date: "", end_date: "", is_current: false, description: "", accomplishments: []
+        });
+        renderResumeReviewFields();
+      });
+
+      document.getElementById("addReviewEducation").addEventListener("click", () => {
+        currentReviewAnalysis = collectResumeReviewForm();
+        currentReviewAnalysis.education.push({
+          school_name: "", degree: "", field_of_study: "", location: "", start_date: "", end_date: "", description: ""
+        });
+        renderResumeReviewFields();
+      });
+
+      document.getElementById("addReviewCertification").addEventListener("click", () => {
+        currentReviewAnalysis = collectResumeReviewForm();
+        currentReviewAnalysis.certifications.push({
+          certification_name: "", issuing_organization: "", credential_id: "", credential_url: "", issue_date: "", expiration_date: "", does_not_expire: false
+        });
+        renderResumeReviewFields();
+      });
+    }
+
+    function collectResumeReviewForm() {
+      const container = document.getElementById("resumeReviewFields");
+      const base = currentReviewAnalysis || {};
+      const contact = {
+        full_name: "", email: "", phone: "", city: "", state: "", country: "", linkedin_url: "", portfolio_url: ""
+      };
+
+      container.querySelectorAll("[data-contact-field]").forEach(input => {
+        contact[input.dataset.contactField] = input.value.trim();
+      });
+
+      const experience = [];
+      container.querySelectorAll("[data-exp-index]").forEach(input => {
+        const index = Number(input.dataset.expIndex);
+        if (!experience[index]) {
+          experience[index] = { job_title: "", company: "", location: "", start_date: "", end_date: "", is_current: false, description: "", accomplishments: [] };
+        }
+        experience[index][input.dataset.expField] = input.value.trim();
+      });
+      container.querySelectorAll("[data-exp-current]").forEach(input => {
+        const index = Number(input.dataset.expCurrent);
+        if (!experience[index]) experience[index] = { job_title: "", company: "", location: "", start_date: "", end_date: "", is_current: false, description: "", accomplishments: [] };
+        experience[index].is_current = input.checked;
+      });
+      container.querySelectorAll("[data-exp-accomplishments]").forEach(input => {
+        const index = Number(input.dataset.expAccomplishments);
+        if (!experience[index]) experience[index] = { job_title: "", company: "", location: "", start_date: "", end_date: "", is_current: false, description: "", accomplishments: [] };
+        experience[index].accomplishments = input.value.split(/\n+/).map(value => value.trim()).filter(Boolean);
+      });
+
+      const education = [];
+      container.querySelectorAll("[data-edu-index]").forEach(input => {
+        const index = Number(input.dataset.eduIndex);
+        if (!education[index]) education[index] = { school_name: "", degree: "", field_of_study: "", location: "", start_date: "", end_date: "", description: "" };
+        education[index][input.dataset.eduField] = input.value.trim();
+      });
+
+      const certifications = [];
+      container.querySelectorAll("[data-cert-index]").forEach(input => {
+        const index = Number(input.dataset.certIndex);
+        if (!certifications[index]) certifications[index] = { certification_name: "", issuing_organization: "", credential_id: "", credential_url: "", issue_date: "", expiration_date: "", does_not_expire: false };
+        certifications[index][input.dataset.certField] = input.value.trim();
+      });
+      container.querySelectorAll("[data-cert-no-expire]").forEach(input => {
+        const index = Number(input.dataset.certNoExpire);
+        if (!certifications[index]) certifications[index] = { certification_name: "", issuing_organization: "", credential_id: "", credential_url: "", issue_date: "", expiration_date: "", does_not_expire: false };
+        certifications[index].does_not_expire = input.checked;
+      });
+
+      const skillsText = document.getElementById("reviewSkillsText")?.value || "";
+      const skills = [...new Set(skillsText.split(/[\n,;]+/).map(value => value.trim()).filter(Boolean))];
+
+      return {
+        ...base,
+        contact,
+        professional_headline: container.querySelector("[data-review-headline]")?.value.trim() || "",
+        professional_summary: container.querySelector("[data-review-summary]")?.value.trim() || "",
+        experience: experience.filter(Boolean),
+        education: education.filter(Boolean),
+        skills,
+        certifications: certifications.filter(Boolean)
+      };
+    }
+
+    async function saveResumeReview(approve = false) {
+      if (!currentSession?.user || !currentReviewResumeId) return;
+
+      const saveButton = document.getElementById("saveResumeReviewButton");
+      const approveButton = document.getElementById("approveResumeReviewButton");
+      const status = document.getElementById("resumeReviewStatus");
+      saveButton.disabled = true;
+      approveButton.disabled = true;
+      status.textContent = approve ? "Approving review..." : "Saving review...";
+
+      try {
+        currentReviewAnalysis = collectResumeReviewForm();
+
+        const { data: row, error: readError } = await db
+          .from("resumes")
+          .select("parsed_data")
+          .eq("user_id", currentSession.user.id)
+          .eq("id", currentReviewResumeId)
+          .single();
+
+        if (readError) throw readError;
+
+        const parsedData = row?.parsed_data && typeof row.parsed_data === "object" && !Array.isArray(row.parsed_data)
+          ? { ...row.parsed_data }
+          : {};
+        const previousAnalysis = parsedData.analysis && typeof parsedData.analysis === "object"
+          ? { ...parsedData.analysis }
+          : {};
+        const now = new Date().toISOString();
+
+        parsedData.analysis = {
+          ...previousAnalysis,
+          status: approve ? "approved" : "ready_for_review",
+          reviewed_at: now,
+          data: currentReviewAnalysis
+        };
+
+        const { error: updateError } = await db
+          .from("resumes")
+          .update({ parsed_data: parsedData, updated_at: now })
+          .eq("user_id", currentSession.user.id)
+          .eq("id", currentReviewResumeId);
+
+        if (updateError) throw updateError;
+
+        status.textContent = approve
+          ? "Approved. CareerPilot is ready to import this information into your permanent Career Profile in the next backend step."
+          : "Review saved.";
+        showToast(approve ? "Resume analysis approved." : "Resume review saved.");
+        await loadResumes();
+      } catch (error) {
+        console.error("Save resume review error:", error);
+        status.textContent = error?.message || "We couldn't save your review.";
+        showToast("We couldn't save your review.");
+      } finally {
+        saveButton.disabled = false;
+        approveButton.disabled = false;
       }
     }
 
@@ -1901,6 +2679,20 @@
     }
 
     document.getElementById("uploadResumeButton").addEventListener("click", uploadResume);
+
+    document.getElementById("reviewAnalyzedResumeButton").addEventListener("click", () => {
+      if (analyzedResumeForSummary) openResumeReview(analyzedResumeForSummary);
+    });
+
+    document.getElementById("closeResumeReviewButton").addEventListener("click", () => {
+      if (document.getElementById("resumeReviewPanel").classList.contains("show")) {
+        currentReviewAnalysis = collectResumeReviewForm();
+      }
+      document.getElementById("resumeReviewPanel").classList.remove("show");
+    });
+
+    document.getElementById("saveResumeReviewButton").addEventListener("click", () => saveResumeReview(false));
+    document.getElementById("approveResumeReviewButton").addEventListener("click", () => saveResumeReview(true));
 
     function setAuthMode(mode) {
       authMode = mode;
