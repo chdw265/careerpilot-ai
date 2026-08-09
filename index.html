@@ -386,6 +386,184 @@
     .remove-job-button:hover { background: #fef3f2; }
     .save-hint { margin-top: 10px; color: #667085; font-size: 13px; }
 
+    /* CAREER PROFILE */
+    #profileSection { display: none; }
+    .profile-shell {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.04);
+    }
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+    .profile-header h2 { font-size: 32px; margin-bottom: 4px; }
+    .profile-header p { color: #667085; }
+    .profile-progress-wrap { min-width: 220px; }
+    .profile-progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+      color: #475467;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .profile-progress-track {
+      height: 9px;
+      border-radius: 999px;
+      background: #eaecf0;
+      overflow: hidden;
+    }
+    .profile-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #315ee8;
+      transition: width .2s ease;
+    }
+    .profile-block {
+      border-top: 1px solid #eaecf0;
+      padding-top: 24px;
+      margin-top: 24px;
+    }
+    .profile-block:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+    .profile-block h3 { font-size: 20px; margin-bottom: 4px; }
+    .profile-block-subtitle { color: #667085; font-size: 14px; margin-bottom: 18px; }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
+    }
+    .profile-field { display: flex; flex-direction: column; gap: 6px; }
+    .profile-field.full { grid-column: 1 / -1; }
+    .profile-field label { color: #344054; font-size: 13px; font-weight: 700; }
+    .profile-field input,
+    .profile-field select,
+    .profile-field textarea {
+      width: 100%;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .profile-field textarea { min-height: 115px; resize: vertical; }
+    .profile-field input:focus,
+    .profile-field select:focus,
+    .profile-field textarea:focus {
+      outline: 2px solid #315ee8;
+      outline-offset: 1px;
+      border-color: #315ee8;
+    }
+    .field-help { color: #667085; font-size: 12px; }
+    .choice-row { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+    .choice-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      color: #344054;
+      font-weight: 600;
+    }
+    .choice-row input { width: 17px; height: 17px; }
+    .profile-save-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+    .profile-save-button,
+    .resume-action-button {
+      border: 1px solid #315ee8;
+      background: #315ee8;
+      color: white;
+      border-radius: 8px;
+      padding: 11px 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .profile-save-button:hover,
+    .resume-action-button:hover { background: #244bc5; }
+    .profile-save-button:disabled,
+    .resume-action-button:disabled { opacity: .6; cursor: wait; }
+    #profileSaveStatus { color: #667085; font-size: 14px; }
+    .resume-upload-box {
+      border: 1px dashed #98a2b3;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 22px;
+    }
+    .resume-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .resume-upload-row input[type="file"] { max-width: 100%; }
+    .resume-note { margin-top: 10px; color: #667085; font-size: 13px; }
+    .resume-list { display: grid; gap: 12px; margin-top: 18px; }
+    .resume-card {
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .resume-card-main { min-width: 220px; flex: 1; }
+    .resume-card-title { font-weight: 800; margin-bottom: 3px; }
+    .resume-card-meta { color: #667085; font-size: 13px; }
+    .primary-badge {
+      display: inline-block;
+      margin-left: 7px;
+      background: #ecfdf3;
+      color: #067647;
+      border: 1px solid #abefc6;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .resume-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .resume-small-button {
+      border: 1px solid #cfd6e1;
+      background: white;
+      color: #14213d;
+      border-radius: 7px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .resume-small-button:hover { background: #f8fafc; }
+    .resume-small-button.danger { color: #b42318; border-color: #fda29b; }
+    .resume-small-button.danger:hover { background: #fef3f2; }
+    .resume-small-button:disabled { opacity: .6; cursor: wait; }
+    .profile-placeholder-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .profile-placeholder-card {
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      padding: 15px;
+      background: #fafbfc;
+    }
+    .profile-placeholder-card strong { display: block; margin-bottom: 4px; }
+    .profile-placeholder-card span { color: #667085; font-size: 12px; }
+
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -569,6 +747,9 @@
       .search-panel { padding: 20px; }
       .member-shell { padding: 22px; }
       .header-button { padding: 8px 11px; }
+      .profile-grid { grid-template-columns: 1fr; }
+      .profile-field.full { grid-column: auto; }
+      .profile-placeholder-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
     @media(max-width: 540px) {
       header { position: static; flex-direction: column; }
@@ -655,6 +836,96 @@
         <div class="member-card"><h3>Applications</h3><div class="member-number" id="applicationsCount">0</div><div class="member-small">Applications being tracked</div></div>
         <div class="member-card"><h3>Job Matches</h3><div class="member-number" id="jobMatchesCount">0</div><div class="member-small">AI matching will be connected next</div></div>
         <div class="member-card"><h3>Career Profile</h3><div class="member-number" id="profileStatus" style="font-size:18px;">Getting started</div><div class="member-small">Resume and profile tools are coming next</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="profileSection">
+    <div class="profile-shell">
+      <div class="profile-header">
+        <div>
+          <h2>Career Profile</h2>
+          <p>Tell CareerPilot what you have done and what you want next.</p>
+        </div>
+        <div class="profile-progress-wrap">
+          <div class="profile-progress-label"><span>Profile completion</span><span id="profileProgressText">0%</span></div>
+          <div class="profile-progress-track"><div class="profile-progress-bar" id="profileProgressBar"></div></div>
+        </div>
+      </div>
+
+      <form id="careerProfileForm">
+        <div class="profile-block">
+          <h3>Personal & contact</h3>
+          <p class="profile-block-subtitle">Your CareerPilot display name can be different from the name supplied by Google.</p>
+          <div class="profile-grid">
+            <div class="profile-field"><label for="profileDisplayName">Display name</label><input id="profileDisplayName" type="text" placeholder="How your name should appear in CareerPilot"></div>
+            <div class="profile-field"><label for="profilePhone">Phone</label><input id="profilePhone" type="tel" autocomplete="tel" placeholder="Optional"></div>
+            <div class="profile-field"><label for="profileCity">City</label><input id="profileCity" type="text" autocomplete="address-level2" placeholder="e.g. Orlando"></div>
+            <div class="profile-field"><label for="profileState">State / region</label><input id="profileState" type="text" autocomplete="address-level1" placeholder="e.g. Florida"></div>
+            <div class="profile-field"><label for="profileCountry">Country</label><input id="profileCountry" type="text" autocomplete="country-name" placeholder="e.g. United States"></div>
+            <div class="profile-field"><label for="profilePostalCode">ZIP / postal code</label><input id="profilePostalCode" type="text" autocomplete="postal-code" placeholder="Optional"></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Career overview</h3>
+          <p class="profile-block-subtitle">This becomes the foundation for future resume tailoring and AI job matching.</p>
+          <div class="profile-grid">
+            <div class="profile-field"><label for="profileCurrentTitle">Current or most recent job title</label><input id="profileCurrentTitle" type="text" placeholder="e.g. Revenue Cycle Director"></div>
+            <div class="profile-field"><label for="profileYearsExperience">Years of experience</label><input id="profileYearsExperience" type="number" min="0" max="80" step="0.5" placeholder="e.g. 12"></div>
+            <div class="profile-field full"><label for="profileHeadline">Professional headline</label><input id="profileHeadline" type="text" placeholder="e.g. Healthcare Operations & Revenue Cycle Leader"></div>
+            <div class="profile-field full"><label for="profileSummary">Professional summary</label><textarea id="profileSummary" placeholder="A short summary of your background, strengths, and career direction."></textarea></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>What you're looking for</h3>
+          <p class="profile-block-subtitle">Use commas or separate lines for fields that accept multiple choices.</p>
+          <div class="profile-grid">
+            <div class="profile-field full"><label for="profileTargetTitles">Target job titles</label><textarea id="profileTargetTitles" placeholder="Revenue Cycle Director, Operations Director, Patient Access Director"></textarea><span class="field-help">These will later power job recommendations and autocomplete.</span></div>
+            <div class="profile-field"><label for="profileTargetIndustries">Target industries</label><textarea id="profileTargetIndustries" placeholder="Healthcare, Health Tech, Insurance"></textarea></div>
+            <div class="profile-field"><label for="profileTargetLocations">Target locations</label><textarea id="profileTargetLocations" placeholder="Orlando, FL; Remote; Tampa, FL"></textarea></div>
+            <div class="profile-field full"><label>Preferred work setting</label><div class="choice-row"><label><input type="checkbox" name="workSettingPreference" value="remote">Remote</label><label><input type="checkbox" name="workSettingPreference" value="hybrid">Hybrid</label><label><input type="checkbox" name="workSettingPreference" value="onsite">On-site</label></div></div>
+            <div class="profile-field full"><label>Employment type</label><div class="choice-row"><label><input type="checkbox" name="employmentTypePreference" value="full_time">Full-time</label><label><input type="checkbox" name="employmentTypePreference" value="part_time">Part-time</label><label><input type="checkbox" name="employmentTypePreference" value="contract">Contract</label><label><input type="checkbox" name="employmentTypePreference" value="temporary">Temporary</label><label><input type="checkbox" name="employmentTypePreference" value="internship">Internship</label></div></div>
+            <div class="profile-field"><label for="profileSalaryMin">Desired salary minimum</label><input id="profileSalaryMin" type="number" min="0" step="1000" placeholder="e.g. 90000"></div>
+            <div class="profile-field"><label for="profileSalaryMax">Desired salary maximum</label><input id="profileSalaryMax" type="number" min="0" step="1000" placeholder="e.g. 125000"></div>
+            <div class="profile-field"><label for="profileSalaryCurrency">Salary currency</label><select id="profileSalaryCurrency"><option value="USD">USD — US Dollar</option><option value="CAD">CAD — Canadian Dollar</option><option value="GBP">GBP — British Pound</option><option value="EUR">EUR — Euro</option><option value="AUD">AUD — Australian Dollar</option></select></div>
+            <div class="profile-field"><label>Relocation</label><div class="choice-row" style="min-height:44px;align-items:center;"><label><input type="checkbox" id="profileRelocate">Willing to relocate</label></div></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Professional links</h3>
+          <div class="profile-grid">
+            <div class="profile-field"><label for="profileLinkedIn">LinkedIn URL</label><input id="profileLinkedIn" type="url" placeholder="https://www.linkedin.com/in/..."></div>
+            <div class="profile-field"><label for="profilePortfolio">Portfolio / personal website</label><input id="profilePortfolio" type="url" placeholder="https://..."></div>
+          </div>
+        </div>
+
+        <div class="profile-save-row"><button type="submit" class="profile-save-button" id="profileSaveButton">Save Career Profile</button><span id="profileSaveStatus"></span></div>
+      </form>
+
+      <div class="profile-block">
+        <h3>Resume</h3>
+        <p class="profile-block-subtitle">Upload your resume now. Automatic PDF reading and AI analysis will be connected in the next backend step.</p>
+        <div class="resume-upload-box">
+          <strong>Upload a PDF resume</strong>
+          <div class="resume-upload-row"><input type="file" id="resumeFileInput" accept="application/pdf,.pdf"><button type="button" class="resume-action-button" id="uploadResumeButton">Upload Resume</button></div>
+          <div class="resume-note">PDF only • Maximum 10 MB • Stored privately under your CareerPilot account.</div>
+          <div id="resumeUploadStatus" class="resume-note"></div>
+        </div>
+        <div class="resume-list" id="resumeList"></div>
+      </div>
+
+      <div class="profile-block">
+        <h3>Career history</h3>
+        <p class="profile-block-subtitle">The secure database tables are ready. We'll connect these editors after the profile and resume upload are proven stable.</p>
+        <div class="profile-placeholder-grid">
+          <div class="profile-placeholder-card"><strong>Experience</strong><span>Add employers, roles, dates, and accomplishments next.</span></div>
+          <div class="profile-placeholder-card"><strong>Education</strong><span>Add schools, degrees, and fields of study next.</span></div>
+          <div class="profile-placeholder-card"><strong>Skills</strong><span>Build a reusable skill inventory for matching.</span></div>
+          <div class="profile-placeholder-card"><strong>Certifications</strong><span>Track licenses, credentials, and expiration dates.</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -832,6 +1103,7 @@
     let authMode = "signin";
     let savedJobIds = new Set();
     let pendingSaveJobId = null;
+    let currentProfile = null;
 
     function debounce(func, delay = 250) {
       let timer;
@@ -871,6 +1143,26 @@
       if (parts.length === 1) return parts[0].substring(0,1).toUpperCase();
       return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
     }
+    function parseList(value) {
+      return [...new Set(String(value || "").split(/[\n,;]+/).map(item => item.trim()).filter(Boolean))];
+    }
+    function formatList(values) { return Array.isArray(values) ? values.join(", ") : ""; }
+    function numberOrNull(value) {
+      if (value === "" || value === null || value === undefined) return null;
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    }
+    function sanitizeFilename(filename) {
+      const cleaned = String(filename || "resume.pdf").replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+      return cleaned || "resume.pdf";
+    }
+    function formatBytes(bytes) {
+      const value = Number(bytes || 0);
+      if (!value) return "0 KB";
+      if (value < 1024 * 1024) return `${Math.max(1, Math.round(value / 1024))} KB`;
+      return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
     function safeExternalUrl(value) {
       if (!value) return null;
       try {
@@ -925,6 +1217,7 @@
     const memberSection = document.getElementById("memberSection");
     const memberWelcome = document.getElementById("memberWelcome");
     const savedJobsSection = document.getElementById("savedJobsSection");
+    const profileSection = document.getElementById("profileSection");
     const authModal = document.getElementById("authModal");
     const authMessage = document.getElementById("authMessage");
     const signInTab = document.getElementById("signInTab");
@@ -945,8 +1238,10 @@
     async function updateAuthUI(session) {
       currentSession = session;
       const user = session?.user || null;
+
       if (user) {
-        const displayName = getUserDisplayName(user);
+        currentProfile = await getCareerProfile(user.id);
+        const displayName = profileDisplayName(currentProfile, user);
         signedOutNav.style.display = "none";
         signedInNav.style.display = "flex";
         userPill.style.display = "flex";
@@ -955,9 +1250,11 @@
         heroAccountButton.textContent = "My CareerPilot";
         memberWelcome.textContent = `Welcome, ${displayName}`;
         memberSection.style.display = "block";
-        await loadSavedJobIds();
-        await loadMemberDashboard(user.id);
+        populateProfileForm(currentProfile, user);
+
+        await Promise.all([loadSavedJobIds(), loadMemberDashboard(user.id), loadResumes()]);
         syncSaveButtons();
+
         if (pendingSaveJobId) {
           const jobId = pendingSaveJobId;
           pendingSaveJobId = null;
@@ -970,28 +1267,293 @@
         heroAccountButton.textContent = "Create Free Account";
         memberSection.style.display = "none";
         savedJobsSection.style.display = "none";
+        profileSection.style.display = "none";
+        currentProfile = null;
         savedJobIds = new Set();
         document.getElementById("savedJobsCount").textContent = "0";
         document.getElementById("applicationsCount").textContent = "0";
         document.getElementById("jobMatchesCount").textContent = "0";
+        document.getElementById("profileStatus").textContent = "Getting started";
+        document.getElementById("resumeList").innerHTML = "";
         syncSaveButtons();
       }
     }
 
     async function loadMemberDashboard(userId) {
       try {
-        const [applicationResult, matchResult, profileResult] = await Promise.all([
+        const [applicationResult, matchResult] = await Promise.all([
           db.from("applications").select("id", { count: "exact", head: true }).eq("user_id", userId),
-          db.from("job_matches").select("id", { count: "exact", head: true }).eq("user_id", userId),
-          db.from("profiles").select("professional_headline,onboarding_completed").eq("id", userId).maybeSingle()
+          db.from("job_matches").select("id", { count: "exact", head: true }).eq("user_id", userId)
         ]);
         document.getElementById("savedJobsCount").textContent = savedJobIds.size;
         document.getElementById("applicationsCount").textContent = applicationResult.count ?? 0;
         document.getElementById("jobMatchesCount").textContent = matchResult.count ?? 0;
-        const profile = profileResult.data;
-        document.getElementById("profileStatus").textContent = profile?.onboarding_completed ? "Profile ready" : profile?.professional_headline ? "In progress" : "Getting started";
+        updateProfileCompletion(currentProfile);
       } catch (error) { console.error("Dashboard load error:", error); }
     }
+
+    async function getCareerProfile(userId) {
+      const { data, error } = await db.from("profiles").select(`
+        id,full_name,email,phone,city,state,country,postal_code,
+        professional_headline,professional_summary,display_name,current_job_title,
+        years_experience,target_job_titles,target_industries,target_locations,
+        work_setting_preferences,employment_type_preferences,desired_salary_min,
+        desired_salary_max,salary_currency,willing_to_relocate,linkedin_url,
+        portfolio_url,onboarding_completed
+      `).eq("id", userId).maybeSingle();
+      if (error) { console.error("Profile load error:", error); return null; }
+      return data || null;
+    }
+
+    function profileDisplayName(profile, user) {
+      return profile?.display_name || profile?.full_name || getUserDisplayName(user);
+    }
+
+    function setCheckedValues(name, values) {
+      const selected = new Set(Array.isArray(values) ? values : []);
+      document.querySelectorAll(`input[name="${name}"]`).forEach(input => { input.checked = selected.has(input.value); });
+    }
+
+    function getCheckedValues(name) {
+      return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(input => input.value);
+    }
+
+    function populateProfileForm(profile, user) {
+      const source = profile || {};
+      document.getElementById("profileDisplayName").value = source.display_name || source.full_name || getUserDisplayName(user) || "";
+      document.getElementById("profilePhone").value = source.phone || "";
+      document.getElementById("profileCity").value = source.city || "";
+      document.getElementById("profileState").value = source.state || "";
+      document.getElementById("profileCountry").value = source.country || "";
+      document.getElementById("profilePostalCode").value = source.postal_code || "";
+      document.getElementById("profileCurrentTitle").value = source.current_job_title || "";
+      document.getElementById("profileYearsExperience").value = source.years_experience ?? "";
+      document.getElementById("profileHeadline").value = source.professional_headline || "";
+      document.getElementById("profileSummary").value = source.professional_summary || "";
+      document.getElementById("profileTargetTitles").value = formatList(source.target_job_titles);
+      document.getElementById("profileTargetIndustries").value = formatList(source.target_industries);
+      document.getElementById("profileTargetLocations").value = formatList(source.target_locations);
+      document.getElementById("profileSalaryMin").value = source.desired_salary_min ?? "";
+      document.getElementById("profileSalaryMax").value = source.desired_salary_max ?? "";
+      document.getElementById("profileSalaryCurrency").value = source.salary_currency || "USD";
+      document.getElementById("profileRelocate").checked = Boolean(source.willing_to_relocate);
+      document.getElementById("profileLinkedIn").value = source.linkedin_url || "";
+      document.getElementById("profilePortfolio").value = source.portfolio_url || "";
+      setCheckedValues("workSettingPreference", source.work_setting_preferences);
+      setCheckedValues("employmentTypePreference", source.employment_type_preferences);
+      updateProfileCompletion(source);
+    }
+
+    function calculateProfileCompletion(profile) {
+      if (!profile) return 0;
+      const checks = [
+        Boolean(profile.display_name || profile.full_name),
+        Boolean(profile.city && profile.state && profile.country),
+        Boolean(profile.current_job_title),
+        profile.years_experience !== null && profile.years_experience !== undefined,
+        Boolean(profile.professional_headline),
+        Boolean(profile.professional_summary),
+        Array.isArray(profile.target_job_titles) && profile.target_job_titles.length > 0,
+        Array.isArray(profile.work_setting_preferences) && profile.work_setting_preferences.length > 0,
+        profile.desired_salary_min !== null && profile.desired_salary_min !== undefined,
+        Boolean(profile.linkedin_url || profile.portfolio_url)
+      ];
+      return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+    }
+
+    function updateProfileCompletion(profile) {
+      const percent = calculateProfileCompletion(profile);
+      document.getElementById("profileProgressText").textContent = `${percent}%`;
+      document.getElementById("profileProgressBar").style.width = `${percent}%`;
+      document.getElementById("profileStatus").textContent = percent > 0 ? `${percent}% complete` : "Getting started";
+      return percent;
+    }
+
+    async function loadCareerProfile(userId) {
+      currentProfile = await getCareerProfile(userId);
+      populateProfileForm(currentProfile, currentSession?.user);
+      return currentProfile;
+    }
+
+    document.getElementById("careerProfileForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!currentSession?.user) { openAuth("signin", "Sign in to edit your CareerPilot profile."); return; }
+
+      const button = document.getElementById("profileSaveButton");
+      const status = document.getElementById("profileSaveStatus");
+      button.disabled = true;
+      status.textContent = "Saving...";
+
+      const payload = {
+        display_name: document.getElementById("profileDisplayName").value.trim() || null,
+        phone: document.getElementById("profilePhone").value.trim() || null,
+        city: document.getElementById("profileCity").value.trim() || null,
+        state: document.getElementById("profileState").value.trim() || null,
+        country: document.getElementById("profileCountry").value.trim() || null,
+        postal_code: document.getElementById("profilePostalCode").value.trim() || null,
+        current_job_title: document.getElementById("profileCurrentTitle").value.trim() || null,
+        years_experience: numberOrNull(document.getElementById("profileYearsExperience").value),
+        professional_headline: document.getElementById("profileHeadline").value.trim() || null,
+        professional_summary: document.getElementById("profileSummary").value.trim() || null,
+        target_job_titles: parseList(document.getElementById("profileTargetTitles").value),
+        target_industries: parseList(document.getElementById("profileTargetIndustries").value),
+        target_locations: parseList(document.getElementById("profileTargetLocations").value),
+        work_setting_preferences: getCheckedValues("workSettingPreference"),
+        employment_type_preferences: getCheckedValues("employmentTypePreference"),
+        desired_salary_min: numberOrNull(document.getElementById("profileSalaryMin").value),
+        desired_salary_max: numberOrNull(document.getElementById("profileSalaryMax").value),
+        salary_currency: document.getElementById("profileSalaryCurrency").value || "USD",
+        willing_to_relocate: document.getElementById("profileRelocate").checked,
+        linkedin_url: document.getElementById("profileLinkedIn").value.trim() || null,
+        portfolio_url: document.getElementById("profilePortfolio").value.trim() || null,
+        updated_at: new Date().toISOString()
+      };
+
+      try {
+        const { error } = await db.from("profiles").update(payload).eq("id", currentSession.user.id);
+        if (error) throw error;
+        currentProfile = { ...(currentProfile || {}), ...payload };
+        const displayName = profileDisplayName(currentProfile, currentSession.user);
+        headerUserName.textContent = displayName;
+        userAvatar.textContent = getInitials(displayName);
+        memberWelcome.textContent = `Welcome, ${displayName}`;
+        updateProfileCompletion(currentProfile);
+        status.textContent = "Saved.";
+        showToast("Career profile saved.");
+      } catch (error) {
+        console.error("Profile save error:", error);
+        status.textContent = "Could not save profile.";
+        showToast("We couldn't save your profile. Please try again.");
+      } finally { button.disabled = false; }
+    });
+
+    async function loadResumes() {
+      const list = document.getElementById("resumeList");
+      if (!currentSession?.user) { list.innerHTML = ""; return []; }
+      const { data, error } = await db.from("resumes")
+        .select("id,resume_name,original_filename,storage_path,mime_type,file_size_bytes,is_primary,created_at")
+        .eq("user_id", currentSession.user.id)
+        .order("created_at", { ascending: false });
+      if (error) { console.error("Resume list error:", error); list.innerHTML = '<div class="saved-empty">We could not load your resumes.</div>'; return []; }
+      renderResumeList(data || []);
+      return data || [];
+    }
+
+    function renderResumeList(resumes) {
+      const list = document.getElementById("resumeList");
+      list.innerHTML = "";
+      if (!resumes.length) {
+        const empty = document.createElement("div");
+        empty.className = "saved-empty";
+        empty.innerHTML = '<strong style="display:block;color:#14213d;margin-bottom:5px;">No resume uploaded yet</strong><span>Your first uploaded resume will automatically become your primary resume.</span>';
+        list.appendChild(empty);
+        return;
+      }
+
+      resumes.forEach(resume => {
+        const card = document.createElement("div"); card.className = "resume-card";
+        const main = document.createElement("div"); main.className = "resume-card-main";
+        const title = document.createElement("div"); title.className = "resume-card-title"; title.textContent = resume.resume_name || resume.original_filename || "Resume";
+        if (resume.is_primary) { const badge = document.createElement("span"); badge.className = "primary-badge"; badge.textContent = "Primary"; title.appendChild(badge); }
+        const meta = document.createElement("div"); meta.className = "resume-card-meta";
+        const uploaded = resume.created_at ? new Date(resume.created_at).toLocaleDateString() : "";
+        meta.textContent = `${resume.original_filename || "PDF"} • ${formatBytes(resume.file_size_bytes)}${uploaded ? ` • Uploaded ${uploaded}` : ""}`;
+        main.appendChild(title); main.appendChild(meta);
+
+        const actions = document.createElement("div"); actions.className = "resume-card-actions";
+        const openButton = document.createElement("button"); openButton.type = "button"; openButton.className = "resume-small-button"; openButton.textContent = "Open PDF"; openButton.addEventListener("click", () => openResume(resume.storage_path, openButton)); actions.appendChild(openButton);
+        if (!resume.is_primary) { const primaryButton = document.createElement("button"); primaryButton.type = "button"; primaryButton.className = "resume-small-button"; primaryButton.textContent = "Make Primary"; primaryButton.addEventListener("click", () => setPrimaryResume(resume.id, primaryButton)); actions.appendChild(primaryButton); }
+        const deleteButton = document.createElement("button"); deleteButton.type = "button"; deleteButton.className = "resume-small-button danger"; deleteButton.textContent = "Delete"; deleteButton.addEventListener("click", () => deleteResume(resume, deleteButton)); actions.appendChild(deleteButton);
+        card.appendChild(main); card.appendChild(actions); list.appendChild(card);
+      });
+    }
+
+    async function uploadResume() {
+      if (!currentSession?.user) { openAuth("signin", "Sign in to upload a resume."); return; }
+      const input = document.getElementById("resumeFileInput");
+      const button = document.getElementById("uploadResumeButton");
+      const status = document.getElementById("resumeUploadStatus");
+      const file = input.files?.[0];
+      if (!file) { status.textContent = "Choose a PDF file first."; return; }
+      const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+      if (!isPdf) { status.textContent = "CareerPilot currently accepts PDF resumes only."; return; }
+      if (file.size > 10 * 1024 * 1024) { status.textContent = "That file is larger than the 10 MB limit."; return; }
+
+      button.disabled = true;
+      status.textContent = "Uploading securely...";
+      const safeName = sanitizeFilename(file.name);
+      const storagePath = `${currentSession.user.id}/${Date.now()}-${safeName}`;
+
+      try {
+        const { error: uploadError } = await db.storage.from("resumes").upload(storagePath, file, { cacheControl: "3600", upsert: false, contentType: "application/pdf" });
+        if (uploadError) throw uploadError;
+
+        const existing = await db.from("resumes").select("id", { count: "exact", head: true }).eq("user_id", currentSession.user.id);
+        if (existing.error) throw existing.error;
+        const shouldBePrimary = (existing.count ?? 0) === 0;
+        const resumeName = safeName.replace(/\.pdf$/i, "").replace(/[-_]+/g, " ").trim() || "Resume";
+
+        const { error: insertError } = await db.from("resumes").insert({ user_id: currentSession.user.id, resume_name: resumeName, original_filename: file.name, storage_path: storagePath, mime_type: "application/pdf", file_size_bytes: file.size, is_primary: shouldBePrimary });
+        if (insertError) { await db.storage.from("resumes").remove([storagePath]); throw insertError; }
+
+        input.value = "";
+        status.textContent = shouldBePrimary ? "Resume uploaded and set as your primary resume." : "Resume uploaded successfully.";
+        showToast("Resume uploaded securely.");
+        await loadResumes();
+      } catch (error) {
+        console.error("Resume upload error:", error);
+        status.textContent = error?.message || "We couldn't upload that resume.";
+      } finally { button.disabled = false; }
+    }
+
+    async function openResume(storagePath, button) {
+      button.disabled = true;
+      try {
+        const { data, error } = await db.storage.from("resumes").createSignedUrl(storagePath, 60);
+        if (error) throw error;
+        const url = data?.signedUrl || data?.signedURL;
+        if (!url) throw new Error("No signed resume URL was returned.");
+        window.open(url, "_blank", "noopener,noreferrer");
+      } catch (error) { console.error("Open resume error:", error); showToast("We couldn't open that resume."); }
+      finally { button.disabled = false; }
+    }
+
+    async function setPrimaryResume(resumeId, button) {
+      if (!currentSession?.user) return;
+      button.disabled = true;
+      try {
+        const { error: clearError } = await db.from("resumes").update({ is_primary: false, updated_at: new Date().toISOString() }).eq("user_id", currentSession.user.id).eq("is_primary", true);
+        if (clearError) throw clearError;
+        const { error: setError } = await db.from("resumes").update({ is_primary: true, updated_at: new Date().toISOString() }).eq("user_id", currentSession.user.id).eq("id", resumeId);
+        if (setError) throw setError;
+        showToast("Primary resume updated.");
+        await loadResumes();
+      } catch (error) { console.error("Primary resume error:", error); showToast("We couldn't change the primary resume."); }
+      finally { button.disabled = false; }
+    }
+
+    async function deleteResume(resume, button) {
+      if (!currentSession?.user) return;
+      if (!window.confirm(`Delete ${resume.original_filename || "this resume"}?`)) return;
+      button.disabled = true;
+      try {
+        const { error: storageError } = await db.storage.from("resumes").remove([resume.storage_path]);
+        if (storageError) throw storageError;
+        const { error: rowError } = await db.from("resumes").delete().eq("user_id", currentSession.user.id).eq("id", resume.id);
+        if (rowError) throw rowError;
+
+        if (resume.is_primary) {
+          const { data: newest } = await db.from("resumes").select("id").eq("user_id", currentSession.user.id).order("created_at", { ascending: false }).limit(1);
+          if (newest?.length) await db.from("resumes").update({ is_primary: true, updated_at: new Date().toISOString() }).eq("user_id", currentSession.user.id).eq("id", newest[0].id);
+        }
+
+        showToast("Resume deleted.");
+        await loadResumes();
+      } catch (error) { console.error("Delete resume error:", error); showToast("We couldn't delete that resume."); }
+      finally { button.disabled = false; }
+    }
+
+    document.getElementById("uploadResumeButton").addEventListener("click", uploadResume);
 
     function setAuthMode(mode) {
       authMode = mode;
@@ -1480,7 +2042,13 @@
       savedJobsSection.scrollIntoView({ behavior: "smooth" });
     });
     document.getElementById("applicationsButton").addEventListener("click", () => { goToMemberSection(); showToast("Application tracking is connected and will be expanded next."); });
-    document.getElementById("profileButton").addEventListener("click", () => { goToMemberSection(); showToast("Career Profile and resume tools are coming next."); });
+    document.getElementById("profileButton").addEventListener("click", async () => {
+      if (!currentSession?.user) { openAuth("signin", "Sign in to view your Career Profile."); return; }
+      profileSection.style.display = "block";
+      await loadCareerProfile(currentSession.user.id);
+      await loadResumes();
+      profileSection.scrollIntoView({ behavior: "smooth" });
+    });
     document.getElementById("heroSearchJobs").addEventListener("click", () => document.getElementById("job-search").scrollIntoView({ behavior: "smooth" }));
     document.getElementById("backToSearchButton").addEventListener("click", () => document.getElementById("job-search").scrollIntoView({ behavior: "smooth" }));
     heroAccountButton.addEventListener("click", () => { if (currentSession?.user) goToMemberSection(); else openAuth("signup"); });
