@@ -1352,6 +1352,54 @@
       font-weight: 750;
     }
     .tailored-keyword.unsupported { background: #fff6ed; border-color: #fedf89; color: #b54708; }
+    .resume-alignment-card {
+      border-color: #c7d7fe;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+    }
+    .resume-alignment-scores {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+      gap: 10px;
+      align-items: center;
+      margin: 12px 0 8px;
+    }
+    .resume-alignment-score {
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      background: white;
+    }
+    .resume-alignment-score.after { border-color: #8fb0ff; background: #f3f6ff; }
+    .resume-alignment-score span { display: block; color: #667085; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .resume-alignment-score strong { display: block; color: #14213d; font-size: 26px; line-height: 1.1; margin-top: 3px; }
+    .resume-alignment-score.after strong { color: #315ee8; }
+    .resume-alignment-arrow { color: #667085; font-weight: 900; font-size: 20px; }
+    .resume-alignment-delta {
+      display: inline-flex;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+      color: #067647;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .resume-alignment-note { color: #475467; font-size: 12px; line-height: 1.5; margin-top: 5px; }
+    .career-fit-remains {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 9px;
+      background: #fff8eb;
+      border: 1px solid #fedf89;
+      color: #7a2e0e;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .alignment-hard-gaps { margin-top: 10px; }
+    .alignment-hard-gaps strong { font-size: 12px; }
+    .alignment-hard-gaps ul { margin-top: 6px; }
     .fit-detail-badge { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; }
     .fit-detail-badge strong { color: #315ee8; }
 
@@ -4271,6 +4319,38 @@
         .join(" | ");
     }
 
+    function cleanTailoredDisplayName(value) {
+      return String(value || "")
+        .replace(/[“”"']?country[“”"']?/gi, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function tailoredResumeDisplayName(resume) {
+      const content = resume?.tailored_content || {};
+      const contact = content.contact || {};
+      const candidates = [
+        currentProfile?.display_name,
+        currentSession?.user ? getUserDisplayName(currentSession.user) : "",
+        currentProfile?.full_name,
+        contact.full_name
+      ];
+
+      for (const value of candidates) {
+        const cleaned = cleanTailoredDisplayName(value);
+        if (cleaned) return cleaned;
+      }
+
+      return "CareerPilot User";
+    }
+
+    function scoreOrNull(value) {
+      if (value === null || value === undefined || value === "") return null;
+      const number = Number(value);
+      if (!Number.isFinite(number)) return null;
+      return Math.max(0, Math.min(100, Math.round(number)));
+    }
+
     function renderTailoredResumePreview(resume) {
       const preview = document.getElementById("tailoredResumePreview");
       const insights = document.getElementById("tailoredResumeInsights");
@@ -4281,7 +4361,7 @@
       insights.innerHTML = "";
 
       const name = document.createElement("h1");
-      name.textContent = contact.full_name || "CareerPilot User";
+      name.textContent = tailoredResumeDisplayName(resume);
       preview.appendChild(name);
 
       if (content.professional_headline) {
@@ -4381,6 +4461,88 @@
         preview.appendChild(ul);
       }
 
+      const alignment = content.resume_alignment || {};
+      const beforeScore = scoreOrNull(resume?.match_score_before ?? alignment.before_score);
+      const afterScore = scoreOrNull(resume?.match_score_after ?? alignment.after_score);
+
+      if (beforeScore !== null && afterScore !== null) {
+        const alignmentCard = document.createElement("div");
+        alignmentCard.className = "tailored-side-card resume-alignment-card";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "Resume Alignment";
+
+        const scores = document.createElement("div");
+        scores.className = "resume-alignment-scores";
+
+        const beforeBox = document.createElement("div");
+        beforeBox.className = "resume-alignment-score";
+        const beforeLabel = document.createElement("span");
+        beforeLabel.textContent = "Before";
+        const beforeValue = document.createElement("strong");
+        beforeValue.textContent = `${beforeScore}%`;
+        beforeBox.append(beforeLabel, beforeValue);
+
+        const arrow = document.createElement("div");
+        arrow.className = "resume-alignment-arrow";
+        arrow.textContent = "→";
+
+        const afterBox = document.createElement("div");
+        afterBox.className = "resume-alignment-score after";
+        const afterLabel = document.createElement("span");
+        afterLabel.textContent = "Tailored";
+        const afterValue = document.createElement("strong");
+        afterValue.textContent = `${afterScore}%`;
+        afterBox.append(afterLabel, afterValue);
+
+        scores.append(beforeBox, arrow, afterBox);
+        alignmentCard.append(heading, scores);
+
+        const improvement = afterScore - beforeScore;
+        const delta = document.createElement("div");
+        delta.className = "resume-alignment-delta";
+        delta.textContent = improvement > 0 ? `+${improvement} alignment points` : "Alignment maintained";
+        alignmentCard.appendChild(delta);
+
+        const summary = document.createElement("div");
+        summary.className = "resume-alignment-note";
+        summary.textContent = alignment.summary || "CareerPilot improved the resume's supported wording, emphasis, and ATS alignment for this specific job.";
+        alignmentCard.appendChild(summary);
+
+        const fitScore = scoreOrNull(content.career_fit?.score);
+        if (fitScore !== null) {
+          const fitNote = document.createElement("div");
+          fitNote.className = "career-fit-remains";
+          const fitLevel = content.career_fit?.level ? ` — ${content.career_fit.level}` : "";
+          fitNote.textContent = `Career Fit remains ${fitScore}%${fitLevel}. Resume tailoring improves presentation and ATS alignment; it does not change your underlying qualifications.`;
+          alignmentCard.appendChild(fitNote);
+        }
+
+        const hardGaps = Array.isArray(alignment.remaining_hard_gaps) ? alignment.remaining_hard_gaps.filter(Boolean) : [];
+        if (hardGaps.length) {
+          const gapsWrap = document.createElement("div");
+          gapsWrap.className = "alignment-hard-gaps";
+          const gapsTitle = document.createElement("strong");
+          gapsTitle.textContent = "Qualification gaps tailoring cannot solve";
+          const ul = document.createElement("ul");
+          hardGaps.forEach(value => {
+            const li = document.createElement("li");
+            li.textContent = value;
+            ul.appendChild(li);
+          });
+          gapsWrap.append(gapsTitle, ul);
+          alignmentCard.appendChild(gapsWrap);
+        }
+
+        const disclaimer = document.createElement("div");
+        disclaimer.className = "resume-alignment-note";
+        disclaimer.style.marginTop = "10px";
+        disclaimer.textContent = "Resume Alignment is an estimate of job-specific resume presentation, not a hiring probability or guarantee of ATS passage.";
+        alignmentCard.appendChild(disclaimer);
+
+        insights.appendChild(alignmentCard);
+      }
+
       const changesCard = document.createElement("div");
       changesCard.className = "tailored-side-card";
       const changesHeading = document.createElement("h3");
@@ -4451,7 +4613,12 @@
         insights.appendChild(card);
       }
 
-      status.textContent = `Saved ${resume?.created_at ? new Date(resume.created_at).toLocaleString() : "to your CareerPilot account"}. You can download this version again anytime.`;
+      const savedWhen = resume?.created_at ? new Date(resume.created_at).toLocaleString() : "to your CareerPilot account";
+      if (beforeScore !== null && afterScore !== null) {
+        status.textContent = `Saved ${savedWhen}. Resume Alignment: ${beforeScore}% → ${afterScore}%. You can download this version again anytime.`;
+      } else {
+        status.textContent = `Saved ${savedWhen}. You can download this version again anytime.`;
+      }
     }
 
     function openTailoredResumePreview(resume) {
@@ -4505,6 +4672,14 @@
         const date = resume.created_at ? new Date(resume.created_at).toLocaleDateString() : "";
         meta.textContent = [resume.target_company_name, date ? `Created ${date}` : null, resume.status].filter(Boolean).join(" • ");
         main.append(title, meta);
+        const before = scoreOrNull(resume.match_score_before);
+        const after = scoreOrNull(resume.match_score_after);
+        if (before !== null && after !== null) {
+          const alignmentMeta = document.createElement("div");
+          alignmentMeta.className = "tailored-card-meta";
+          alignmentMeta.textContent = `Resume Alignment ${before}% → ${after}%${after > before ? ` (+${after - before})` : ""}`;
+          main.appendChild(alignmentMeta);
+        }
 
         const actions = document.createElement("div");
         actions.className = "tailored-card-actions";
@@ -4585,8 +4760,20 @@
       showToast("CareerPilot is tailoring your verified resume for this job...");
 
       try {
+        let careerFit = null;
+        try {
+          const fitData = await loadCareerFitData();
+          careerFit = fitData?.ready ? computeCareerFit(job, fitData) : null;
+        } catch (fitError) {
+          console.warn("Career Fit context unavailable for tailoring:", fitError);
+        }
+
         const { data, error } = await db.functions.invoke("tailor-resume", {
-          body: { job_id: job.id }
+          body: {
+            job_id: job.id,
+            career_fit_score: careerFit?.fit_score ?? null,
+            career_fit_level: careerFit?.fit_level ?? null
+          }
         });
         if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot AI could not tailor this resume."));
         if (!data?.success || !data?.tailored_resume) {
@@ -4595,7 +4782,13 @@
         currentTailoredResume = data.tailored_resume;
         openTailoredResumePreview(currentTailoredResume);
         await loadTailoredResumes();
-        showToast(data.message || "Tailored resume created and saved.");
+        const before = scoreOrNull(currentTailoredResume.match_score_before);
+        const after = scoreOrNull(currentTailoredResume.match_score_after);
+        if (before !== null && after !== null) {
+          showToast(`Tailored resume created. Resume Alignment improved from ${before}% to ${after}%.`);
+        } else {
+          showToast(data.message || "Tailored resume created and saved.");
+        }
       } catch (error) {
         console.error("Tailored resume error:", error);
         showToast(error?.message || "We couldn't create the tailored resume.");
@@ -4642,7 +4835,7 @@
       const textWidth = width - (margin * 2);
       let y = 18;
 
-      y = pdfWriteWrapped(doc, contact.full_name || "CareerPilot User", margin, y, textWidth, { fontSize: 17, lineHeight: 6.5, bold: true });
+      y = pdfWriteWrapped(doc, tailoredResumeDisplayName(resume), margin, y, textWidth, { fontSize: 17, lineHeight: 6.5, bold: true });
       if (content.professional_headline) y = pdfWriteWrapped(doc, content.professional_headline, margin, y, textWidth, { fontSize: 10.5, lineHeight: 5, bold: true });
       const contactLine = tailoredResumeContactLine(contact);
       if (contactLine) y = pdfWriteWrapped(doc, contactLine, margin, y, textWidth, { fontSize: 8.5, lineHeight: 4 });
@@ -4709,7 +4902,7 @@
       const children = [];
 
       children.push(new Paragraph({
-        children: [new TextRun({ text: contact.full_name || "CareerPilot User", bold: true, size: 32 })]
+        children: [new TextRun({ text: tailoredResumeDisplayName(resume), bold: true, size: 32 })]
       }));
       if (content.professional_headline) {
         children.push(new Paragraph({ children: [new TextRun({ text: content.professional_headline, bold: true, size: 22 })] }));
