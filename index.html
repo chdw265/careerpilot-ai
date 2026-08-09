@@ -1042,6 +1042,87 @@
     .company-jobs-subtitle { color: #667085; margin-bottom: 18px; }
     .job-card-applicants { color: #475467; font-size: 13px; font-weight: 700; margin-top: 6px; }
 
+    /* ============================================================
+       CAREERPILOT AI MATCH
+    ============================================================ */
+    .ai-match-card {
+      border: 1px solid #c7d2fe;
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 28px;
+      background: linear-gradient(180deg, #f8faff, #ffffff);
+    }
+    .ai-match-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+    .ai-match-title { font-size: 22px; color: #14213d; margin-bottom: 5px; }
+    .ai-match-subtitle { color: #667085; font-size: 14px; line-height: 1.5; }
+    .ai-match-score-box {
+      min-width: 132px;
+      text-align: center;
+      border: 1px solid #d6e4ff;
+      background: white;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .ai-match-score { font-size: 34px; line-height: 1; font-weight: 900; color: #315ee8; }
+    .ai-match-level { margin-top: 6px; font-size: 12px; font-weight: 800; color: #344054; }
+    .ai-match-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .ai-match-button {
+      min-height: 42px;
+      border-radius: 8px;
+      padding: 9px 15px;
+      font-weight: 800;
+      cursor: pointer;
+      border: 1px solid #315ee8;
+      background: #315ee8;
+      color: white;
+    }
+    .ai-match-button.secondary { background: white; color: #315ee8; }
+    .ai-match-button:disabled { opacity: .55; cursor: not-allowed; }
+    .ai-match-section { border-top: 1px solid #eaecf0; padding-top: 17px; margin-top: 17px; }
+    .ai-match-section h4 { font-size: 15px; color: #14213d; margin-bottom: 9px; }
+    .ai-match-section p { color: #475467; line-height: 1.6; }
+    .ai-match-list { margin: 0; padding-left: 20px; color: #475467; }
+    .ai-match-list li { margin-bottom: 8px; line-height: 1.5; }
+    .ai-match-chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .ai-match-chip {
+      display: inline-flex;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 750;
+      background: #ecfdf3;
+      color: #067647;
+      border: 1px solid #abefc6;
+    }
+    .ai-match-chip.missing { background: #fff6ed; color: #b54708; border-color: #fedf89; }
+    .ai-match-gap {
+      border: 1px solid #eaecf0;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 9px;
+      background: #fff;
+    }
+    .ai-match-gap strong { display: block; color: #14213d; margin-bottom: 3px; }
+    .ai-match-gap span { color: #667085; font-size: 13px; line-height: 1.45; }
+    .ai-match-importance {
+      display: inline-flex;
+      margin-top: 7px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #f2f4f7;
+      color: #475467;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+    .ai-match-status { color: #667085; line-height: 1.55; }
+
     footer { text-align: center; padding: 35px; color: #7b8495; font-size: 14px; }
 
     @media(max-width: 1100px) {
@@ -1562,6 +1643,8 @@
     let currentReviewResumeName = "";
     let currentReviewAnalysis = null;
     let currentJobDetailId = null;
+    let currentJobDetail = null;
+    let currentJobMatch = null;
     let currentCompanyName = "";
 
     const JOB_DETAIL_SELECT = `
@@ -1798,6 +1881,8 @@
         jobDetailSection.style.display = "none";
         companySection.style.display = "none";
         currentProfile = null;
+        currentJobDetail = null;
+        currentJobMatch = null;
         savedJobIds = new Set();
         document.getElementById("savedJobsCount").textContent = "0";
         document.getElementById("applicationsCount").textContent = "0";
@@ -3358,6 +3443,8 @@
         return;
       }
 
+      currentJobDetail = job;
+      currentJobMatch = null;
       renderJobDetails(job);
     }
 
@@ -3393,6 +3480,17 @@
       main.className = "job-detail-main";
       const side = document.createElement("aside");
       side.className = "job-detail-side";
+
+      const matchHost = document.createElement("div");
+      matchHost.id = "jobMatchPanel";
+      main.appendChild(matchHost);
+
+      if (currentSession?.user) {
+        renderJobMatchLoading(job);
+        loadJobMatch(job);
+      } else {
+        renderJobMatchSignedOut(job);
+      }
 
       if (job.description) {
         const block = document.createElement("section");
@@ -3471,7 +3569,7 @@
       matchNote.className = "application-note";
       matchNote.style.marginTop = "12px";
       matchNote.textContent = currentSession?.user
-        ? "AI Match and Tailor Resume to This Job are the next CareerPilot job-intelligence features being connected."
+        ? "Review your CareerPilot AI Match before applying. Resume tailoring will be connected next."
         : "Sign in to use CareerPilot profile matching and resume tools.";
       application.appendChild(matchNote);
       side.appendChild(application);
@@ -3487,6 +3585,300 @@
       grid.append(main, side);
       content.append(header, grid);
       syncSaveButtons();
+    }
+
+    function createMatchBase(job) {
+      const card = document.createElement("section");
+      card.className = "ai-match-card";
+
+      const top = document.createElement("div");
+      top.className = "ai-match-top";
+
+      const text = document.createElement("div");
+      const title = document.createElement("h3");
+      title.className = "ai-match-title";
+      title.textContent = "CareerPilot AI Match";
+      const subtitle = document.createElement("div");
+      subtitle.className = "ai-match-subtitle";
+      subtitle.textContent = `Compare your verified Career Profile with ${job.title || "this opportunity"}.`;
+      text.append(title, subtitle);
+      top.appendChild(text);
+      card.appendChild(top);
+
+      return { card, top };
+    }
+
+    function renderJobMatchSignedOut(job) {
+      const host = document.getElementById("jobMatchPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createMatchBase(job);
+      const status = document.createElement("div");
+      status.className = "ai-match-status";
+      status.textContent = "Sign in to compare this job with your CareerPilot Career Profile.";
+      const actions = document.createElement("div");
+      actions.className = "ai-match-actions";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "ai-match-button";
+      button.textContent = "Sign In to Analyze Match";
+      button.addEventListener("click", () => openAuth("signin", "Sign in to analyze your job match."));
+      actions.appendChild(button);
+      card.append(status, actions);
+      host.appendChild(card);
+    }
+
+    function renderJobMatchLoading(job) {
+      const host = document.getElementById("jobMatchPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createMatchBase(job);
+      const status = document.createElement("div");
+      status.className = "ai-match-status";
+      status.textContent = "Checking for an existing CareerPilot match analysis...";
+      card.appendChild(status);
+      host.appendChild(card);
+    }
+
+    async function loadJobMatch(job) {
+      if (!currentSession?.user || !job?.id) {
+        renderJobMatchSignedOut(job);
+        return;
+      }
+
+      const requestedJobId = job.id;
+      const { data, error } = await db
+        .from("job_matches")
+        .select(`
+          id,job_id,match_score,match_level,summary,why_match,matched_skills,missing_skills,
+          strengths,gaps,recommendations,model_name,analysis_version,analyzed_at,updated_at
+        `)
+        .eq("user_id", currentSession.user.id)
+        .eq("job_id", requestedJobId)
+        .maybeSingle();
+
+      if (currentJobDetailId !== requestedJobId) return;
+
+      if (error) {
+        console.error("Job match load error:", error);
+        renderJobMatchError(job, "CareerPilot couldn't load your saved match analysis.");
+        return;
+      }
+
+      currentJobMatch = data || null;
+      renderJobMatchPanel(job, currentJobMatch);
+    }
+
+    function renderJobMatchError(job, message) {
+      const host = document.getElementById("jobMatchPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createMatchBase(job);
+      const status = document.createElement("div");
+      status.className = "ai-match-status";
+      status.textContent = message;
+      const actions = document.createElement("div");
+      actions.className = "ai-match-actions";
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "ai-match-button secondary";
+      retry.textContent = "Try Again";
+      retry.addEventListener("click", () => loadJobMatch(job));
+      actions.appendChild(retry);
+      card.append(status, actions);
+      host.appendChild(card);
+    }
+
+    function appendMatchSection(card, heading, contentNode) {
+      const section = document.createElement("div");
+      section.className = "ai-match-section";
+      const h = document.createElement("h4");
+      h.textContent = heading;
+      section.append(h, contentNode);
+      card.appendChild(section);
+    }
+
+    function makeTextList(items) {
+      const list = document.createElement("ul");
+      list.className = "ai-match-list";
+      (items || []).filter(Boolean).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = String(item);
+        list.appendChild(li);
+      });
+      return list;
+    }
+
+    function renderJobMatchPanel(job, match) {
+      const host = document.getElementById("jobMatchPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card, top } = createMatchBase(job);
+
+      if (!match) {
+        const status = document.createElement("div");
+        status.className = "ai-match-status";
+        status.textContent = "CareerPilot can compare this opportunity with the experience, education, skills, and certifications in your verified Career Profile.";
+
+        const actions = document.createElement("div");
+        actions.className = "ai-match-actions";
+        const analyze = document.createElement("button");
+        analyze.type = "button";
+        analyze.className = "ai-match-button";
+        analyze.textContent = "Analyze My Match";
+        analyze.addEventListener("click", () => analyzeJobMatch(job, analyze));
+        actions.appendChild(analyze);
+        card.append(status, actions);
+        host.appendChild(card);
+        return;
+      }
+
+      const scoreBox = document.createElement("div");
+      scoreBox.className = "ai-match-score-box";
+      const score = document.createElement("div");
+      score.className = "ai-match-score";
+      score.textContent = `${Number(match.match_score || 0)}%`;
+      const level = document.createElement("div");
+      level.className = "ai-match-level";
+      level.textContent = match.match_level || "CareerPilot Match";
+      scoreBox.append(score, level);
+      top.appendChild(scoreBox);
+
+      if (match.summary) {
+        const p = document.createElement("p");
+        p.textContent = match.summary;
+        appendMatchSection(card, "Match summary", p);
+      }
+
+      if (match.why_match) {
+        const p = document.createElement("p");
+        p.textContent = match.why_match;
+        appendMatchSection(card, "Why you match", p);
+      }
+
+      if (Array.isArray(match.strengths) && match.strengths.length) {
+        const list = document.createElement("ul");
+        list.className = "ai-match-list";
+        match.strengths.forEach(item => {
+          const li = document.createElement("li");
+          const area = item?.area ? `${item.area}: ` : "";
+          li.textContent = area + (item?.evidence || "");
+          list.appendChild(li);
+        });
+        appendMatchSection(card, "Your strongest alignment", list);
+      }
+
+      if (Array.isArray(match.matched_skills) && match.matched_skills.length) {
+        const chips = document.createElement("div");
+        chips.className = "ai-match-chip-row";
+        match.matched_skills.forEach(value => {
+          const chip = document.createElement("span");
+          chip.className = "ai-match-chip";
+          chip.textContent = value;
+          chips.appendChild(chip);
+        });
+        appendMatchSection(card, "Matched skills", chips);
+      }
+
+      if (Array.isArray(match.gaps) && match.gaps.length) {
+        const gaps = document.createElement("div");
+        match.gaps.forEach(item => {
+          const gap = document.createElement("div");
+          gap.className = "ai-match-gap";
+          const strong = document.createElement("strong");
+          strong.textContent = item?.requirement || "Potential gap";
+          const reason = document.createElement("span");
+          reason.textContent = item?.reason || "Not demonstrated in the current Career Profile.";
+          const importance = document.createElement("div");
+          importance.className = "ai-match-importance";
+          importance.textContent = `${item?.importance || "moderate"} importance`;
+          gap.append(strong, reason, importance);
+          gaps.appendChild(gap);
+        });
+        appendMatchSection(card, "Potential gaps", gaps);
+      }
+
+      if (Array.isArray(match.missing_skills) && match.missing_skills.length) {
+        const chips = document.createElement("div");
+        chips.className = "ai-match-chip-row";
+        match.missing_skills.forEach(value => {
+          const chip = document.createElement("span");
+          chip.className = "ai-match-chip missing";
+          chip.textContent = value;
+          chips.appendChild(chip);
+        });
+        appendMatchSection(card, "Requested skills not demonstrated in your profile", chips);
+      }
+
+      if (Array.isArray(match.recommendations) && match.recommendations.length) {
+        appendMatchSection(card, "CareerPilot recommendations", makeTextList(match.recommendations));
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "ai-match-actions";
+      const reanalyze = document.createElement("button");
+      reanalyze.type = "button";
+      reanalyze.className = "ai-match-button secondary";
+      reanalyze.textContent = "Re-analyze Match";
+      reanalyze.addEventListener("click", () => analyzeJobMatch(job, reanalyze));
+
+      const tailor = document.createElement("button");
+      tailor.type = "button";
+      tailor.className = "ai-match-button";
+      tailor.textContent = "Tailor Resume to This Job";
+      tailor.disabled = true;
+      tailor.title = "CareerPilot resume tailoring is the next feature being connected.";
+
+      actions.append(reanalyze, tailor);
+      card.appendChild(actions);
+      host.appendChild(card);
+    }
+
+    async function analyzeJobMatch(job, button) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to analyze your job match.");
+        return;
+      }
+
+      const originalText = button?.textContent || "Analyze My Match";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Analyzing...";
+      }
+
+      const host = document.getElementById("jobMatchPanel");
+      const status = document.createElement("div");
+      status.className = "ai-match-status";
+      status.textContent = "CareerPilot AI is comparing this job with your verified Career Profile. This can take a little while.";
+      if (host) {
+        host.innerHTML = "";
+        const { card } = createMatchBase(job);
+        card.appendChild(status);
+        host.appendChild(card);
+      }
+
+      try {
+        const { data, error } = await db.functions.invoke("analyze-job-match", {
+          body: { job_id: job.id }
+        });
+
+        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot AI could not analyze this job match."));
+        if (!data?.success) throw new Error(data?.error || "CareerPilot AI could not analyze this job match.");
+
+        currentJobMatch = data.match || null;
+        renderJobMatchPanel(job, currentJobMatch);
+        showToast(data.message || "CareerPilot AI match complete.");
+        await loadMemberDashboard(currentSession.user.id);
+      } catch (error) {
+        console.error("Job match analysis error:", error);
+        renderJobMatchError(job, error?.message || "CareerPilot AI could not analyze this job match.");
+        showToast("We couldn't analyze this job match.");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
     }
 
     async function openCompanyPage(companyName) {
