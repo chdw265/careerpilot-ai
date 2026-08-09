@@ -333,6 +333,7 @@
     #jobSearchStatus { margin-top: 28px; margin-bottom: 15px; font-weight: 600; }
 
     .job-card {
+      position: relative;
       background: white;
       border: 1px solid #d9e0ea;
       border-radius: 14px;
@@ -340,7 +341,57 @@
       margin: 18px 0;
       text-align: left;
     }
-    .job-card h3 { margin-bottom: 6px; font-size: 21px; }
+    .job-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 6px;
+    }
+    .job-card-title-wrap {
+      min-width: 0;
+      flex: 1;
+    }
+    .job-card h3 { margin-bottom: 0; font-size: 21px; }
+    .job-match-badge {
+      flex: 0 0 auto;
+      min-width: 112px;
+      padding: 10px 12px;
+      border: 1px solid #c7d7fe;
+      border-radius: 12px;
+      background: #f5f8ff;
+      text-align: center;
+    }
+    .job-match-badge-score {
+      display: block;
+      color: #315ee8;
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 900;
+    }
+    .job-match-badge-level {
+      display: block;
+      margin-top: 5px;
+      color: #344054;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+    .analyze-card-match-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 18px;
+      border: 1px solid #c7d7fe;
+      border-radius: 8px;
+      background: #f5f8ff;
+      color: #315ee8;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .analyze-card-match-button:hover { background: #eef3ff; }
+    .analyze-card-match-button:disabled { opacity: .65; cursor: wait; }
     .job-meta { margin: 3px 0; color: #344054; }
     .job-description { margin-top: 14px; color: #344054; }
     .job-actions {
@@ -1210,7 +1261,7 @@
       <div class="feature"><h3>AI Job Matching</h3><p>Compare job requirements against your verified experience and skills to understand why an opportunity may be a strong match.</p></div>
       <div class="feature"><h3>Resume Intelligence</h3><p>Turn your resume into a structured career profile that can support matching, tailoring, and future application assistance.</p></div>
       <div class="feature"><h3>ATS Optimization</h3><p>Analyze job descriptions and tailor resumes using verified candidate experience without inventing qualifications.</p></div>
-      <div class="feature"><h3>Powerful Filtering</h3><p>Search by title, company, industry, location, work setting, salary, posting age, and eventually AI match score.</p></div>
+      <div class="feature"><h3>Powerful Filtering</h3><p>Search by title, company, industry, location, work setting, salary, posting age, and your saved AI match score.</p></div>
       <div class="feature"><h3>Application Assistance</h3><p>Reduce repetitive application entry and support future CareerPilot Quick Apply integrations.</p></div>
     </div>
   </section>
@@ -1525,9 +1576,21 @@
           </div>
 
           <div class="filter-field">
-            <label for="jobMinimumMatch">Minimum match</label>
-            <select id="jobMinimumMatch" disabled title="Available when CareerPilot AI matching is enabled">
-              <option>Coming with AI matching</option>
+            <label for="jobMinimumMatch">AI match</label>
+            <select id="jobMinimumMatch" disabled title="Sign in to filter by your CareerPilot AI Match">
+              <option value="">Any match</option>
+              <option value="matched">Matched jobs only</option>
+              <option value="70">70%+ Good matches</option>
+              <option value="80">80%+ Strong matches</option>
+              <option value="90">90%+ Excellent matches</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="jobSort">Sort by</label>
+            <select id="jobSort">
+              <option value="recent">Most recent</option>
+              <option value="best-match" id="bestMatchSortOption" disabled>Best match</option>
             </select>
           </div>
 
@@ -1645,6 +1708,7 @@
     let currentJobDetailId = null;
     let currentJobDetail = null;
     let currentJobMatch = null;
+    let savedJobMatchMap = new Map();
     let currentCompanyName = "";
 
     const JOB_DETAIL_SELECT = `
@@ -1838,6 +1902,25 @@
     const resetPasswordModal = document.getElementById("resetPasswordModal");
     const newPasswordMessage = document.getElementById("newPasswordMessage");
 
+    function updateMatchSearchControls() {
+      const minimumMatch = document.getElementById("jobMinimumMatch");
+      const bestMatchOption = document.getElementById("bestMatchSortOption");
+      const sort = document.getElementById("jobSort");
+      const signedIn = Boolean(currentSession?.user);
+
+      if (minimumMatch) {
+        minimumMatch.disabled = !signedIn;
+        minimumMatch.title = signedIn
+          ? "Filter jobs using your saved CareerPilot AI Match scores"
+          : "Sign in to filter by your CareerPilot AI Match";
+        if (!signedIn) minimumMatch.value = "";
+      }
+
+      if (bestMatchOption) bestMatchOption.disabled = !signedIn;
+      if (!signedIn && sort?.value === "best-match") sort.value = "recent";
+      if (!signedIn) savedJobMatchMap = new Map();
+    }
+
     async function updateAuthUI(session) {
       currentSession = session;
       const user = session?.user || null;
@@ -1870,6 +1953,9 @@
           pendingSaveJobId = null;
           if (!savedJobIds.has(jobId)) await saveJob(jobId);
         }
+
+        updateMatchSearchControls();
+        await searchJobs();
       } else {
         signedOutNav.style.display = "flex";
         signedInNav.style.display = "none";
@@ -1891,6 +1977,8 @@
         document.getElementById("resumeList").innerHTML = "";
         resetCareerAnalysisUI();
         syncSaveButtons();
+        updateMatchSearchControls();
+        await searchJobs();
       }
     }
 
@@ -3380,7 +3468,10 @@
       const order = new Map(jobIds.map((id, index) => [id, index]));
       const sortedJobs = (jobs || []).sort((a, b) => (order.get(a.id) ?? 9999) - (order.get(b.id) ?? 9999));
 
-      renderJobs(sortedJobs, results, { savedWorkspace: true });
+      const matchMap = await loadSavedMatchesForJobs(sortedJobs.map(job => job.id));
+      matchMap.forEach((value, key) => savedJobMatchMap.set(key, value));
+
+      renderJobs(sortedJobs, results, { savedWorkspace: true, matchMap });
       syncSaveButtons();
     }
 
@@ -3940,8 +4031,111 @@
       document.getElementById("companyJobsStatus").textContent = rows.length
         ? `${rows.length} open job${rows.length === 1 ? "" : "s"}`
         : "No active jobs are currently listed for this company.";
-      renderJobs(rows, document.getElementById("companyJobsResults"), { companyWorkspace: true });
+
+      const matchMap = await loadSavedMatchesForJobs(rows.map(job => job.id));
+      matchMap.forEach((value, key) => savedJobMatchMap.set(key, value));
+
+      renderJobs(rows, document.getElementById("companyJobsResults"), { companyWorkspace: true, matchMap });
       syncSaveButtons();
+    }
+
+    function createJobMatchBadge(match) {
+      if (!match || match.match_score === null || match.match_score === undefined) return null;
+
+      const badge = document.createElement("div");
+      badge.className = "job-match-badge";
+      badge.title = "Saved CareerPilot AI Match";
+
+      const score = document.createElement("span");
+      score.className = "job-match-badge-score";
+      score.textContent = `${Number(match.match_score)}%`;
+
+      const level = document.createElement("span");
+      level.className = "job-match-badge-level";
+      level.textContent = match.match_level || scoreLevelForCard(match.match_score);
+
+      badge.append(score, level);
+      return badge;
+    }
+
+    function scoreLevelForCard(scoreValue) {
+      const score = Number(scoreValue || 0);
+      if (score >= 90) return "Excellent Match";
+      if (score >= 80) return "Strong Match";
+      if (score >= 70) return "Good Match";
+      if (score >= 60) return "Possible Match";
+      return "Limited Match";
+    }
+
+    async function loadSavedMatchesForJobs(jobIds) {
+      const ids = [...new Set((jobIds || []).filter(Boolean))];
+      if (!currentSession?.user || !ids.length) return new Map();
+
+      const { data, error } = await db
+        .from("job_matches")
+        .select("job_id,match_score,match_level,analyzed_at,updated_at")
+        .eq("user_id", currentSession.user.id)
+        .in("job_id", ids);
+
+      if (error) {
+        console.error("Saved job match lookup error:", error);
+        return new Map();
+      }
+
+      const map = new Map();
+      (data || []).forEach(match => {
+        if (match.job_id) map.set(match.job_id, match);
+      });
+      return map;
+    }
+
+    async function analyzeMatchFromJobCard(job, button, card) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to analyze your job match.");
+        return;
+      }
+
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Analyzing...";
+
+      try {
+        const { data, error } = await db.functions.invoke("analyze-job-match", {
+          body: { job_id: job.id }
+        });
+
+        if (error) {
+          throw new Error(await getFunctionErrorMessage(error, "CareerPilot AI could not analyze this job match."));
+        }
+        if (!data?.success || !data?.match) {
+          throw new Error(data?.error || "CareerPilot AI could not analyze this job match.");
+        }
+
+        const compactMatch = {
+          job_id: job.id,
+          match_score: data.match.match_score,
+          match_level: data.match.match_level,
+          analyzed_at: data.match.analyzed_at,
+          updated_at: data.match.updated_at
+        };
+
+        savedJobMatchMap.set(job.id, compactMatch);
+
+        const header = card?.querySelector(".job-card-header");
+        if (header && !header.querySelector(".job-match-badge")) {
+          const badge = createJobMatchBadge(compactMatch);
+          if (badge) header.appendChild(badge);
+        }
+
+        button.remove();
+        showToast(data.message || `CareerPilot AI Match: ${compactMatch.match_score}%`);
+        await loadMemberDashboard(currentSession.user.id);
+      } catch (error) {
+        console.error("Job card match analysis error:", error);
+        showToast(error?.message || "We couldn't analyze this job match.");
+        button.disabled = false;
+        button.textContent = originalText;
+      }
     }
 
     function renderJobs(jobs, results = document.getElementById("jobResults"), options = {}) {
@@ -3954,13 +4148,28 @@
         return;
       }
 
+      const matchMap = options.matchMap || savedJobMatchMap;
+
       jobs.forEach(job => {
         const card = document.createElement("div");
         card.className = "job-card";
 
+        const header = document.createElement("div");
+        header.className = "job-card-header";
+
+        const titleWrap = document.createElement("div");
+        titleWrap.className = "job-card-title-wrap";
+
         const title = document.createElement("h3");
         title.textContent = job.title || "Untitled position";
-        card.appendChild(title);
+        titleWrap.appendChild(title);
+        header.appendChild(titleWrap);
+
+        const savedMatch = matchMap.get(job.id);
+        const matchBadge = createJobMatchBadge(savedMatch);
+        if (matchBadge) header.appendChild(matchBadge);
+
+        card.appendChild(header);
 
         const company = document.createElement("div");
         company.className = "job-meta";
@@ -4023,6 +4232,15 @@
         viewButton.addEventListener("click", () => openJobDetails(job.id));
         actions.appendChild(viewButton);
 
+        if (currentSession?.user && !savedMatch) {
+          const analyzeButton = document.createElement("button");
+          analyzeButton.type = "button";
+          analyzeButton.className = "analyze-card-match-button";
+          analyzeButton.textContent = "✨ Analyze Match";
+          analyzeButton.addEventListener("click", () => analyzeMatchFromJobCard(job, analyzeButton, card));
+          actions.appendChild(analyzeButton);
+        }
+
         if (options.savedWorkspace) {
           const removeButton = document.createElement("button");
           removeButton.type = "button";
@@ -4066,6 +4284,8 @@
       const postedDays = document.getElementById("jobPosted").value;
       const workSetting = document.getElementById("jobWorkSetting").value;
       const minimumSalary = document.getElementById("jobMinimumSalary").value;
+      const minimumMatch = document.getElementById("jobMinimumMatch").value;
+      const sortBy = document.getElementById("jobSort").value;
       const industry = document.getElementById("jobIndustry").value.trim();
       const location = document.getElementById("jobLocation").value.trim();
       const includeSalaryUnknown = document.getElementById("includeSalaryUnknown").checked;
@@ -4076,12 +4296,56 @@
       status.textContent = "Searching current jobs...";
       results.innerHTML = "";
 
+      const signedIn = Boolean(currentSession?.user);
+      const usingMatchFilter = signedIn && Boolean(minimumMatch);
+      const usingBestMatchSort = signedIn && sortBy === "best-match";
+
+      let scopedMatchRows = [];
+      let qualifyingJobIds = null;
+
+      if (usingMatchFilter || usingBestMatchSort) {
+        let matchQuery = db
+          .from("job_matches")
+          .select("job_id,match_score,match_level,analyzed_at,updated_at")
+          .eq("user_id", currentSession.user.id)
+          .not("job_id", "is", null);
+
+        if (minimumMatch && minimumMatch !== "matched") {
+          matchQuery = matchQuery.gte("match_score", Number(minimumMatch));
+        }
+
+        matchQuery = matchQuery
+          .order("match_score", { ascending: false, nullsFirst: false })
+          .limit(500);
+
+        const { data: matchRows, error: matchError } = await matchQuery;
+
+        if (matchError) {
+          console.error("Match filter load error:", matchError);
+          status.textContent = "There was a problem loading your AI Match filters.";
+          return;
+        }
+
+        scopedMatchRows = matchRows || [];
+        qualifyingJobIds = [...new Set(scopedMatchRows.map(row => row.job_id).filter(Boolean))];
+
+        if (!qualifyingJobIds.length) {
+          status.textContent = minimumMatch
+            ? "No analyzed jobs currently meet this AI Match filter."
+            : "You have not analyzed any jobs yet. Use Analyze Match on a job to create your first score.";
+          renderJobs([], results);
+          return;
+        }
+      }
+
       let query = db.from("jobs").select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
         employer_posted_at,applicant_count,applicant_count_source,experience_level,
         source_name,description,apply_url
       `, { count: "exact" }).eq("is_active", true);
+
+      if (qualifyingJobIds) query = query.in("id", qualifyingJobIds);
 
       if (keyword) {
         query = query.textSearch("search_document", keyword, {
@@ -4115,7 +4379,9 @@
       if (industry) query = query.ilike("industry", `%${industry}%`);
       if (location) query = query.ilike("location_text", `%${location}%`);
 
-      query = query.order("posted_at", { ascending: false, nullsFirst: false }).limit(50);
+      query = query
+        .order("posted_at", { ascending: false, nullsFirst: false })
+        .limit(usingBestMatchSort ? 200 : 50);
 
       const { data, error, count } = await query;
 
@@ -4125,14 +4391,54 @@
         return;
       }
 
-      const jobs = data || [];
+      let jobs = data || [];
+      let matchMap = new Map();
+
+      if (signedIn && jobs.length) {
+        if (scopedMatchRows.length) {
+          scopedMatchRows.forEach(match => {
+            if (match.job_id) matchMap.set(match.job_id, match);
+          });
+
+          const missingIds = jobs
+            .map(job => job.id)
+            .filter(id => !matchMap.has(id));
+
+          if (missingIds.length) {
+            const extraMatches = await loadSavedMatchesForJobs(missingIds);
+            extraMatches.forEach((value, key) => matchMap.set(key, value));
+          }
+        } else {
+          matchMap = await loadSavedMatchesForJobs(jobs.map(job => job.id));
+        }
+
+        matchMap.forEach((value, key) => savedJobMatchMap.set(key, value));
+      }
+
+      if (usingBestMatchSort) {
+        jobs = [...jobs].sort((a, b) => {
+          const aScore = Number(matchMap.get(a.id)?.match_score ?? -1);
+          const bScore = Number(matchMap.get(b.id)?.match_score ?? -1);
+          if (bScore !== aScore) return bScore - aScore;
+
+          const aDate = new Date(a.employer_posted_at || a.posted_at || 0).getTime();
+          const bDate = new Date(b.employer_posted_at || b.posted_at || 0).getTime();
+          return bDate - aDate;
+        });
+
+        jobs = jobs.slice(0, 50);
+      }
+
       const total = count ?? jobs.length;
+      const matchSuffix = usingMatchFilter || usingBestMatchSort
+        ? " • using your saved AI Match scores"
+        : "";
 
       status.textContent = total > jobs.length
-        ? `${total} current jobs found • showing first ${jobs.length}`
-        : `${total} current job${total === 1 ? "" : "s"} found`;
+        ? `${total} current jobs found • showing first ${jobs.length}${matchSuffix}`
+        : `${total} current job${total === 1 ? "" : "s"} found${matchSuffix}`;
 
-      renderJobs(jobs);
+      renderJobs(jobs, results, { matchMap });
       syncSaveButtons();
     }
 
@@ -4275,6 +4581,8 @@
       document.getElementById("jobPosted").value = "7";
       document.getElementById("jobWorkSetting").value = "";
       document.getElementById("jobMinimumSalary").value = "";
+      document.getElementById("jobMinimumMatch").value = "";
+      document.getElementById("jobSort").value = "recent";
       document.getElementById("jobIndustry").value = "";
       document.getElementById("jobLocation").value = "";
       document.getElementById("includeSalaryUnknown").checked = true;
