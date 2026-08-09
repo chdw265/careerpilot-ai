@@ -331,6 +331,15 @@
     }
     .reset-button:hover { background: #f8fafc; }
     #jobSearchStatus { margin-top: 28px; margin-bottom: 15px; font-weight: 600; }
+    .career-fit-note {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.45;
+    }
 
     .job-card {
       position: relative;
@@ -377,6 +386,35 @@
       line-height: 1.2;
       font-weight: 800;
     }
+    .job-score-stack {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .career-fit-badge {
+      min-width: 112px;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #f8fafc;
+      text-align: center;
+    }
+    .score-badge-kicker {
+      display: block;
+      margin-bottom: 4px;
+      color: #667085;
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .career-fit-badge .job-match-badge-score { color: #475467; }
+    .job-match-badge { min-width: 112px; }
+
     .analyze-card-match-button {
       display: inline-flex;
       align-items: center;
@@ -1261,7 +1299,7 @@
       <div class="feature"><h3>AI Job Matching</h3><p>Compare job requirements against your verified experience and skills to understand why an opportunity may be a strong match.</p></div>
       <div class="feature"><h3>Resume Intelligence</h3><p>Turn your resume into a structured career profile that can support matching, tailoring, and future application assistance.</p></div>
       <div class="feature"><h3>ATS Optimization</h3><p>Analyze job descriptions and tailor resumes using verified candidate experience without inventing qualifications.</p></div>
-      <div class="feature"><h3>Powerful Filtering</h3><p>Search by title, company, industry, location, work setting, salary, posting age, and your saved AI match score.</p></div>
+      <div class="feature"><h3>Powerful Filtering</h3><p>Search by title, company, industry, location, work setting, salary, posting age, and your automatic Career Fit score.</p></div>
       <div class="feature"><h3>Application Assistance</h3><p>Reduce repetitive application entry and support future CareerPilot Quick Apply integrations.</p></div>
     </div>
   </section>
@@ -1576,13 +1614,13 @@
           </div>
 
           <div class="filter-field">
-            <label for="jobMinimumMatch">AI match</label>
-            <select id="jobMinimumMatch" disabled title="Sign in to filter by your CareerPilot AI Match">
-              <option value="">Any match</option>
-              <option value="matched">Matched jobs only</option>
-              <option value="70">70%+ Good matches</option>
-              <option value="80">80%+ Strong matches</option>
-              <option value="90">90%+ Excellent matches</option>
+            <label for="jobMinimumMatch">Career Fit</label>
+            <select id="jobMinimumMatch" disabled title="Sign in to use automatic Career Fit">
+              <option value="">Any Career Fit</option>
+              <option value="60">60%+ Possible fits</option>
+              <option value="70">70%+ Good fits</option>
+              <option value="80">80%+ Strong fits</option>
+              <option value="90">90%+ Excellent fits</option>
             </select>
           </div>
 
@@ -1615,6 +1653,11 @@
         <div class="search-options">
           <label class="checkbox-option"><input type="checkbox" id="includeSalaryUnknown" checked>Include jobs with salary not listed</label>
           <label class="checkbox-option"><input type="checkbox" id="includeWorkSettingUnknown" checked>Include jobs where work setting is unclear</label>
+        </div>
+
+        <div class="career-fit-note">
+          <strong>Career Fit</strong> is calculated automatically from your Career Profile and helps rank all searched jobs.
+          <strong>Detailed AI Match</strong> is a separate, deeper analysis you can run on a specific job.
         </div>
 
         <div class="search-actions">
@@ -1709,6 +1752,9 @@
     let currentJobDetail = null;
     let currentJobMatch = null;
     let savedJobMatchMap = new Map();
+    let careerFitScoreMap = new Map();
+    let careerFitData = null;
+    let careerFitDataUserId = null;
     let currentCompanyName = "";
 
     const JOB_DETAIL_SELECT = `
@@ -1911,14 +1957,20 @@
       if (minimumMatch) {
         minimumMatch.disabled = !signedIn;
         minimumMatch.title = signedIn
-          ? "Filter jobs using your saved CareerPilot AI Match scores"
-          : "Sign in to filter by your CareerPilot AI Match";
+          ? "Filter jobs using your automatic Career Fit score"
+          : "Sign in to use automatic Career Fit";
         if (!signedIn) minimumMatch.value = "";
       }
 
       if (bestMatchOption) bestMatchOption.disabled = !signedIn;
       if (!signedIn && sort?.value === "best-match") sort.value = "recent";
-      if (!signedIn) savedJobMatchMap = new Map();
+
+      if (!signedIn) {
+        savedJobMatchMap = new Map();
+        careerFitScoreMap = new Map();
+        careerFitData = null;
+        careerFitDataUserId = null;
+      }
     }
 
     async function updateAuthUI(session) {
@@ -2131,6 +2183,9 @@
         if (error) throw error;
 
         currentProfile = { ...(currentProfile || {}), ...payload };
+        careerFitData = null;
+        careerFitDataUserId = null;
+        careerFitScoreMap = new Map();
         const displayName = profileDisplayName(currentProfile, currentSession.user);
         headerUserName.textContent = displayName;
         userAvatar.textContent = getInitials(displayName);
@@ -2900,6 +2955,9 @@
         showToast("Career Profile imported successfully.");
 
         // Refresh both the editable Profile fields and the resume/analysis badges.
+        careerFitData = null;
+        careerFitDataUserId = null;
+        careerFitScoreMap = new Map();
         await loadCareerProfile(currentSession.user.id);
         await loadResumes();
         await loadMemberDashboard(currentSession.user.id);
@@ -3452,7 +3510,7 @@
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
         employer_posted_at,applicant_count,applicant_count_source,experience_level,
-        source_name,description,apply_url
+        requirements,category,job_function,source_name,description,apply_url
       `).in("id", jobIds).eq("is_active", true);
 
       if (jobsError) {
@@ -3470,8 +3528,9 @@
 
       const matchMap = await loadSavedMatchesForJobs(sortedJobs.map(job => job.id));
       matchMap.forEach((value, key) => savedJobMatchMap.set(key, value));
+      const fitMap = await buildCareerFitMap(sortedJobs);
 
-      renderJobs(sortedJobs, results, { savedWorkspace: true, matchMap });
+      renderJobs(sortedJobs, results, { savedWorkspace: true, matchMap, fitMap });
       syncSaveButtons();
     }
 
@@ -3660,7 +3719,7 @@
       matchNote.className = "application-note";
       matchNote.style.marginTop = "12px";
       matchNote.textContent = currentSession?.user
-        ? "Review your CareerPilot AI Match before applying. Resume tailoring will be connected next."
+        ? "Career Fit gives you an automatic profile-based ranking. Detailed AI Match provides a deeper review before you apply. Resume tailoring will be connected next."
         : "Sign in to use CareerPilot profile matching and resume tools.";
       application.appendChild(matchNote);
       side.appendChild(application);
@@ -3987,7 +4046,7 @@
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
         employer_posted_at,applicant_count,applicant_count_source,experience_level,
-        source_name,description,apply_url
+        requirements,category,job_function,source_name,description,apply_url
       `).eq("company_name", companyName).eq("is_active", true).order("posted_at", { ascending: false, nullsFirst: false }).limit(100);
 
       if (error) {
@@ -4034,9 +4093,301 @@
 
       const matchMap = await loadSavedMatchesForJobs(rows.map(job => job.id));
       matchMap.forEach((value, key) => savedJobMatchMap.set(key, value));
+      const fitMap = await buildCareerFitMap(rows);
 
-      renderJobs(rows, document.getElementById("companyJobsResults"), { companyWorkspace: true, matchMap });
+      renderJobs(rows, document.getElementById("companyJobsResults"), { companyWorkspace: true, matchMap, fitMap });
       syncSaveButtons();
+    }
+
+    const CAREER_FIT_SCAN_LIMIT = 250;
+    const CAREER_FIT_STOP_WORDS = new Set(`
+      a an and are as at be been being but by can company could did do does doing for from had has have
+      having he her here hers herself him himself his how i if in into is it its itself job jobs just may
+      me more most must my no not of on one only or other our ours ourselves out over own position role
+      same she should so some such than that the their theirs them themselves then there these they this
+      those through to too under until up very was we were what when where which while who why will with
+      within would you your yours yourself yourselves work working opportunity opportunities employer
+      candidate candidates required preferred requirements responsibilities responsibility including
+      include includes ability able looking seeking team teams year years experience experienced
+    `.trim().split(/\s+/));
+
+    function fitNormalizeText(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/&/g, " and ")
+        .replace(/revenue\s+cycle\s+management/g, " revenuecycle ")
+        .replace(/revenue\s+cycle/g, " revenuecycle ")
+        .replace(/accounts?\s+receivable/g, " accountsreceivable ")
+        .replace(/prior\s+authorization/g, " priorauthorization ")
+        .replace(/health\s*care/g, " healthcare ")
+        .replace(/call\s+center/g, " callcenter ")
+        .replace(/contact\s+center/g, " contactcenter ")
+        .replace(/project\s+management/g, " projectmanagement ")
+        .replace(/business\s+development/g, " businessdevelopment ")
+        .replace(/customer\s+service/g, " customerservice ")
+        .replace(/patient\s+services/g, " patientservices ")
+        .replace(/medical\s+billing/g, " medicalbilling ")
+        .replace(/claims?\s+management/g, " claimsmanagement ")
+        .replace(/[^a-z0-9+#.]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function fitTokens(value) {
+      return fitNormalizeText(value)
+        .split(" ")
+        .filter(token => token.length >= 2 && !CAREER_FIT_STOP_WORDS.has(token) && !/^\d+$/.test(token));
+    }
+
+    function fitTokenSet(value) {
+      return new Set(fitTokens(value));
+    }
+
+    function fitDiceSimilarity(left, right) {
+      const a = fitTokenSet(left);
+      const b = fitTokenSet(right);
+      if (!a.size || !b.size) return 0;
+      let intersection = 0;
+      a.forEach(token => { if (b.has(token)) intersection += 1; });
+      return (2 * intersection) / (a.size + b.size);
+    }
+
+    function careerFitLevel(scoreValue) {
+      const score = Number(scoreValue || 0);
+      if (score >= 90) return "Excellent Fit";
+      if (score >= 80) return "Strong Fit";
+      if (score >= 70) return "Good Fit";
+      if (score >= 60) return "Possible Fit";
+      return "Limited Fit";
+    }
+
+    function flattenCareerFitText(data) {
+      const profile = data?.profile || {};
+      const parts = [
+        profile.current_job_title,
+        profile.professional_headline,
+        profile.professional_summary,
+        ...(Array.isArray(profile.target_job_titles) ? profile.target_job_titles : []),
+        ...(Array.isArray(profile.target_industries) ? profile.target_industries : [])
+      ];
+
+      (data?.experiences || []).forEach(item => {
+        parts.push(item.job_title, item.company_name, item.description);
+        if (Array.isArray(item.accomplishments)) parts.push(...item.accomplishments);
+      });
+      (data?.skills || []).forEach(item => parts.push(item.skill_name));
+      (data?.education || []).forEach(item => parts.push(item.degree, item.field_of_study, item.description));
+      (data?.certifications || []).forEach(item => parts.push(item.certification_name, item.issuing_organization));
+      return fitNormalizeText(parts.filter(Boolean).join(" "));
+    }
+
+    async function loadCareerFitData() {
+      const userId = currentSession?.user?.id;
+      if (!userId) return null;
+      if (careerFitData && careerFitDataUserId === userId) return careerFitData;
+
+      const [experienceResult, skillsResult, educationResult, certificationsResult] = await Promise.all([
+        db.from("experiences")
+          .select("job_title,company_name,description,accomplishments,is_current,start_date,end_date")
+          .eq("user_id", userId),
+        db.from("skills")
+          .select("skill_name,years_experience,proficiency")
+          .eq("user_id", userId),
+        db.from("education")
+          .select("school_name,degree,field_of_study,description")
+          .eq("user_id", userId),
+        db.from("certifications")
+          .select("certification_name,issuing_organization")
+          .eq("user_id", userId)
+      ]);
+
+      const firstError = [experienceResult, skillsResult, educationResult, certificationsResult].find(result => result.error)?.error;
+      if (firstError) {
+        console.error("Career Fit profile load error:", firstError);
+        return null;
+      }
+
+      const profile = currentProfile || await getCareerProfile(userId) || {};
+      careerFitData = {
+        profile,
+        experiences: experienceResult.data || [],
+        skills: skillsResult.data || [],
+        education: educationResult.data || [],
+        certifications: certificationsResult.data || []
+      };
+      careerFitData.allText = flattenCareerFitText(careerFitData);
+      careerFitData.allTokens = fitTokenSet(careerFitData.allText);
+      careerFitData.ready = Boolean(
+        profile.current_job_title ||
+        profile.professional_headline ||
+        (Array.isArray(profile.target_job_titles) && profile.target_job_titles.length) ||
+        careerFitData.experiences.length ||
+        careerFitData.skills.length
+      );
+      careerFitDataUserId = userId;
+      return careerFitData;
+    }
+
+    function careerFitHardRequirementCap(job, data) {
+      const title = fitNormalizeText(job?.title);
+      const jobText = fitNormalizeText([job?.title, job?.requirements, job?.description].filter(Boolean).join(" "));
+      const candidate = data?.allText || "";
+      let cap = 100;
+
+      const physicianRole = /\b(rheumatologist|physician|surgeon|cardiologist|neurologist|psychiatrist|anesthesiologist|radiologist|medical doctor)\b/.test(title);
+      const physicianEvidence = /\b(doctor of medicine|medical doctor|physician|md degree|do degree|medical license|licensed physician)\b/.test(candidate);
+      if (physicianRole && !physicianEvidence) cap = Math.min(cap, 25);
+
+      const nursingRole = /\b(registered nurse|nurse practitioner|nurse supervisor|nursing supervisor|rn)\b/.test(title);
+      const nursingEvidence = /\b(registered nurse|nursing|rn license|nursing license|nurse practitioner)\b/.test(candidate);
+      if (nursingRole && !nursingEvidence) cap = Math.min(cap, 45);
+
+      const cdlRole = /\b(cdl|truck driver|tractor trailer|commercial driver)\b/.test(title + " " + jobText);
+      const cdlEvidence = /\b(cdl|commercial driver|truck driver|class a license|class b license)\b/.test(candidate);
+      if (cdlRole && !cdlEvidence) cap = Math.min(cap, 35);
+
+      const legalRole = /\b(attorney|lawyer|counsel)\b/.test(title);
+      const legalEvidence = /\b(attorney|lawyer|juris doctor|law degree|bar admission|licensed counsel)\b/.test(candidate);
+      if (legalRole && !legalEvidence) cap = Math.min(cap, 35);
+
+      const pharmacistRole = /\bpharmacist\b/.test(title);
+      const pharmacistEvidence = /\b(pharmacist|pharmd|pharmacy license)\b/.test(candidate);
+      if (pharmacistRole && !pharmacistEvidence) cap = Math.min(cap, 35);
+
+      return cap;
+    }
+
+    function computeCareerFit(job, data) {
+      if (!job || !data) return null;
+      const profile = data.profile || {};
+      const jobTitle = job.title || "";
+      const jobText = [job.title, job.industry, job.category, job.job_function, job.requirements, job.description]
+        .filter(Boolean).join(" ");
+      const normalizedJobText = fitNormalizeText(jobText);
+      const jobTokens = fitTokenSet(jobText);
+
+      const candidateTitles = [
+        ...(Array.isArray(profile.target_job_titles) ? profile.target_job_titles : []),
+        profile.current_job_title,
+        ...(data.experiences || []).map(item => item.job_title)
+      ].filter(Boolean);
+
+      let bestTitleSimilarity = 0;
+      candidateTitles.forEach(candidateTitle => {
+        const normalizedCandidate = fitNormalizeText(candidateTitle);
+        let similarity = fitDiceSimilarity(candidateTitle, jobTitle);
+        if (normalizedCandidate && fitNormalizeText(jobTitle).includes(normalizedCandidate)) similarity = Math.max(similarity, 0.86);
+        if (normalizedCandidate && normalizedCandidate.includes(fitNormalizeText(jobTitle))) similarity = Math.max(similarity, 0.86);
+        bestTitleSimilarity = Math.max(bestTitleSimilarity, similarity);
+      });
+
+      const jobTitleTokens = fitTokenSet(jobTitle);
+      if (jobTitleTokens.size) {
+        let titleEvidenceHits = 0;
+        jobTitleTokens.forEach(token => { if (data.allTokens?.has(token)) titleEvidenceHits += 1; });
+        const titleEvidenceCoverage = titleEvidenceHits / jobTitleTokens.size;
+        bestTitleSimilarity = Math.max(bestTitleSimilarity, titleEvidenceCoverage * 0.92);
+      }
+
+      let titleScore = Math.min(40, bestTitleSimilarity * 40);
+      if (bestTitleSimilarity >= 0.70) titleScore = Math.min(40, titleScore + 6);
+      let score = titleScore;
+
+      const meaningfulSkills = (data.skills || [])
+        .map(item => String(item.skill_name || "").trim())
+        .filter(skill => skill.length >= 3 && !/^(management|leadership|communication|teamwork|microsoft office)$/i.test(skill));
+      let skillHits = 0;
+      meaningfulSkills.forEach(skill => {
+        const normalizedSkill = fitNormalizeText(skill);
+        const skillTokens = fitTokens(skill);
+        const phraseHit = normalizedSkill.length >= 4 && normalizedJobText.includes(normalizedSkill);
+        const tokenHit = skillTokens.length > 0 && skillTokens.every(token => jobTokens.has(token));
+        if (phraseHit || tokenHit) skillHits += 1;
+      });
+      score += Math.min(28, skillHits * 4);
+
+      let evidenceOverlap = 0;
+      jobTokens.forEach(token => { if (data.allTokens?.has(token)) evidenceOverlap += 1; });
+      score += Math.min(20, evidenceOverlap * 1.15);
+
+      const targetIndustries = Array.isArray(profile.target_industries) ? profile.target_industries : [];
+      let industrySimilarity = 0;
+      targetIndustries.forEach(value => { industrySimilarity = Math.max(industrySimilarity, fitDiceSimilarity(value, job.industry || job.category || "")); });
+      if (!targetIndustries.length && job.industry) industrySimilarity = fitDiceSimilarity(data.allText, job.industry);
+      score += Math.min(8, industrySimilarity * 8);
+
+      const workPrefs = Array.isArray(profile.work_setting_preferences) ? profile.work_setting_preferences.map(fitNormalizeText) : [];
+      const jobSetting = fitNormalizeText(job.work_setting);
+      if (!workPrefs.length) score += 2;
+      else if (workPrefs.includes(jobSetting) || (jobSetting === "hybrid" && workPrefs.includes("remote"))) score += 4;
+
+      const typePrefs = Array.isArray(profile.employment_type_preferences) ? profile.employment_type_preferences.map(fitNormalizeText) : [];
+      const jobType = fitNormalizeText(job.employment_type);
+      if (!typePrefs.length) score += 1.5;
+      else if (typePrefs.includes(jobType)) score += 3;
+
+      const targetLocations = Array.isArray(profile.target_locations) ? profile.target_locations : [];
+      const locationText = fitNormalizeText(job.location_text);
+      if (jobSetting === "remote") score += 2;
+      else if (targetLocations.some(value => locationText.includes(fitNormalizeText(value)) || fitNormalizeText(value).includes(locationText))) score += 2;
+      else if (profile.willing_to_relocate) score += 1;
+
+      const desiredMin = Number(profile.desired_salary_min || 0);
+      const salaryMax = Number(job.salary_max || job.salary_min || 0);
+      if (!desiredMin) score += 1;
+      else if (salaryMax && salaryMax >= desiredMin) score += 3;
+
+      if (bestTitleSimilarity < 0.12 && skillHits === 0) score = Math.min(score, 35);
+      else if (bestTitleSimilarity < 0.18 && skillHits < 2) score = Math.min(score, 55);
+
+      score = Math.min(score, careerFitHardRequirementCap(job, data));
+      score = Math.max(0, Math.min(100, Math.round(score)));
+
+      return {
+        job_id: job.id,
+        fit_score: score,
+        fit_level: careerFitLevel(score),
+        title_similarity: bestTitleSimilarity,
+        skill_hits: skillHits
+      };
+    }
+
+    async function buildCareerFitMap(jobs) {
+      const map = new Map();
+      if (!currentSession?.user || !Array.isArray(jobs) || !jobs.length) return map;
+      const data = await loadCareerFitData();
+      if (!data?.ready) return map;
+
+      jobs.forEach(job => {
+        const fit = computeCareerFit(job, data);
+        if (fit?.job_id) {
+          map.set(fit.job_id, fit);
+          careerFitScoreMap.set(fit.job_id, fit);
+        }
+      });
+      return map;
+    }
+
+    function createCareerFitBadge(fit) {
+      if (!fit || fit.fit_score === null || fit.fit_score === undefined) return null;
+      const badge = document.createElement("div");
+      badge.className = "career-fit-badge";
+      badge.title = "Automatic Career Fit based on your Career Profile. Detailed AI Match is separate.";
+
+      const kicker = document.createElement("span");
+      kicker.className = "score-badge-kicker";
+      kicker.textContent = "Career Fit";
+
+      const score = document.createElement("span");
+      score.className = "job-match-badge-score";
+      score.textContent = `${Number(fit.fit_score)}%`;
+
+      const level = document.createElement("span");
+      level.className = "job-match-badge-level";
+      level.textContent = fit.fit_level || careerFitLevel(fit.fit_score);
+
+      badge.append(kicker, score, level);
+      return badge;
     }
 
     function createJobMatchBadge(match) {
@@ -4046,6 +4397,10 @@
       badge.className = "job-match-badge";
       badge.title = "Saved CareerPilot AI Match";
 
+      const kicker = document.createElement("span");
+      kicker.className = "score-badge-kicker";
+      kicker.textContent = "AI Match";
+
       const score = document.createElement("span");
       score.className = "job-match-badge-score";
       score.textContent = `${Number(match.match_score)}%`;
@@ -4054,7 +4409,7 @@
       level.className = "job-match-badge-level";
       level.textContent = match.match_level || scoreLevelForCard(match.match_score);
 
-      badge.append(score, level);
+      badge.append(kicker, score, level);
       return badge;
     }
 
@@ -4123,8 +4478,14 @@
 
         const header = card?.querySelector(".job-card-header");
         if (header && !header.querySelector(".job-match-badge")) {
+          let stack = header.querySelector(".job-score-stack");
+          if (!stack) {
+            stack = document.createElement("div");
+            stack.className = "job-score-stack";
+            header.appendChild(stack);
+          }
           const badge = createJobMatchBadge(compactMatch);
-          if (badge) header.appendChild(badge);
+          if (badge) stack.appendChild(badge);
         }
 
         button.remove();
@@ -4149,6 +4510,7 @@
       }
 
       const matchMap = options.matchMap || savedJobMatchMap;
+      const fitMap = options.fitMap || careerFitScoreMap;
 
       jobs.forEach(job => {
         const card = document.createElement("div");
@@ -4166,9 +4528,17 @@
         header.appendChild(titleWrap);
 
         const savedMatch = matchMap.get(job.id);
-        const matchBadge = createJobMatchBadge(savedMatch);
-        if (matchBadge) header.appendChild(matchBadge);
+        const careerFit = fitMap.get(job.id);
+        const scoreStack = document.createElement("div");
+        scoreStack.className = "job-score-stack";
 
+        const fitBadge = createCareerFitBadge(careerFit);
+        if (fitBadge) scoreStack.appendChild(fitBadge);
+
+        const aiBadge = createJobMatchBadge(savedMatch);
+        if (aiBadge) scoreStack.appendChild(aiBadge);
+
+        if (scoreStack.children.length) header.appendChild(scoreStack);
         card.appendChild(header);
 
         const company = document.createElement("div");
@@ -4236,7 +4606,8 @@
           const analyzeButton = document.createElement("button");
           analyzeButton.type = "button";
           analyzeButton.className = "analyze-card-match-button";
-          analyzeButton.textContent = "✨ Analyze Match";
+          analyzeButton.textContent = "✨ Detailed AI Match";
+          analyzeButton.title = "Run a deeper AI analysis for this specific job";
           analyzeButton.addEventListener("click", () => analyzeMatchFromJobCard(job, analyzeButton, card));
           actions.appendChild(analyzeButton);
         }
@@ -4284,7 +4655,7 @@
       const postedDays = document.getElementById("jobPosted").value;
       const workSetting = document.getElementById("jobWorkSetting").value;
       const minimumSalary = document.getElementById("jobMinimumSalary").value;
-      const minimumMatch = document.getElementById("jobMinimumMatch").value;
+      const minimumFit = document.getElementById("jobMinimumMatch").value;
       const sortBy = document.getElementById("jobSort").value;
       const industry = document.getElementById("jobIndustry").value.trim();
       const location = document.getElementById("jobLocation").value.trim();
@@ -4297,63 +4668,19 @@
       results.innerHTML = "";
 
       const signedIn = Boolean(currentSession?.user);
-      const usingMatchFilter = signedIn && Boolean(minimumMatch);
+      const usingFitFilter = signedIn && Boolean(minimumFit);
       const usingBestMatchSort = signedIn && sortBy === "best-match";
-
-      let scopedMatchRows = [];
-      let qualifyingJobIds = null;
-
-      if (usingMatchFilter || usingBestMatchSort) {
-        let matchQuery = db
-          .from("job_matches")
-          .select("job_id,match_score,match_level,analyzed_at,updated_at")
-          .eq("user_id", currentSession.user.id)
-          .not("job_id", "is", null);
-
-        if (minimumMatch && minimumMatch !== "matched") {
-          matchQuery = matchQuery.gte("match_score", Number(minimumMatch));
-        }
-
-        matchQuery = matchQuery
-          .order("match_score", { ascending: false, nullsFirst: false })
-          .limit(500);
-
-        const { data: matchRows, error: matchError } = await matchQuery;
-
-        if (matchError) {
-          console.error("Match filter load error:", matchError);
-          status.textContent = "There was a problem loading your AI Match filters.";
-          return;
-        }
-
-        scopedMatchRows = matchRows || [];
-        qualifyingJobIds = [...new Set(scopedMatchRows.map(row => row.job_id).filter(Boolean))];
-
-        if (!qualifyingJobIds.length) {
-          status.textContent = minimumMatch
-            ? "No analyzed jobs currently meet this AI Match filter."
-            : "You have not analyzed any jobs yet. Use Analyze Match on a job to create your first score.";
-          renderJobs([], results);
-          return;
-        }
-      }
 
       let query = db.from("jobs").select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
-        salary_currency,salary_period,employment_type,industry,posted_at,
-        employer_posted_at,applicant_count,applicant_count_source,experience_level,
-        source_name,description,apply_url
+        salary_currency,salary_period,employment_type,industry,category,job_function,
+        requirements,posted_at,employer_posted_at,applicant_count,applicant_count_source,
+        experience_level,source_name,description,apply_url
       `, { count: "exact" }).eq("is_active", true);
 
-      if (qualifyingJobIds) query = query.in("id", qualifyingJobIds);
-
       if (keyword) {
-        query = query.textSearch("search_document", keyword, {
-          type: "websearch",
-          config: "english"
-        });
+        query = query.or(`title.ilike.%${keyword}%,description.ilike.%${keyword}%,company_name.ilike.%${keyword}%`);
       }
-
       if (company) query = query.ilike("company_name", `%${company}%`);
 
       const cutoff = getPostedCutoff(postedDays);
@@ -4379,9 +4706,10 @@
       if (industry) query = query.ilike("industry", `%${industry}%`);
       if (location) query = query.ilike("location_text", `%${location}%`);
 
+      const scanLimit = (usingFitFilter || usingBestMatchSort) ? CAREER_FIT_SCAN_LIMIT : 50;
       query = query
         .order("posted_at", { ascending: false, nullsFirst: false })
-        .limit(usingBestMatchSort ? 200 : 50);
+        .limit(scanLimit);
 
       const { data, error, count } = await query;
 
@@ -4392,53 +4720,52 @@
       }
 
       let jobs = data || [];
+      let fitMap = new Map();
       let matchMap = new Map();
 
       if (signedIn && jobs.length) {
-        if (scopedMatchRows.length) {
-          scopedMatchRows.forEach(match => {
-            if (match.job_id) matchMap.set(match.job_id, match);
-          });
-
-          const missingIds = jobs
-            .map(job => job.id)
-            .filter(id => !matchMap.has(id));
-
-          if (missingIds.length) {
-            const extraMatches = await loadSavedMatchesForJobs(missingIds);
-            extraMatches.forEach((value, key) => matchMap.set(key, value));
-          }
-        } else {
-          matchMap = await loadSavedMatchesForJobs(jobs.map(job => job.id));
-        }
-
+        fitMap = await buildCareerFitMap(jobs);
+        matchMap = await loadSavedMatchesForJobs(jobs.map(job => job.id));
         matchMap.forEach((value, key) => savedJobMatchMap.set(key, value));
+      }
+
+      if ((usingFitFilter || usingBestMatchSort) && signedIn && jobs.length && !fitMap.size) {
+        status.textContent = "Career Fit needs an imported or completed Career Profile before it can rank jobs.";
+        renderJobs(jobs.slice(0, 50), results, { matchMap, fitMap });
+        syncSaveButtons();
+        return;
+      }
+
+      if (usingFitFilter) {
+        const minimum = Number(minimumFit);
+        jobs = jobs.filter(job => Number(fitMap.get(job.id)?.fit_score ?? -1) >= minimum);
       }
 
       if (usingBestMatchSort) {
         jobs = [...jobs].sort((a, b) => {
-          const aScore = Number(matchMap.get(a.id)?.match_score ?? -1);
-          const bScore = Number(matchMap.get(b.id)?.match_score ?? -1);
+          const aScore = Number(fitMap.get(a.id)?.fit_score ?? -1);
+          const bScore = Number(fitMap.get(b.id)?.fit_score ?? -1);
           if (bScore !== aScore) return bScore - aScore;
-
           const aDate = new Date(a.employer_posted_at || a.posted_at || 0).getTime();
           const bDate = new Date(b.employer_posted_at || b.posted_at || 0).getTime();
           return bDate - aDate;
         });
-
-        jobs = jobs.slice(0, 50);
       }
 
+      if (jobs.length > 50) jobs = jobs.slice(0, 50);
+
       const total = count ?? jobs.length;
-      const matchSuffix = usingMatchFilter || usingBestMatchSort
-        ? " • using your saved AI Match scores"
-        : "";
+      if (usingFitFilter || usingBestMatchSort) {
+        const evaluated = Math.min(total, scanLimit);
+        const scanNote = total > scanLimit ? ` • beta evaluated the ${scanLimit} most recent matching listings` : "";
+        status.textContent = `${jobs.length} Career Fit job${jobs.length === 1 ? "" : "s"} shown • ${evaluated} evaluated${scanNote}`;
+      } else {
+        status.textContent = total > jobs.length
+          ? `${total} current jobs found • showing first ${jobs.length}`
+          : `${total} current job${total === 1 ? "" : "s"} found`;
+      }
 
-      status.textContent = total > jobs.length
-        ? `${total} current jobs found • showing first ${jobs.length}${matchSuffix}`
-        : `${total} current job${total === 1 ? "" : "s"} found${matchSuffix}`;
-
-      renderJobs(jobs, results, { matchMap });
+      renderJobs(jobs, results, { matchMap, fitMap });
       syncSaveButtons();
     }
 
