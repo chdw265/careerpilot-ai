@@ -1212,6 +1212,149 @@
     }
     .ai-match-status { color: #667085; line-height: 1.55; }
 
+    /* ============================================================
+       TAILORED RESUMES
+    ============================================================ */
+    .tailored-list { display: grid; gap: 12px; margin-top: 16px; }
+    .tailored-card {
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fbfcfe;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .tailored-card-main { min-width: 220px; flex: 1; }
+    .tailored-card-title { font-weight: 850; color: #14213d; font-size: 16px; }
+    .tailored-card-meta { color: #667085; font-size: 13px; margin-top: 4px; }
+    .tailored-card-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tailored-button {
+      border: 1px solid #cfd6e1;
+      background: white;
+      color: #14213d;
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .tailored-button.primary { background: #315ee8; border-color: #315ee8; color: white; }
+    .tailored-button.danger { color: #b42318; border-color: #fda29b; }
+    .tailored-button:disabled { opacity: .55; cursor: not-allowed; }
+    .tailored-empty {
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 22px;
+      color: #667085;
+      text-align: center;
+      background: #fbfcfe;
+      margin-top: 14px;
+    }
+    .tailored-resume-modal {
+      width: min(1180px, 96vw);
+      max-height: 94vh;
+      overflow: auto;
+      background: #f5f7fb;
+      border-radius: 16px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.28);
+      position: relative;
+    }
+    .tailored-modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #111827;
+      color: white;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .tailored-modal-header h2 { font-size: 22px; }
+    .tailored-modal-close {
+      border: 1px solid #475467;
+      background: transparent;
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 22px;
+    }
+    .tailored-modal-body { padding: 24px; }
+    .tailored-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .tailored-toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tailored-status { color: #667085; font-size: 14px; }
+    .tailored-preview-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(300px, .8fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .tailored-paper {
+      background: white;
+      border: 1px solid #e3e7ef;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+      padding: 48px 54px;
+      min-height: 900px;
+      color: #1f2937;
+    }
+    .tailored-paper h1 { font-size: 27px; line-height: 1.2; margin-bottom: 2px; }
+    .tailored-paper .resume-headline { font-weight: 750; margin-bottom: 2px; }
+    .tailored-paper .resume-contact { font-size: 12px; color: #475467; margin-bottom: 22px; overflow-wrap: anywhere; }
+    .tailored-paper h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .035em;
+      border-bottom: 1px solid #98a2b3;
+      padding-bottom: 4px;
+      margin: 20px 0 9px;
+    }
+    .tailored-paper p { font-size: 12.5px; line-height: 1.48; }
+    .tailored-paper ul { padding-left: 20px; margin-top: 5px; }
+    .tailored-paper li { font-size: 12.5px; line-height: 1.45; margin-bottom: 4px; }
+    .tailored-paper .resume-role { margin-top: 11px; }
+    .tailored-paper .resume-role strong { display: block; font-size: 13px; }
+    .tailored-paper .resume-role-meta { font-size: 12px; color: #475467; font-style: italic; }
+    .tailored-side-card {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .tailored-side-card h3 { font-size: 16px; margin-bottom: 10px; }
+    .tailored-side-card ul { padding-left: 19px; color: #475467; }
+    .tailored-side-card li { margin-bottom: 8px; font-size: 13px; line-height: 1.45; }
+    .tailored-change { border-top: 1px solid #eaecf0; padding-top: 10px; margin-top: 10px; }
+    .tailored-change:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+    .tailored-change strong { display: block; font-size: 13px; }
+    .tailored-change span { display: block; color: #667085; font-size: 12px; line-height: 1.45; margin-top: 2px; }
+    .tailored-keywords { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tailored-keyword {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+      color: #067647;
+      font-size: 11px;
+      font-weight: 750;
+    }
+    .tailored-keyword.unsupported { background: #fff6ed; border-color: #fedf89; color: #b54708; }
+    .fit-detail-badge { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; }
+    .fit-detail-badge strong { color: #315ee8; }
+
     footer { text-align: center; padding: 35px; color: #7b8495; font-size: 14px; }
 
     @media(max-width: 1100px) {
@@ -1236,6 +1379,8 @@
       .review-field.full { grid-column: auto; }
       .job-detail-grid { grid-template-columns: 1fr; }
       .company-summary-grid { grid-template-columns: 1fr; }
+      .tailored-preview-layout { grid-template-columns: 1fr; }
+      .tailored-paper { padding: 28px 24px; }
     }
     @media(max-width: 540px) {
       header { position: static; flex-direction: column; }
@@ -1247,6 +1392,8 @@
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@9.7.1/dist/index.iife.js"></script>
 </head>
 
 <body>
@@ -1331,7 +1478,7 @@
         <div class="member-card">
           <h3>Job Matches</h3>
           <div class="member-number" id="jobMatchesCount">0</div>
-          <div class="member-small">AI matching will be connected next</div>
+          <div class="member-small">Saved detailed AI job analyses</div>
         </div>
         <div class="member-card">
           <h3>Career Profile</h3>
@@ -1447,6 +1594,12 @@
           <div id="resumeUploadStatus" class="resume-note"></div>
         </div>
         <div class="resume-list" id="resumeList"></div>
+      </div>
+
+      <div class="profile-block" id="tailoredResumesBlock">
+        <h3>Tailored resumes</h3>
+        <p class="profile-block-subtitle">Every job-specific resume CareerPilot creates is saved here. Preview it again or download a fresh PDF or Word copy anytime.</p>
+        <div id="tailoredResumeList" class="tailored-list"></div>
       </div>
 
       <div class="profile-block" id="careerHistoryBlock">
@@ -1671,6 +1824,31 @@
     </div>
   </section>
 
+  <div class="modal-backdrop" id="tailoredResumeModal" role="dialog" aria-modal="true" aria-labelledby="tailoredResumeModalTitle">
+    <div class="tailored-resume-modal">
+      <div class="tailored-modal-header">
+        <div>
+          <h2 id="tailoredResumeModalTitle">Tailored Resume</h2>
+          <div id="tailoredResumeModalSubtitle" style="color:#cbd5e1;font-size:13px;"></div>
+        </div>
+        <button type="button" class="tailored-modal-close" id="closeTailoredResumeModal" aria-label="Close">×</button>
+      </div>
+      <div class="tailored-modal-body">
+        <div class="tailored-toolbar">
+          <div id="tailoredResumeStatus" class="tailored-status"></div>
+          <div class="tailored-toolbar-actions">
+            <button type="button" class="tailored-button" id="downloadTailoredPdfButton">Download PDF</button>
+            <button type="button" class="tailored-button" id="downloadTailoredWordButton">Download Word</button>
+          </div>
+        </div>
+        <div class="tailored-preview-layout">
+          <div id="tailoredResumePreview" class="tailored-paper"></div>
+          <div id="tailoredResumeInsights"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="authModal" role="dialog" aria-modal="true">
     <div class="auth-modal">
       <button type="button" class="modal-close" id="closeAuthModal" aria-label="Close">×</button>
@@ -1751,6 +1929,7 @@
     let currentJobDetailId = null;
     let currentJobDetail = null;
     let currentJobMatch = null;
+    let currentTailoredResume = null;
     let savedJobMatchMap = new Map();
     let careerFitScoreMap = new Map();
     let careerFitData = null;
@@ -1946,6 +2125,7 @@
     const forgotPasswordModal = document.getElementById("forgotPasswordModal");
     const forgotMessage = document.getElementById("forgotMessage");
     const resetPasswordModal = document.getElementById("resetPasswordModal");
+    const tailoredResumeModal = document.getElementById("tailoredResumeModal");
     const newPasswordMessage = document.getElementById("newPasswordMessage");
 
     function updateMatchSearchControls() {
@@ -1995,7 +2175,8 @@
         await loadSavedJobIds();
         await Promise.all([
           loadMemberDashboard(user.id),
-          loadResumes()
+          loadResumes(),
+          loadTailoredResumes()
         ]);
 
         syncSaveButtons();
@@ -2027,6 +2208,8 @@
         document.getElementById("jobMatchesCount").textContent = "0";
         document.getElementById("profileStatus").textContent = "Getting started";
         document.getElementById("resumeList").innerHTML = "";
+        document.getElementById("tailoredResumeList").innerHTML = "";
+        currentTailoredResume = null;
         resetCareerAnalysisUI();
         syncSaveButtons();
         updateMatchSearchControls();
@@ -3624,6 +3807,10 @@
         });
       if (badges.children.length) header.appendChild(badges);
 
+      const detailFitHost = document.createElement("div");
+      detailFitHost.id = "jobDetailCareerFit";
+      header.appendChild(detailFitHost);
+
       const grid = document.createElement("div");
       grid.className = "job-detail-grid";
       const main = document.createElement("div");
@@ -3719,7 +3906,7 @@
       matchNote.className = "application-note";
       matchNote.style.marginTop = "12px";
       matchNote.textContent = currentSession?.user
-        ? "Career Fit gives you an automatic profile-based ranking. Detailed AI Match provides a deeper review before you apply. Resume tailoring will be connected next."
+        ? "Career Fit gives you an automatic profile-based ranking. Detailed AI Match provides a deeper review, and CareerPilot can create a truthful job-specific tailored resume from your verified profile."
         : "Sign in to use CareerPilot profile matching and resume tools.";
       application.appendChild(matchNote);
       side.appendChild(application);
@@ -3735,6 +3922,31 @@
       grid.append(main, side);
       content.append(header, grid);
       syncSaveButtons();
+      renderJobDetailCareerFit(job);
+    }
+
+    async function renderJobDetailCareerFit(job) {
+      const host = document.getElementById("jobDetailCareerFit");
+      if (!host || !currentSession?.user) return;
+      try {
+        const data = await loadCareerFitData();
+        const fit = data?.ready ? computeCareerFit(job, data) : null;
+        if (!fit || currentJobDetailId !== job.id) return;
+        careerFitScoreMap.set(job.id, fit);
+        host.innerHTML = "";
+        const wrap = document.createElement("div");
+        wrap.className = "fit-detail-badge";
+        const badge = createCareerFitBadge(fit);
+        if (badge) wrap.appendChild(badge);
+        const hint = document.createElement("span");
+        hint.style.color = "#667085";
+        hint.style.fontSize = "12px";
+        hint.textContent = "Automatic profile-based ranking";
+        wrap.appendChild(hint);
+        host.appendChild(wrap);
+      } catch (error) {
+        console.error("Job detail Career Fit error:", error);
+      }
     }
 
     function createMatchBase(job) {
@@ -3877,7 +4089,14 @@
         analyze.className = "ai-match-button";
         analyze.textContent = "Analyze My Match";
         analyze.addEventListener("click", () => analyzeJobMatch(job, analyze));
-        actions.appendChild(analyze);
+
+        const tailor = document.createElement("button");
+        tailor.type = "button";
+        tailor.className = "ai-match-button secondary";
+        tailor.textContent = "Tailor Resume to This Job";
+        tailor.addEventListener("click", () => tailorResumeForJob(job, tailor));
+
+        actions.append(analyze, tailor);
         card.append(status, actions);
         host.appendChild(card);
         return;
@@ -3976,8 +4195,8 @@
       tailor.type = "button";
       tailor.className = "ai-match-button";
       tailor.textContent = "Tailor Resume to This Job";
-      tailor.disabled = true;
-      tailor.title = "CareerPilot resume tailoring is the next feature being connected.";
+      tailor.title = "Create a job-specific resume using only verified Career Profile information.";
+      tailor.addEventListener("click", () => tailorResumeForJob(job, tailor));
 
       actions.append(reanalyze, tailor);
       card.appendChild(actions);
@@ -4030,6 +4249,524 @@
         }
       }
     }
+
+    function tailoredResumeBaseFilename(resume) {
+      const content = resume?.tailored_content || {};
+      const target = content.target_job || {};
+      const title = resume?.target_job_title || target.title || "Tailored Resume";
+      const company = resume?.target_company_name || target.company_name || "CareerPilot";
+      return sanitizeFilename(`${title}-${company}`)
+        .replace(/\.(pdf|docx?|rtf)$/i, "")
+        .slice(0, 120) || "CareerPilot-Tailored-Resume";
+    }
+
+    function displayResumeDate(value) {
+      if (!value) return "";
+      return String(value).replace(/^null$/i, "").trim();
+    }
+
+    function tailoredResumeContactLine(contact) {
+      return [contact?.location, contact?.phone, contact?.email, contact?.linkedin_url, contact?.portfolio_url]
+        .filter(Boolean)
+        .join(" | ");
+    }
+
+    function renderTailoredResumePreview(resume) {
+      const preview = document.getElementById("tailoredResumePreview");
+      const insights = document.getElementById("tailoredResumeInsights");
+      const status = document.getElementById("tailoredResumeStatus");
+      const content = resume?.tailored_content || {};
+      const contact = content.contact || {};
+      preview.innerHTML = "";
+      insights.innerHTML = "";
+
+      const name = document.createElement("h1");
+      name.textContent = contact.full_name || "CareerPilot User";
+      preview.appendChild(name);
+
+      if (content.professional_headline) {
+        const headline = document.createElement("div");
+        headline.className = "resume-headline";
+        headline.textContent = content.professional_headline;
+        preview.appendChild(headline);
+      }
+
+      const contactLine = tailoredResumeContactLine(contact);
+      if (contactLine) {
+        const contactEl = document.createElement("div");
+        contactEl.className = "resume-contact";
+        contactEl.textContent = contactLine;
+        preview.appendChild(contactEl);
+      }
+
+      const addSectionHeading = (label) => {
+        const heading = document.createElement("h3");
+        heading.textContent = label;
+        preview.appendChild(heading);
+      };
+
+      if (content.professional_summary) {
+        addSectionHeading("Professional Summary");
+        const p = document.createElement("p");
+        p.textContent = content.professional_summary;
+        preview.appendChild(p);
+      }
+
+      if (Array.isArray(content.core_skills) && content.core_skills.length) {
+        addSectionHeading("Core Skills");
+        const p = document.createElement("p");
+        p.textContent = content.core_skills.join(" | ");
+        preview.appendChild(p);
+      }
+
+      if (Array.isArray(content.experience) && content.experience.length) {
+        addSectionHeading("Professional Experience");
+        content.experience.forEach(item => {
+          const role = document.createElement("div");
+          role.className = "resume-role";
+          const title = document.createElement("strong");
+          title.textContent = item.job_title || "Position";
+          const meta = document.createElement("div");
+          meta.className = "resume-role-meta";
+          const dates = [displayResumeDate(item.start_date), item.is_current ? "Present" : displayResumeDate(item.end_date)]
+            .filter(Boolean).join(" – ");
+          meta.textContent = [item.company_name, item.location, dates].filter(Boolean).join(" | ");
+          role.append(title, meta);
+          if (Array.isArray(item.bullets) && item.bullets.length) {
+            const ul = document.createElement("ul");
+            item.bullets.filter(Boolean).forEach(value => {
+              const li = document.createElement("li");
+              li.textContent = value;
+              ul.appendChild(li);
+            });
+            role.appendChild(ul);
+          }
+          preview.appendChild(role);
+        });
+      }
+
+      if (Array.isArray(content.education) && content.education.length) {
+        addSectionHeading("Education");
+        content.education.forEach(item => {
+          const role = document.createElement("div");
+          role.className = "resume-role";
+          const degree = [item.degree, item.field_of_study].filter(Boolean).join(" — ");
+          const title = document.createElement("strong");
+          title.textContent = degree || item.school_name || "Education";
+          const meta = document.createElement("div");
+          meta.className = "resume-role-meta";
+          const dates = [displayResumeDate(item.start_date), displayResumeDate(item.end_date)].filter(Boolean).join(" – ");
+          meta.textContent = [item.school_name, item.location, dates].filter(Boolean).join(" | ");
+          role.append(title, meta);
+          if (item.description) {
+            const p = document.createElement("p");
+            p.textContent = item.description;
+            role.appendChild(p);
+          }
+          preview.appendChild(role);
+        });
+      }
+
+      if (Array.isArray(content.certifications) && content.certifications.length) {
+        addSectionHeading("Certifications");
+        const ul = document.createElement("ul");
+        content.certifications.forEach(item => {
+          const li = document.createElement("li");
+          const dates = item.does_not_expire
+            ? "Does not expire"
+            : [displayResumeDate(item.issue_date), displayResumeDate(item.expiration_date)].filter(Boolean).join(" – ");
+          li.textContent = [item.certification_name, item.issuing_organization, item.credential_id, dates].filter(Boolean).join(" | ");
+          ul.appendChild(li);
+        });
+        preview.appendChild(ul);
+      }
+
+      const changesCard = document.createElement("div");
+      changesCard.className = "tailored-side-card";
+      const changesHeading = document.createElement("h3");
+      changesHeading.textContent = "What CareerPilot changed";
+      changesCard.appendChild(changesHeading);
+      const changes = Array.isArray(resume?.change_summary) && resume.change_summary.length
+        ? resume.change_summary
+        : (Array.isArray(content.change_summary) ? content.change_summary : []);
+      if (changes.length) {
+        changes.forEach(item => {
+          const row = document.createElement("div");
+          row.className = "tailored-change";
+          const strong = document.createElement("strong");
+          strong.textContent = item?.area || "Resume update";
+          const change = document.createElement("span");
+          change.textContent = item?.change || "";
+          const reason = document.createElement("span");
+          reason.textContent = item?.reason ? `Why: ${item.reason}` : "";
+          row.append(strong, change);
+          if (item?.reason) row.appendChild(reason);
+          changesCard.appendChild(row);
+        });
+      } else {
+        const p = document.createElement("div");
+        p.className = "tailored-status";
+        p.textContent = "No change summary was stored for this version.";
+        changesCard.appendChild(p);
+      }
+      insights.appendChild(changesCard);
+
+      const used = Array.isArray(content.ats_keywords_used) ? content.ats_keywords_used : [];
+      if (used.length) {
+        const card = document.createElement("div");
+        card.className = "tailored-side-card";
+        const h = document.createElement("h3");
+        h.textContent = "Supported ATS keywords emphasized";
+        const chips = document.createElement("div");
+        chips.className = "tailored-keywords";
+        used.forEach(value => {
+          const chip = document.createElement("span");
+          chip.className = "tailored-keyword";
+          chip.textContent = value;
+          chips.appendChild(chip);
+        });
+        card.append(h, chips);
+        insights.appendChild(card);
+      }
+
+      const notUsed = Array.isArray(content.ats_keywords_not_used) ? content.ats_keywords_not_used : [];
+      if (notUsed.length) {
+        const card = document.createElement("div");
+        card.className = "tailored-side-card";
+        const h = document.createElement("h3");
+        h.textContent = "Job keywords CareerPilot did not add";
+        const explanation = document.createElement("div");
+        explanation.className = "tailored-status";
+        explanation.textContent = "These were not supported by the verified Career Profile, so CareerPilot left them out rather than inventing qualifications.";
+        const chips = document.createElement("div");
+        chips.className = "tailored-keywords";
+        chips.style.marginTop = "10px";
+        notUsed.forEach(value => {
+          const chip = document.createElement("span");
+          chip.className = "tailored-keyword unsupported";
+          chip.textContent = value;
+          chips.appendChild(chip);
+        });
+        card.append(h, explanation, chips);
+        insights.appendChild(card);
+      }
+
+      status.textContent = `Saved ${resume?.created_at ? new Date(resume.created_at).toLocaleString() : "to your CareerPilot account"}. You can download this version again anytime.`;
+    }
+
+    function openTailoredResumePreview(resume) {
+      if (!resume) return;
+      currentTailoredResume = resume;
+      document.getElementById("tailoredResumeModalTitle").textContent = resume.name || "Tailored Resume";
+      document.getElementById("tailoredResumeModalSubtitle").textContent = [resume.target_job_title, resume.target_company_name].filter(Boolean).join(" • ");
+      renderTailoredResumePreview(resume);
+      openModal(tailoredResumeModal);
+    }
+
+    async function loadTailoredResumes() {
+      const list = document.getElementById("tailoredResumeList");
+      if (!list) return [];
+      list.innerHTML = "";
+
+      if (!currentSession?.user) return [];
+
+      const { data, error } = await db
+        .from("tailored_resumes")
+        .select(`
+          id,user_id,job_id,source_resume_id,name,target_job_title,target_company_name,status,
+          tailored_content,change_summary,match_score_before,match_score_after,
+          pdf_storage_path,docx_storage_path,created_at,updated_at
+        `)
+        .eq("user_id", currentSession.user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Tailored resumes load error:", error);
+        list.innerHTML = '<div class="tailored-empty">CareerPilot could not load your tailored resumes.</div>';
+        return [];
+      }
+
+      const rows = data || [];
+      if (!rows.length) {
+        list.innerHTML = '<div class="tailored-empty">No tailored resumes yet. Open a job and choose <strong>Tailor Resume to This Job</strong> to create your first one.</div>';
+        return rows;
+      }
+
+      rows.forEach(resume => {
+        const card = document.createElement("div");
+        card.className = "tailored-card";
+        const main = document.createElement("div");
+        main.className = "tailored-card-main";
+        const title = document.createElement("div");
+        title.className = "tailored-card-title";
+        title.textContent = resume.name || "Tailored Resume";
+        const meta = document.createElement("div");
+        meta.className = "tailored-card-meta";
+        const date = resume.created_at ? new Date(resume.created_at).toLocaleDateString() : "";
+        meta.textContent = [resume.target_company_name, date ? `Created ${date}` : null, resume.status].filter(Boolean).join(" • ");
+        main.append(title, meta);
+
+        const actions = document.createElement("div");
+        actions.className = "tailored-card-actions";
+        const preview = document.createElement("button");
+        preview.type = "button";
+        preview.className = "tailored-button primary";
+        preview.textContent = "Preview";
+        preview.addEventListener("click", () => openTailoredResumePreview(resume));
+        const pdf = document.createElement("button");
+        pdf.type = "button";
+        pdf.className = "tailored-button";
+        pdf.textContent = "PDF";
+        pdf.addEventListener("click", () => downloadTailoredResumePdf(resume));
+        const word = document.createElement("button");
+        word.type = "button";
+        word.className = "tailored-button";
+        word.textContent = "Word";
+        word.addEventListener("click", () => downloadTailoredResumeWord(resume));
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "tailored-button danger";
+        remove.textContent = "Delete";
+        remove.addEventListener("click", async () => {
+          if (!confirm("Delete this tailored resume from your CareerPilot account?")) return;
+          remove.disabled = true;
+          const { error: deleteError } = await db
+            .from("tailored_resumes")
+            .delete()
+            .eq("user_id", currentSession.user.id)
+            .eq("id", resume.id);
+          if (deleteError) {
+            console.error("Tailored resume delete error:", deleteError);
+            showToast("We couldn't delete that tailored resume.");
+            remove.disabled = false;
+            return;
+          }
+          if (currentTailoredResume?.id === resume.id) {
+            currentTailoredResume = null;
+            closeModal(tailoredResumeModal);
+          }
+          await loadTailoredResumes();
+          showToast("Tailored resume deleted.");
+        });
+        actions.append(preview, pdf, word, remove);
+        card.append(main, actions);
+        list.appendChild(card);
+      });
+
+      return rows;
+    }
+
+    async function confirmTailoringForFit(job) {
+      try {
+        const data = await loadCareerFitData();
+        const fit = data?.ready ? computeCareerFit(job, data) : null;
+        if (!fit || fit.fit_score >= 50) return true;
+        return confirm(
+          `CareerPilot currently estimates only ${fit.fit_score}% Career Fit (${fit.fit_level}) for this job.\n\n` +
+          "This position may require qualifications that are not demonstrated in your Career Profile. You can still create a tailored resume, but CareerPilot will not invent missing qualifications.\n\nContinue?"
+        );
+      } catch {
+        return true;
+      }
+    }
+
+    async function tailorResumeForJob(job, button) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to create a tailored resume for this job.");
+        return;
+      }
+      if (!(await confirmTailoringForFit(job))) return;
+
+      const originalText = button?.textContent || "Tailor Resume to This Job";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Tailoring Resume...";
+      }
+      showToast("CareerPilot is tailoring your verified resume for this job...");
+
+      try {
+        const { data, error } = await db.functions.invoke("tailor-resume", {
+          body: { job_id: job.id }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot AI could not tailor this resume."));
+        if (!data?.success || !data?.tailored_resume) {
+          throw new Error(data?.error || "CareerPilot AI could not tailor this resume.");
+        }
+        currentTailoredResume = data.tailored_resume;
+        openTailoredResumePreview(currentTailoredResume);
+        await loadTailoredResumes();
+        showToast(data.message || "Tailored resume created and saved.");
+      } catch (error) {
+        console.error("Tailored resume error:", error);
+        showToast(error?.message || "We couldn't create the tailored resume.");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+    }
+
+    function pdfWriteWrapped(doc, text, x, y, maxWidth, options = {}) {
+      const fontSize = options.fontSize || 10;
+      const lineHeight = options.lineHeight || 4.8;
+      const bold = Boolean(options.bold);
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const bottom = options.bottom || 14;
+      doc.setFontSize(fontSize);
+      doc.setFont("helvetica", bold ? "bold" : "normal");
+      const lines = doc.splitTextToSize(String(text || ""), maxWidth);
+      lines.forEach(line => {
+        if (y > pageHeight - bottom) {
+          doc.addPage();
+          y = 16;
+        }
+        doc.text(line, x, y);
+        y += lineHeight;
+      });
+      return y;
+    }
+
+    function downloadTailoredResumePdf(resume = currentTailoredResume) {
+      if (!resume) return;
+      if (!window.jspdf?.jsPDF) {
+        showToast("PDF generator did not load. Please refresh and try again.");
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: "mm", format: "letter", orientation: "portrait" });
+      const content = resume.tailored_content || {};
+      const contact = content.contact || {};
+      const width = doc.internal.pageSize.getWidth();
+      const margin = 18;
+      const textWidth = width - (margin * 2);
+      let y = 18;
+
+      y = pdfWriteWrapped(doc, contact.full_name || "CareerPilot User", margin, y, textWidth, { fontSize: 17, lineHeight: 6.5, bold: true });
+      if (content.professional_headline) y = pdfWriteWrapped(doc, content.professional_headline, margin, y, textWidth, { fontSize: 10.5, lineHeight: 5, bold: true });
+      const contactLine = tailoredResumeContactLine(contact);
+      if (contactLine) y = pdfWriteWrapped(doc, contactLine, margin, y, textWidth, { fontSize: 8.5, lineHeight: 4 });
+      y += 3;
+
+      const heading = (label) => {
+        y += 2;
+        y = pdfWriteWrapped(doc, label.toUpperCase(), margin, y, textWidth, { fontSize: 10, lineHeight: 5, bold: true });
+        doc.setDrawColor(150);
+        doc.line(margin, y - 3.5, width - margin, y - 3.5);
+      };
+
+      if (content.professional_summary) {
+        heading("Professional Summary");
+        y = pdfWriteWrapped(doc, content.professional_summary, margin, y, textWidth, { fontSize: 9, lineHeight: 4.3 });
+      }
+      if (Array.isArray(content.core_skills) && content.core_skills.length) {
+        heading("Core Skills");
+        y = pdfWriteWrapped(doc, content.core_skills.join(" | "), margin, y, textWidth, { fontSize: 9, lineHeight: 4.3 });
+      }
+      if (Array.isArray(content.experience) && content.experience.length) {
+        heading("Professional Experience");
+        content.experience.forEach(item => {
+          y += 1;
+          y = pdfWriteWrapped(doc, item.job_title || "Position", margin, y, textWidth, { fontSize: 9.5, lineHeight: 4.5, bold: true });
+          const dates = [displayResumeDate(item.start_date), item.is_current ? "Present" : displayResumeDate(item.end_date)].filter(Boolean).join(" – ");
+          y = pdfWriteWrapped(doc, [item.company_name, item.location, dates].filter(Boolean).join(" | "), margin, y, textWidth, { fontSize: 8.5, lineHeight: 4 });
+          (item.bullets || []).filter(Boolean).forEach(bullet => {
+            y = pdfWriteWrapped(doc, `• ${bullet}`, margin + 3, y, textWidth - 3, { fontSize: 9, lineHeight: 4.2 });
+          });
+        });
+      }
+      if (Array.isArray(content.education) && content.education.length) {
+        heading("Education");
+        content.education.forEach(item => {
+          const degree = [item.degree, item.field_of_study].filter(Boolean).join(" — ");
+          y = pdfWriteWrapped(doc, degree || item.school_name || "Education", margin, y, textWidth, { fontSize: 9.5, lineHeight: 4.5, bold: true });
+          const dates = [displayResumeDate(item.start_date), displayResumeDate(item.end_date)].filter(Boolean).join(" – ");
+          y = pdfWriteWrapped(doc, [item.school_name, item.location, dates].filter(Boolean).join(" | "), margin, y, textWidth, { fontSize: 8.5, lineHeight: 4 });
+        });
+      }
+      if (Array.isArray(content.certifications) && content.certifications.length) {
+        heading("Certifications");
+        content.certifications.forEach(item => {
+          y = pdfWriteWrapped(doc, [item.certification_name, item.issuing_organization, item.credential_id].filter(Boolean).join(" | "), margin, y, textWidth, { fontSize: 9, lineHeight: 4.2 });
+        });
+      }
+
+      doc.save(`${tailoredResumeBaseFilename(resume)}.pdf`);
+    }
+
+    async function downloadTailoredResumeWord(resume = currentTailoredResume) {
+      if (!resume) return;
+      if (!window.docx) {
+        showToast("Word generator did not load. Please refresh and try again.");
+        return;
+      }
+
+      const {
+        Document, Packer, Paragraph, TextRun, HeadingLevel
+      } = window.docx;
+      const content = resume.tailored_content || {};
+      const contact = content.contact || {};
+      const children = [];
+
+      children.push(new Paragraph({
+        children: [new TextRun({ text: contact.full_name || "CareerPilot User", bold: true, size: 32 })]
+      }));
+      if (content.professional_headline) {
+        children.push(new Paragraph({ children: [new TextRun({ text: content.professional_headline, bold: true, size: 22 })] }));
+      }
+      const contactLine = tailoredResumeContactLine(contact);
+      if (contactLine) children.push(new Paragraph({ text: contactLine }));
+
+      const addHeading = label => children.push(new Paragraph({ text: label, heading: HeadingLevel.HEADING_2 }));
+      if (content.professional_summary) {
+        addHeading("Professional Summary");
+        children.push(new Paragraph({ text: content.professional_summary }));
+      }
+      if (Array.isArray(content.core_skills) && content.core_skills.length) {
+        addHeading("Core Skills");
+        children.push(new Paragraph({ text: content.core_skills.join(" | ") }));
+      }
+      if (Array.isArray(content.experience) && content.experience.length) {
+        addHeading("Professional Experience");
+        content.experience.forEach(item => {
+          children.push(new Paragraph({ children: [new TextRun({ text: item.job_title || "Position", bold: true })] }));
+          const dates = [displayResumeDate(item.start_date), item.is_current ? "Present" : displayResumeDate(item.end_date)].filter(Boolean).join(" – ");
+          children.push(new Paragraph({ text: [item.company_name, item.location, dates].filter(Boolean).join(" | ") }));
+          (item.bullets || []).filter(Boolean).forEach(bullet => children.push(new Paragraph({ text: bullet, bullet: { level: 0 } })));
+        });
+      }
+      if (Array.isArray(content.education) && content.education.length) {
+        addHeading("Education");
+        content.education.forEach(item => {
+          const degree = [item.degree, item.field_of_study].filter(Boolean).join(" — ");
+          children.push(new Paragraph({ children: [new TextRun({ text: degree || item.school_name || "Education", bold: true })] }));
+          const dates = [displayResumeDate(item.start_date), displayResumeDate(item.end_date)].filter(Boolean).join(" – ");
+          children.push(new Paragraph({ text: [item.school_name, item.location, dates].filter(Boolean).join(" | ") }));
+        });
+      }
+      if (Array.isArray(content.certifications) && content.certifications.length) {
+        addHeading("Certifications");
+        content.certifications.forEach(item => children.push(new Paragraph({
+          text: [item.certification_name, item.issuing_organization, item.credential_id].filter(Boolean).join(" | "),
+          bullet: { level: 0 }
+        })));
+      }
+
+      const doc = new Document({ sections: [{ properties: {}, children }] });
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${tailoredResumeBaseFilename(resume)}.docx`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    document.getElementById("closeTailoredResumeModal").addEventListener("click", () => closeModal(tailoredResumeModal));
+    document.getElementById("downloadTailoredPdfButton").addEventListener("click", () => downloadTailoredResumePdf());
+    document.getElementById("downloadTailoredWordButton").addEventListener("click", () => downloadTailoredResumeWord());
 
     async function openCompanyPage(companyName) {
       if (!companyName) return;
@@ -4111,6 +4848,55 @@
       include includes ability able looking seeking team teams year years experience experienced
     `.trim().split(/\s+/));
 
+    const CAREER_FIT_GENERIC_SKILLS = new Set([
+      "management", "leadership", "communication", "communications", "teamwork", "collaboration",
+      "customerservice", "customerservice", "problemsolving", "organization", "organized", "microsoft",
+      "microsoftoffice", "office", "training", "coaching", "mentoring", "multitasking", "time management",
+      "timemanagement", "interpersonal", "detail oriented", "detailoriented", "adaptability", "customer"
+    ]);
+
+    const CAREER_FIT_FAMILY_RULES = [
+      { id: "physician", patterns: [/\bphysician\b/, /\bmedical doctor\b/, /\brheumatolog/, /\bcardiolog/, /\bneurolog/, /\bpsychiatrist\b/, /\bsurgeon\b/, /\bradiologist\b/, /\banesthesiolog/] },
+      { id: "nursing", patterns: [/\bregistered nurse\b/, /\bnurse practitioner\b/, /\bnurse supervisor\b/, /\bnursing supervisor\b/, /\brn\b/, /\blpn\b/, /\blvn\b/] },
+      { id: "pharmacy", patterns: [/\bpharmacist\b/, /\bpharmd\b/, /\bpharmacy manager\b/] },
+      { id: "driving", patterns: [/\bcdl\b/, /\btruck driver\b/, /\btractor trailer\b/, /\bcommercial driver\b/, /\bdelivery driver\b/] },
+      { id: "legal", patterns: [/\battorney\b/, /\blawyer\b/, /\bgeneral counsel\b/, /\blegal counsel\b/] },
+      { id: "software", patterns: [/\bsoftware engineer\b/, /\bsoftware developer\b/, /\bfrontend\b/, /\bbackend\b/, /\bfull stack\b/, /\bdevops\b/, /\bsite reliability\b/, /\bdata engineer\b/] },
+      { id: "information_technology", patterns: [/\binformation technology\b/, /\bit manager\b/, /\bsystems administrator\b/, /\bnetwork engineer\b/, /\bcybersecurity\b/, /\bhelp desk\b/] },
+      { id: "healthcare_rcm", patterns: [/\brevenue cycle\b/, /\brevenuecycle\b/, /\bmedical billing\b/, /\bmedicalbilling\b/, /\bpatient access\b/, /\bprior authorization\b/, /\bpriorauthorization\b/, /\bclaims? management\b/, /\bdenials?\b/, /\breimbursement\b/, /\baccounts receivable\b/, /\baccountsreceivable\b/, /\bbenefits operations\b/] },
+      { id: "healthcare_operations", patterns: [/\bhealthcare operations\b/, /\bhealth care operations\b/, /\bpatient services\b/, /\bpatientservices\b/, /\bclinic operations\b/, /\bmedical operations\b/, /\bpractice manager\b/, /\bhealthcare manager\b/] },
+      { id: "sales", patterns: [/\bsales\b/, /\baccount executive\b/, /\bsales development\b/, /\bbusiness development representative\b/, /\bsdr\b/, /\bbdr\b/] },
+      { id: "finance_accounting", patterns: [/\baccountant\b/, /\baccounting\b/, /\baudit\b/, /\bcontroller\b/, /\bfinancial analyst\b/, /\bfinance manager\b/, /\btreasury\b/] },
+      { id: "human_resources", patterns: [/\bhuman resources\b/, /\bhr manager\b/, /\brecruiter\b/, /\btalent acquisition\b/, /\bpeople operations\b/] },
+      { id: "project_program", patterns: [/\bproject manager\b/, /\bprogram manager\b/, /\bproject management\b/, /\bimplementation manager\b/, /\bimplementation consultant\b/] },
+      { id: "customer_operations", patterns: [/\bcustomer success\b/, /\bcontact center\b/, /\bcall center\b/, /\bcustomer service manager\b/, /\bmember services\b/] },
+      { id: "operations", patterns: [/\boperations manager\b/, /\boperations director\b/, /\bdirector of operations\b/, /\boperations lead\b/, /\boperations specialist\b/, /\boperational excellence\b/] },
+      { id: "marketing", patterns: [/\bmarketing\b/, /\bbrand manager\b/, /\bseo\b/, /\bcontent manager\b/, /\bgrowth marketing\b/] },
+      { id: "education", patterns: [/\bteacher\b/, /\binstructor\b/, /\bprofessor\b/, /\bschool administrator\b/, /\bprincipal\b/] },
+      { id: "manufacturing", patterns: [/\bmanufacturing\b/, /\bplant manager\b/, /\bproduction manager\b/, /\bquality engineer\b/] }
+    ];
+
+    const CAREER_FIT_FAMILY_RELATIONSHIPS = {
+      healthcare_rcm: { healthcare_operations: .90, operations: .72, finance_accounting: .50, customer_operations: .48, project_program: .45 },
+      healthcare_operations: { healthcare_rcm: .90, operations: .78, customer_operations: .58, project_program: .50, human_resources: .34 },
+      operations: { healthcare_operations: .78, healthcare_rcm: .72, project_program: .62, customer_operations: .55, human_resources: .42, manufacturing: .40 },
+      project_program: { operations: .62, healthcare_operations: .50, information_technology: .42, software: .35 },
+      customer_operations: { operations: .55, healthcare_operations: .58, sales: .34, human_resources: .30 },
+      finance_accounting: { healthcare_rcm: .50, operations: .34 },
+      sales: { customer_operations: .34, operations: .22, marketing: .42 },
+      information_technology: { software: .62, project_program: .42, operations: .25 },
+      software: { information_technology: .62, project_program: .35 },
+      human_resources: { operations: .42, healthcare_operations: .34 },
+      marketing: { sales: .42 },
+      manufacturing: { operations: .40 },
+      physician: { healthcare_operations: .12, healthcare_rcm: .08 },
+      nursing: { healthcare_operations: .18, healthcare_rcm: .12 },
+      pharmacy: { healthcare_operations: .18, healthcare_rcm: .12 },
+      legal: { operations: .10 },
+      driving: { operations: .08 },
+      education: { operations: .15 }
+    };
+
     function fitNormalizeText(value) {
       return String(value || "")
         .toLowerCase()
@@ -4181,6 +4967,34 @@
       return fitNormalizeText(parts.filter(Boolean).join(" "));
     }
 
+    function detectCareerFamilies(value) {
+      const normalized = fitNormalizeText(value);
+      const families = new Set();
+      CAREER_FIT_FAMILY_RULES.forEach(rule => {
+        if (rule.patterns.some(pattern => pattern.test(normalized))) families.add(rule.id);
+      });
+      return families;
+    }
+
+    function familyCompatibility(jobFamilies, candidateFamilies) {
+      if (!jobFamilies?.size) return .45;
+      if (!candidateFamilies?.size) return .18;
+      let best = 0;
+      jobFamilies.forEach(jobFamily => {
+        candidateFamilies.forEach(candidateFamily => {
+          if (jobFamily === candidateFamily) best = Math.max(best, 1);
+          else {
+            best = Math.max(
+              best,
+              CAREER_FIT_FAMILY_RELATIONSHIPS[jobFamily]?.[candidateFamily] || 0,
+              CAREER_FIT_FAMILY_RELATIONSHIPS[candidateFamily]?.[jobFamily] || 0
+            );
+          }
+        });
+      });
+      return best;
+    }
+
     async function loadCareerFitData() {
       const userId = currentSession?.user?.id;
       if (!userId) return null;
@@ -4217,6 +5031,15 @@
       };
       careerFitData.allText = flattenCareerFitText(careerFitData);
       careerFitData.allTokens = fitTokenSet(careerFitData.allText);
+      careerFitData.candidateTitleText = [
+        ...(Array.isArray(profile.target_job_titles) ? profile.target_job_titles : []),
+        profile.current_job_title,
+        ...(careerFitData.experiences || []).map(item => item.job_title)
+      ].filter(Boolean).join(" | ");
+      careerFitData.candidateFamilies = detectCareerFamilies(careerFitData.candidateTitleText);
+      if (!careerFitData.candidateFamilies.size) {
+        careerFitData.candidateFamilies = detectCareerFamilies(careerFitData.allText);
+      }
       careerFitData.ready = Boolean(
         profile.current_job_title ||
         profile.professional_headline ||
@@ -4228,31 +5051,70 @@
       return careerFitData;
     }
 
-    function careerFitHardRequirementCap(job, data) {
+    function hasCandidateEvidence(candidateText, patterns) {
+      return patterns.some(pattern => pattern.test(candidateText));
+    }
+
+    function explicitRequired(jobText, phrasePattern) {
+      const text = fitNormalizeText(jobText);
+      if (!phrasePattern.test(text)) return false;
+      return /\b(required|must have|must possess|license required|licensed|certification required|certified)\b/.test(text);
+    }
+
+    function careerFitHardRequirementCap(job, data, familyScore) {
       const title = fitNormalizeText(job?.title);
       const jobText = fitNormalizeText([job?.title, job?.requirements, job?.description].filter(Boolean).join(" "));
       const candidate = data?.allText || "";
       let cap = 100;
 
-      const physicianRole = /\b(rheumatologist|physician|surgeon|cardiologist|neurologist|psychiatrist|anesthesiologist|radiologist|medical doctor)\b/.test(title);
-      const physicianEvidence = /\b(doctor of medicine|medical doctor|physician|md degree|do degree|medical license|licensed physician)\b/.test(candidate);
-      if (physicianRole && !physicianEvidence) cap = Math.min(cap, 25);
+      const physicianRole = /\b(rheumatolog|physician|surgeon|cardiolog|neurolog|psychiatrist|anesthesiolog|radiologist|medical doctor)\b/.test(title);
+      const physicianEvidence = hasCandidateEvidence(candidate, [/\bmedical doctor\b/, /\bphysician\b/, /\bmd degree\b/, /\bdo degree\b/, /\bmedical license\b/, /\blicensed physician\b/]);
+      if (physicianRole && !physicianEvidence) cap = Math.min(cap, 15);
 
-      const nursingRole = /\b(registered nurse|nurse practitioner|nurse supervisor|nursing supervisor|rn)\b/.test(title);
-      const nursingEvidence = /\b(registered nurse|nursing|rn license|nursing license|nurse practitioner)\b/.test(candidate);
-      if (nursingRole && !nursingEvidence) cap = Math.min(cap, 45);
+      const nursingRole = /\b(registered nurse|nurse practitioner|nurse supervisor|nursing supervisor|rn|lpn|lvn)\b/.test(title);
+      const nursingEvidence = hasCandidateEvidence(candidate, [/\bregistered nurse\b/, /\brn license\b/, /\bnursing license\b/, /\bnurse practitioner\b/, /\blpn\b/, /\blvn\b/]);
+      if (nursingRole && !nursingEvidence) cap = Math.min(cap, 20);
 
       const cdlRole = /\b(cdl|truck driver|tractor trailer|commercial driver)\b/.test(title + " " + jobText);
-      const cdlEvidence = /\b(cdl|commercial driver|truck driver|class a license|class b license)\b/.test(candidate);
-      if (cdlRole && !cdlEvidence) cap = Math.min(cap, 35);
+      const cdlEvidence = hasCandidateEvidence(candidate, [/\bcdl\b/, /\bcommercial driver\b/, /\btruck driver\b/, /\bclass a license\b/, /\bclass b license\b/]);
+      if (cdlRole && !cdlEvidence) cap = Math.min(cap, 10);
 
       const legalRole = /\b(attorney|lawyer|counsel)\b/.test(title);
-      const legalEvidence = /\b(attorney|lawyer|juris doctor|law degree|bar admission|licensed counsel)\b/.test(candidate);
-      if (legalRole && !legalEvidence) cap = Math.min(cap, 35);
+      const legalEvidence = hasCandidateEvidence(candidate, [/\battorney\b/, /\blawyer\b/, /\bjuris doctor\b/, /\blaw degree\b/, /\bbar admission\b/]);
+      if (legalRole && !legalEvidence) cap = Math.min(cap, 20);
 
       const pharmacistRole = /\bpharmacist\b/.test(title);
-      const pharmacistEvidence = /\b(pharmacist|pharmd|pharmacy license)\b/.test(candidate);
-      if (pharmacistRole && !pharmacistEvidence) cap = Math.min(cap, 35);
+      const pharmacistEvidence = hasCandidateEvidence(candidate, [/\bpharmacist\b/, /\bpharmd\b/, /\bpharmacy license\b/]);
+      if (pharmacistRole && !pharmacistEvidence) cap = Math.min(cap, 20);
+
+      const softwareRole = /\b(software engineer|software developer|frontend|backend|full stack|devops|site reliability)\b/.test(title);
+      const softwareEvidence = hasCandidateEvidence(candidate, [/\bsoftware engineer\b/, /\bsoftware developer\b/, /\bjavascript\b/, /\btypescript\b/, /\bpython\b/, /\bjava\b/, /\breact\b/, /\bdevops\b/]);
+      if (softwareRole && !softwareEvidence) cap = Math.min(cap, 30);
+
+      const salesRole = /\b(sales|account executive|sales development|sdr|bdr)\b/.test(title);
+      const salesEvidence = hasCandidateEvidence(candidate, [/\bsales\b/, /\baccount executive\b/, /\bsales development\b/, /\bbusinessdevelopment\b/, /\bquota\b/]);
+      if (salesRole && !salesEvidence) cap = Math.min(cap, 30);
+
+      const cpaRequired = explicitRequired(jobText, /\bcpa\b/);
+      const cpaEvidence = /\bcpa\b|certified public accountant/.test(candidate);
+      if (cpaRequired && !cpaEvidence) cap = Math.min(cap, 35);
+
+      const clearanceRequired = /\bsecurity clearance\b/.test(jobText) && /\b(required|must have|active clearance)\b/.test(jobText);
+      const clearanceEvidence = /\bsecurity clearance\b|\bsecret clearance\b|\btop secret\b/.test(candidate);
+      if (clearanceRequired && !clearanceEvidence) cap = Math.min(cap, 30);
+
+      if (familyScore < .20) cap = Math.min(cap, 38);
+      if (familyScore < .12) cap = Math.min(cap, 28);
+
+      const profile = data?.profile || {};
+      const candidateCountry = fitNormalizeText(profile.country);
+      const targetLocations = (Array.isArray(profile.target_locations) ? profile.target_locations : []).map(fitNormalizeText);
+      const remoteRegion = fitNormalizeText(job?.remote_region);
+      const jobLocation = fitNormalizeText(job?.location_text);
+      const usCandidate = /\b(united states|usa|u s)\b/.test(candidateCountry) || /\b(fl|florida|orlando|tampa|davenport)\b/.test(fitNormalizeText([profile.city, profile.state].filter(Boolean).join(" ")));
+      const explicitlyEurope = /\b(europe|european union|eu only|uk only|united kingdom|germany|france|spain|italy|netherlands)\b/.test(remoteRegion + " " + jobLocation);
+      const targetsEurope = targetLocations.some(value => /\b(europe|united kingdom|germany|france|spain|italy|netherlands)\b/.test(value));
+      if (usCandidate && explicitlyEurope && !targetsEurope) cap = Math.min(cap, 35);
 
       return cap;
     }
@@ -4273,74 +5135,88 @@
       ].filter(Boolean);
 
       let bestTitleSimilarity = 0;
+      const normalizedJobTitle = fitNormalizeText(jobTitle);
       candidateTitles.forEach(candidateTitle => {
         const normalizedCandidate = fitNormalizeText(candidateTitle);
         let similarity = fitDiceSimilarity(candidateTitle, jobTitle);
-        if (normalizedCandidate && fitNormalizeText(jobTitle).includes(normalizedCandidate)) similarity = Math.max(similarity, 0.86);
-        if (normalizedCandidate && normalizedCandidate.includes(fitNormalizeText(jobTitle))) similarity = Math.max(similarity, 0.86);
+        if (normalizedCandidate && normalizedJobTitle.includes(normalizedCandidate)) similarity = Math.max(similarity, .88);
+        if (normalizedCandidate && normalizedCandidate.includes(normalizedJobTitle)) similarity = Math.max(similarity, .88);
         bestTitleSimilarity = Math.max(bestTitleSimilarity, similarity);
       });
 
-      const jobTitleTokens = fitTokenSet(jobTitle);
-      if (jobTitleTokens.size) {
-        let titleEvidenceHits = 0;
-        jobTitleTokens.forEach(token => { if (data.allTokens?.has(token)) titleEvidenceHits += 1; });
-        const titleEvidenceCoverage = titleEvidenceHits / jobTitleTokens.size;
-        bestTitleSimilarity = Math.max(bestTitleSimilarity, titleEvidenceCoverage * 0.92);
-      }
+      const jobFamilies = detectCareerFamilies(jobTitle + " " + (job.job_function || ""));
+      const candidateFamilies = data.candidateFamilies || new Set();
+      const familyScore = familyCompatibility(jobFamilies, candidateFamilies);
 
-      let titleScore = Math.min(40, bestTitleSimilarity * 40);
-      if (bestTitleSimilarity >= 0.70) titleScore = Math.min(40, titleScore + 6);
-      let score = titleScore;
+      let score = 0;
+      score += familyScore * 35;
+      score += Math.min(25, bestTitleSimilarity * 25);
 
       const meaningfulSkills = (data.skills || [])
         .map(item => String(item.skill_name || "").trim())
-        .filter(skill => skill.length >= 3 && !/^(management|leadership|communication|teamwork|microsoft office)$/i.test(skill));
+        .filter(skill => {
+          const normalized = fitNormalizeText(skill).replace(/\s+/g, "");
+          return skill.length >= 3 && !CAREER_FIT_GENERIC_SKILLS.has(normalized) && !CAREER_FIT_GENERIC_SKILLS.has(fitNormalizeText(skill));
+        });
+
       let skillHits = 0;
+      const matchedSkills = [];
       meaningfulSkills.forEach(skill => {
         const normalizedSkill = fitNormalizeText(skill);
         const skillTokens = fitTokens(skill);
         const phraseHit = normalizedSkill.length >= 4 && normalizedJobText.includes(normalizedSkill);
         const tokenHit = skillTokens.length > 0 && skillTokens.every(token => jobTokens.has(token));
-        if (phraseHit || tokenHit) skillHits += 1;
+        if (phraseHit || tokenHit) {
+          skillHits += 1;
+          matchedSkills.push(skill);
+        }
       });
-      score += Math.min(28, skillHits * 4);
+      score += Math.min(20, skillHits * 3.5);
 
+      const jobMeaningfulTokens = [...jobTokens].filter(token => token.length >= 4 && !CAREER_FIT_GENERIC_SKILLS.has(token));
       let evidenceOverlap = 0;
-      jobTokens.forEach(token => { if (data.allTokens?.has(token)) evidenceOverlap += 1; });
-      score += Math.min(20, evidenceOverlap * 1.15);
+      jobMeaningfulTokens.forEach(token => { if (data.allTokens?.has(token)) evidenceOverlap += 1; });
+      const evidenceRatio = jobMeaningfulTokens.length ? evidenceOverlap / Math.min(jobMeaningfulTokens.length, 20) : 0;
+      score += Math.min(10, evidenceRatio * 10);
 
       const targetIndustries = Array.isArray(profile.target_industries) ? profile.target_industries : [];
+      const jobIndustryText = [job.industry, job.category].filter(Boolean).join(" ");
       let industrySimilarity = 0;
-      targetIndustries.forEach(value => { industrySimilarity = Math.max(industrySimilarity, fitDiceSimilarity(value, job.industry || job.category || "")); });
-      if (!targetIndustries.length && job.industry) industrySimilarity = fitDiceSimilarity(data.allText, job.industry);
-      score += Math.min(8, industrySimilarity * 8);
+      targetIndustries.forEach(value => {
+        industrySimilarity = Math.max(industrySimilarity, fitDiceSimilarity(value, jobIndustryText));
+        if (fitNormalizeText(jobIndustryText).includes(fitNormalizeText(value))) industrySimilarity = Math.max(industrySimilarity, .9);
+      });
+      if (!targetIndustries.length && jobIndustryText) industrySimilarity = Math.min(.7, fitDiceSimilarity(data.allText, jobIndustryText));
+      score += Math.min(5, industrySimilarity * 5);
 
+      let preferenceScore = 0;
       const workPrefs = Array.isArray(profile.work_setting_preferences) ? profile.work_setting_preferences.map(fitNormalizeText) : [];
       const jobSetting = fitNormalizeText(job.work_setting);
-      if (!workPrefs.length) score += 2;
-      else if (workPrefs.includes(jobSetting) || (jobSetting === "hybrid" && workPrefs.includes("remote"))) score += 4;
+      if (!workPrefs.length) preferenceScore += 1;
+      else if (workPrefs.includes(jobSetting) || (jobSetting === "hybrid" && workPrefs.includes("remote"))) preferenceScore += 2;
 
       const typePrefs = Array.isArray(profile.employment_type_preferences) ? profile.employment_type_preferences.map(fitNormalizeText) : [];
       const jobType = fitNormalizeText(job.employment_type);
-      if (!typePrefs.length) score += 1.5;
-      else if (typePrefs.includes(jobType)) score += 3;
+      if (!typePrefs.length) preferenceScore += .5;
+      else if (typePrefs.includes(jobType)) preferenceScore += 1;
 
       const targetLocations = Array.isArray(profile.target_locations) ? profile.target_locations : [];
       const locationText = fitNormalizeText(job.location_text);
-      if (jobSetting === "remote") score += 2;
-      else if (targetLocations.some(value => locationText.includes(fitNormalizeText(value)) || fitNormalizeText(value).includes(locationText))) score += 2;
-      else if (profile.willing_to_relocate) score += 1;
+      if (jobSetting === "remote") preferenceScore += 1;
+      else if (targetLocations.some(value => locationText.includes(fitNormalizeText(value)) || fitNormalizeText(value).includes(locationText))) preferenceScore += 1;
+      else if (profile.willing_to_relocate) preferenceScore += .5;
 
       const desiredMin = Number(profile.desired_salary_min || 0);
       const salaryMax = Number(job.salary_max || job.salary_min || 0);
-      if (!desiredMin) score += 1;
-      else if (salaryMax && salaryMax >= desiredMin) score += 3;
+      if (!desiredMin) preferenceScore += .5;
+      else if (salaryMax && salaryMax >= desiredMin) preferenceScore += 1;
+      score += Math.min(5, preferenceScore);
 
-      if (bestTitleSimilarity < 0.12 && skillHits === 0) score = Math.min(score, 35);
-      else if (bestTitleSimilarity < 0.18 && skillHits < 2) score = Math.min(score, 55);
+      if (bestTitleSimilarity < .10 && familyScore < .35 && skillHits < 2) score = Math.min(score, 35);
+      if (bestTitleSimilarity < .18 && familyScore < .50 && skillHits < 3) score = Math.min(score, 48);
 
-      score = Math.min(score, careerFitHardRequirementCap(job, data));
+      const cap = careerFitHardRequirementCap(job, data, familyScore);
+      score = Math.min(score, cap);
       score = Math.max(0, Math.min(100, Math.round(score)));
 
       return {
@@ -4348,7 +5224,10 @@
         fit_score: score,
         fit_level: careerFitLevel(score),
         title_similarity: bestTitleSimilarity,
-        skill_hits: skillHits
+        family_similarity: familyScore,
+        skill_hits: skillHits,
+        matched_skills: matchedSkills.slice(0, 8),
+        hard_cap: cap
       };
     }
 
@@ -4941,7 +5820,7 @@
 
       profileSection.style.display = "block";
       await loadCareerProfile(currentSession.user.id);
-      await loadResumes();
+      await Promise.all([loadResumes(), loadTailoredResumes()]);
       profileSection.scrollIntoView({ behavior: "smooth" });
     });
 
@@ -4990,6 +5869,7 @@
       if (event.key !== "Escape") return;
       if (authModal.classList.contains("open")) closeModal(authModal);
       if (forgotPasswordModal.classList.contains("open")) closeModal(forgotPasswordModal);
+      if (tailoredResumeModal.classList.contains("open")) closeModal(tailoredResumeModal);
     });
 
     initializeAuth();
