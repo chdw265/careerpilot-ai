@@ -910,6 +910,138 @@
     }
     #toast.show { visibility: visible; opacity: 1; }
 
+
+
+    /* ============================================================
+       INTERNAL JOB DETAILS + COMPANY WORKSPACE
+    ============================================================ */
+    #jobDetailSection, #companySection { display: none; }
+    .job-detail-shell, .company-shell {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+    .job-detail-header, .company-header {
+      padding: 30px;
+      border-bottom: 1px solid #eaecf0;
+      background: linear-gradient(180deg, #ffffff, #fbfcff);
+    }
+    .job-detail-title { font-size: 32px; line-height: 1.18; margin-bottom: 10px; color: #14213d; }
+    .company-link {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #315ee8;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      text-align: left;
+    }
+    .company-link:hover { text-decoration: underline; }
+    .job-card .company-link { margin-top: 2px; }
+    .job-detail-company { font-size: 18px; margin-bottom: 14px; }
+    .job-badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+    .job-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f2f4f7;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid #eaecf0;
+    }
+    .job-badge.primary { background: #eef2ff; color: #244bc5; border-color: #c7d2fe; }
+    .job-detail-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(280px, .8fr);
+      gap: 26px;
+      padding: 30px;
+    }
+    .job-detail-main, .job-detail-side { min-width: 0; }
+    .job-detail-block { margin-bottom: 28px; }
+    .job-detail-block:last-child { margin-bottom: 0; }
+    .job-detail-block h3 { font-size: 20px; margin-bottom: 12px; color: #14213d; }
+    .job-detail-copy {
+      color: #344054;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    .job-side-card {
+      border: 1px solid #e3e7ef;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      background: #fbfcfe;
+    }
+    .job-side-card h3 { font-size: 16px; margin-bottom: 12px; }
+    .job-side-row { margin-bottom: 11px; }
+    .job-side-row:last-child { margin-bottom: 0; }
+    .job-side-label { display: block; color: #667085; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+    .job-side-value { color: #14213d; font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
+    .job-primary-action, .job-secondary-action {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 9px;
+    }
+    .job-primary-action { background: #315ee8; color: white; border: 1px solid #315ee8; }
+    .job-primary-action:hover { background: #244bc5; }
+    .job-secondary-action { background: white; color: #315ee8; border: 1px solid #315ee8; }
+    .job-secondary-action:hover { background: #eef2ff; }
+    .application-note {
+      padding: 12px;
+      border-radius: 9px;
+      background: #fffaeb;
+      border: 1px solid #fedf89;
+      color: #7a2e0e;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .job-benefits-list { margin: 0; padding-left: 20px; color: #344054; }
+    .job-benefits-list li { margin-bottom: 7px; }
+    .company-header h2 { font-size: 32px; color: #14213d; margin-bottom: 6px; }
+    .company-header p { color: #667085; }
+    .company-content { padding: 30px; }
+    .company-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .company-summary-card {
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 18px;
+      background: #fbfcfe;
+    }
+    .company-summary-card strong { display: block; color: #14213d; font-size: 22px; margin-bottom: 5px; }
+    .company-summary-card span { color: #667085; font-size: 13px; }
+    .company-overview-note {
+      border: 1px solid #d6e4ff;
+      background: #f5f8ff;
+      color: #344054;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 26px;
+      line-height: 1.55;
+    }
+    .company-jobs-heading { font-size: 23px; margin-bottom: 8px; color: #14213d; }
+    .company-jobs-subtitle { color: #667085; margin-bottom: 18px; }
+    .job-card-applicants { color: #475467; font-size: 13px; font-weight: 700; margin-top: 6px; }
+
     footer { text-align: center; padding: 35px; color: #7b8495; font-size: 14px; }
 
     @media(max-width: 1100px) {
@@ -932,6 +1064,8 @@
       .analysis-count-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .review-grid { grid-template-columns: 1fr; }
       .review-field.full { grid-column: auto; }
+      .job-detail-grid { grid-template-columns: 1fr; }
+      .company-summary-grid { grid-template-columns: 1fr; }
     }
     @media(max-width: 540px) {
       header { position: static; flex-direction: column; }
@@ -1213,6 +1347,45 @@
     <div id="savedJobsResults"></div>
   </section>
 
+
+
+  <section class="section" id="jobDetailSection">
+    <div class="workspace-header">
+      <div>
+        <h2>Job Details</h2>
+        <p>Review the full opportunity inside CareerPilot before deciding how to apply.</p>
+      </div>
+      <div class="workspace-actions">
+        <button type="button" class="workspace-button" id="jobDetailBackButton">Back to Job Search</button>
+      </div>
+    </div>
+    <div id="jobDetailContent" class="job-detail-shell"></div>
+  </section>
+
+  <section class="section" id="companySection">
+    <div class="workspace-header">
+      <div>
+        <h2>Company</h2>
+        <p>Explore the employer and other active opportunities available through CareerPilot.</p>
+      </div>
+      <div class="workspace-actions">
+        <button type="button" class="workspace-button" id="companyBackButton">Back to Job Search</button>
+      </div>
+    </div>
+    <div class="company-shell">
+      <div class="company-header">
+        <h2 id="companyPageName">Company</h2>
+        <p id="companyPageSubtitle">Loading company information...</p>
+      </div>
+      <div class="company-content">
+        <div id="companySummary"></div>
+        <h3 class="company-jobs-heading">Open jobs</h3>
+        <p class="company-jobs-subtitle" id="companyJobsStatus">Loading current opportunities...</p>
+        <div id="companyJobsResults"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="job-search">
     <h2 class="search-heading">Search Current Jobs</h2>
     <p class="search-description">Search current opportunities collected from CareerPilot's connected job sources.</p>
@@ -1388,6 +1561,18 @@
     let currentReviewResumeId = null;
     let currentReviewResumeName = "";
     let currentReviewAnalysis = null;
+    let currentJobDetailId = null;
+    let currentCompanyName = "";
+
+    const JOB_DETAIL_SELECT = `
+      id,title,company_name,description,requirements,industry,category,city,state,country,
+      location_text,work_setting,salary_min,salary_max,salary_currency,salary_period,
+      employment_type,posted_at,expires_at,source_url,apply_url,source_name,
+      applicant_count,applicant_count_source,employer_posted_at,experience_level,
+      job_function,benefits,direct_apply_url,direct_apply_verified,quick_apply_available,
+      quick_apply_provider,visa_sponsorship,remote_region,work_authorization_notes,
+      application_method,ats_provider,ats_job_id
+    `;
 
     function debounce(func, delay = 250) {
       let timer;
@@ -1551,6 +1736,8 @@
     const memberWelcome = document.getElementById("memberWelcome");
     const savedJobsSection = document.getElementById("savedJobsSection");
     const profileSection = document.getElementById("profileSection");
+    const jobDetailSection = document.getElementById("jobDetailSection");
+    const companySection = document.getElementById("companySection");
     const authModal = document.getElementById("authModal");
     const authMessage = document.getElementById("authMessage");
     const signInTab = document.getElementById("signInTab");
@@ -1608,6 +1795,8 @@
         memberSection.style.display = "none";
         savedJobsSection.style.display = "none";
         profileSection.style.display = "none";
+        jobDetailSection.style.display = "none";
+        companySection.style.display = "none";
         currentProfile = null;
         savedJobIds = new Set();
         document.getElementById("savedJobsCount").textContent = "0";
@@ -3089,6 +3278,7 @@
       const { data: jobs, error: jobsError } = await db.from("jobs").select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
+        employer_posted_at,applicant_count,applicant_count_source,experience_level,
         source_name,description,apply_url
       `).in("id", jobIds).eq("is_active", true);
 
@@ -3106,6 +3296,259 @@
       const sortedJobs = (jobs || []).sort((a, b) => (order.get(a.id) ?? 9999) - (order.get(b.id) ?? 9999));
 
       renderJobs(sortedJobs, results, { savedWorkspace: true });
+      syncSaveButtons();
+    }
+
+
+    function formatDateForJob(value) {
+      if (!value) return null;
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return null;
+      return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function jobPostedText(job) {
+      const employerDate = formatDateForJob(job.employer_posted_at);
+      if (employerDate) return `Employer posted ${employerDate}`;
+      const listedDate = formatDateForJob(job.posted_at);
+      return listedDate ? `Listed ${listedDate}` : null;
+    }
+
+    function appendDetailRow(container, label, value) {
+      if (value === null || value === undefined || value === "") return;
+      const row = document.createElement("div");
+      row.className = "job-side-row";
+      const labelEl = document.createElement("span");
+      labelEl.className = "job-side-label";
+      labelEl.textContent = label;
+      const valueEl = document.createElement("span");
+      valueEl.className = "job-side-value";
+      valueEl.textContent = String(value);
+      row.append(labelEl, valueEl);
+      container.appendChild(row);
+    }
+
+    function makeCompanyLink(companyName, className = "company-link") {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = className;
+      button.textContent = companyName || "Company not listed";
+      if (companyName) button.addEventListener("click", () => openCompanyPage(companyName));
+      else button.disabled = true;
+      return button;
+    }
+
+    async function openJobDetails(jobId) {
+      if (!jobId) return;
+      currentJobDetailId = jobId;
+      jobDetailSection.style.display = "block";
+      const content = document.getElementById("jobDetailContent");
+      content.innerHTML = '<div style="padding:30px;color:#667085;">Loading job details...</div>';
+      jobDetailSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      const { data: job, error } = await db
+        .from("jobs")
+        .select(JOB_DETAIL_SELECT)
+        .eq("id", jobId)
+        .single();
+
+      if (error || !job) {
+        console.error("Job detail error:", error);
+        content.innerHTML = '<div style="padding:30px;color:#b42318;">We could not load this job right now.</div>';
+        return;
+      }
+
+      renderJobDetails(job);
+    }
+
+    function renderJobDetails(job) {
+      const content = document.getElementById("jobDetailContent");
+      content.innerHTML = "";
+
+      const header = document.createElement("div");
+      header.className = "job-detail-header";
+      const title = document.createElement("h2");
+      title.className = "job-detail-title";
+      title.textContent = job.title || "Untitled position";
+      const companyWrap = document.createElement("div");
+      companyWrap.className = "job-detail-company";
+      companyWrap.appendChild(makeCompanyLink(job.company_name));
+      header.append(title, companyWrap);
+
+      const badges = document.createElement("div");
+      badges.className = "job-badge-row";
+      [formatWorkSetting(job.work_setting), formatEmploymentType(job.employment_type), job.experience_level, job.industry]
+        .filter(Boolean)
+        .forEach((value, index) => {
+          const badge = document.createElement("span");
+          badge.className = `job-badge${index === 0 ? " primary" : ""}`;
+          badge.textContent = value;
+          badges.appendChild(badge);
+        });
+      if (badges.children.length) header.appendChild(badges);
+
+      const grid = document.createElement("div");
+      grid.className = "job-detail-grid";
+      const main = document.createElement("div");
+      main.className = "job-detail-main";
+      const side = document.createElement("aside");
+      side.className = "job-detail-side";
+
+      if (job.description) {
+        const block = document.createElement("section");
+        block.className = "job-detail-block";
+        const h = document.createElement("h3"); h.textContent = "Job description";
+        const copy = document.createElement("div"); copy.className = "job-detail-copy"; copy.textContent = job.description;
+        block.append(h, copy); main.appendChild(block);
+      }
+
+      if (job.requirements) {
+        const block = document.createElement("section");
+        block.className = "job-detail-block";
+        const h = document.createElement("h3"); h.textContent = "Requirements";
+        const copy = document.createElement("div"); copy.className = "job-detail-copy"; copy.textContent = job.requirements;
+        block.append(h, copy); main.appendChild(block);
+      }
+
+      if (Array.isArray(job.benefits) && job.benefits.length) {
+        const block = document.createElement("section");
+        block.className = "job-detail-block";
+        const h = document.createElement("h3"); h.textContent = "Benefits";
+        const list = document.createElement("ul"); list.className = "job-benefits-list";
+        job.benefits.filter(Boolean).forEach(item => { const li=document.createElement("li"); li.textContent=item; list.appendChild(li); });
+        block.append(h, list); main.appendChild(block);
+      }
+
+      const overview = document.createElement("div");
+      overview.className = "job-side-card";
+      const oh = document.createElement("h3"); oh.textContent = "Opportunity overview"; overview.appendChild(oh);
+      appendDetailRow(overview, "Location", job.location_text);
+      appendDetailRow(overview, "Salary", formatSalary(job));
+      appendDetailRow(overview, "Posted", jobPostedText(job));
+      appendDetailRow(overview, "Experience level", job.experience_level);
+      appendDetailRow(overview, "Job function", job.job_function);
+      appendDetailRow(overview, "Industry", job.industry);
+      if (job.applicant_count !== null && job.applicant_count !== undefined) {
+        const applicantText = `${Number(job.applicant_count).toLocaleString()} applicant${Number(job.applicant_count) === 1 ? "" : "s"}`;
+        appendDetailRow(overview, "Reported applicants", applicantText);
+        if (job.applicant_count_source) appendDetailRow(overview, "Applicant count source", job.applicant_count_source);
+      }
+      if (job.visa_sponsorship !== null && job.visa_sponsorship !== undefined) appendDetailRow(overview, "Visa sponsorship", job.visa_sponsorship ? "Available / indicated" : "Not indicated");
+      appendDetailRow(overview, "Work authorization", job.work_authorization_notes);
+      side.appendChild(overview);
+
+      const application = document.createElement("div");
+      application.className = "job-side-card";
+      const ah = document.createElement("h3"); ah.textContent = "Apply"; application.appendChild(ah);
+      const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
+      if (directUrl) {
+        const link = document.createElement("a");
+        link.href = directUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className = "job-primary-action";
+        link.textContent = "Apply on Company Website";
+        application.appendChild(link);
+      } else {
+        const note = document.createElement("div");
+        note.className = "application-note";
+        note.textContent = "CareerPilot has not verified a direct employer application link for this job yet. We will not send you through a third-party apply page as if it were the employer site.";
+        application.appendChild(note);
+      }
+
+      const saveButton = document.createElement("button");
+      saveButton.type = "button";
+      saveButton.className = "job-secondary-action save-job-button";
+      saveButton.dataset.saveJobId = job.id;
+      const isSaved = savedJobIds.has(job.id);
+      saveButton.classList.toggle("saved", isSaved);
+      saveButton.textContent = isSaved ? "★ Saved" : "☆ Save Job";
+      saveButton.setAttribute("aria-pressed", isSaved ? "true" : "false");
+      saveButton.addEventListener("click", () => toggleSavedJob(job.id, saveButton));
+      application.appendChild(saveButton);
+
+      const matchNote = document.createElement("div");
+      matchNote.className = "application-note";
+      matchNote.style.marginTop = "12px";
+      matchNote.textContent = currentSession?.user
+        ? "AI Match and Tailor Resume to This Job are the next CareerPilot job-intelligence features being connected."
+        : "Sign in to use CareerPilot profile matching and resume tools.";
+      application.appendChild(matchNote);
+      side.appendChild(application);
+
+      const source = document.createElement("div");
+      source.className = "job-side-card";
+      const sh = document.createElement("h3"); sh.textContent = "Listing information"; source.appendChild(sh);
+      appendDetailRow(source, "CareerPilot source", job.source_name || "Not listed");
+      appendDetailRow(source, "Application method", job.application_method);
+      appendDetailRow(source, "ATS provider", job.ats_provider);
+      side.appendChild(source);
+
+      grid.append(main, side);
+      content.append(header, grid);
+      syncSaveButtons();
+    }
+
+    async function openCompanyPage(companyName) {
+      if (!companyName) return;
+      currentCompanyName = companyName;
+      companySection.style.display = "block";
+      document.getElementById("companyPageName").textContent = companyName;
+      document.getElementById("companyPageSubtitle").textContent = "Loading current CareerPilot company data...";
+      document.getElementById("companySummary").innerHTML = "";
+      document.getElementById("companyJobsResults").innerHTML = "";
+      document.getElementById("companyJobsStatus").textContent = "Loading current opportunities...";
+      companySection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      const { data: jobs, error } = await db.from("jobs").select(`
+        id,title,company_name,location_text,work_setting,salary_min,salary_max,
+        salary_currency,salary_period,employment_type,industry,posted_at,
+        employer_posted_at,applicant_count,applicant_count_source,experience_level,
+        source_name,description,apply_url
+      `).eq("company_name", companyName).eq("is_active", true).order("posted_at", { ascending: false, nullsFirst: false }).limit(100);
+
+      if (error) {
+        console.error("Company page error:", error);
+        document.getElementById("companyPageSubtitle").textContent = "We could not load this company right now.";
+        document.getElementById("companyJobsStatus").textContent = "";
+        return;
+      }
+
+      const rows = jobs || [];
+      const industries = [...new Set(rows.map(j => j.industry).filter(Boolean))];
+      const locations = [...new Set(rows.map(j => j.location_text).filter(Boolean))];
+      document.getElementById("companyPageSubtitle").textContent = `${rows.length} active CareerPilot job${rows.length === 1 ? "" : "s"} currently listed.`;
+
+      const summary = document.getElementById("companySummary");
+      const grid = document.createElement("div"); grid.className = "company-summary-grid";
+      const cards = [
+        [rows.length, "Active jobs"],
+        [industries[0] || "Not listed", "Primary industry in current listings"],
+        [locations.length, "Distinct listed locations"]
+      ];
+      cards.forEach(([value,label]) => { const card=document.createElement("div"); card.className="company-summary-card"; const s=document.createElement("strong"); s.textContent=String(value); const sp=document.createElement("span"); sp.textContent=label; card.append(s,sp); grid.appendChild(card); });
+      summary.appendChild(grid);
+
+      const note = document.createElement("div"); note.className = "company-overview-note";
+      note.textContent = "This company page currently uses CareerPilot's verified job-listing data. A richer employer overview from verified company sources will be connected separately so company information is not guessed from job ads.";
+      summary.appendChild(note);
+
+      const searchButton = document.createElement("button");
+      searchButton.type = "button";
+      searchButton.className = "workspace-button";
+      searchButton.textContent = `Search all ${companyName} jobs`;
+      searchButton.addEventListener("click", () => {
+        document.getElementById("jobCompany").value = companyName;
+        document.getElementById("jobPosted").value = "";
+        searchJobs();
+        document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
+      });
+      summary.appendChild(searchButton);
+
+      document.getElementById("companyJobsStatus").textContent = rows.length
+        ? `${rows.length} open job${rows.length === 1 ? "" : "s"}`
+        : "No active jobs are currently listed for this company.";
+      renderJobs(rows, document.getElementById("companyJobsResults"), { companyWorkspace: true });
       syncSaveButtons();
     }
 
@@ -3127,9 +3570,9 @@
         title.textContent = job.title || "Untitled position";
         card.appendChild(title);
 
-        const company = document.createElement("p");
+        const company = document.createElement("div");
         company.className = "job-meta";
-        company.textContent = job.company_name || "Company not listed";
+        company.appendChild(makeCompanyLink(job.company_name));
         card.appendChild(company);
 
         const details = [
@@ -3154,14 +3597,19 @@
           card.appendChild(salaryLine);
         }
 
-        if (job.posted_at) {
-          const postedDate = new Date(job.posted_at);
-          if (!Number.isNaN(postedDate.getTime())) {
-            const postedLine = document.createElement("p");
-            postedLine.className = "job-meta";
-            postedLine.textContent = `Posted ${postedDate.toLocaleDateString()}`;
-            card.appendChild(postedLine);
-          }
+        const postedText = jobPostedText(job);
+        if (postedText) {
+          const postedLine = document.createElement("p");
+          postedLine.className = "job-meta";
+          postedLine.textContent = postedText;
+          card.appendChild(postedLine);
+        }
+
+        if (job.applicant_count !== null && job.applicant_count !== undefined) {
+          const applicants = document.createElement("p");
+          applicants.className = "job-card-applicants";
+          applicants.textContent = `${Number(job.applicant_count).toLocaleString()} reported applicant${Number(job.applicant_count) === 1 ? "" : "s"}`;
+          card.appendChild(applicants);
         }
 
         if (job.description) {
@@ -3176,16 +3624,12 @@
         const actions = document.createElement("div");
         actions.className = "job-actions";
 
-        const applyUrl = safeExternalUrl(job.apply_url);
-        if (applyUrl) {
-          const link = document.createElement("a");
-          link.href = applyUrl;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "View Job";
-          link.className = "view-job-button";
-          actions.appendChild(link);
-        }
+        const viewButton = document.createElement("button");
+        viewButton.type = "button";
+        viewButton.textContent = "View Job";
+        viewButton.className = "view-job-button";
+        viewButton.addEventListener("click", () => openJobDetails(job.id));
+        actions.appendChild(viewButton);
 
         if (options.savedWorkspace) {
           const removeButton = document.createElement("button");
@@ -3243,6 +3687,7 @@
       let query = db.from("jobs").select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
+        employer_posted_at,applicant_count,applicant_count_source,experience_level,
         source_name,description,apply_url
       `, { count: "exact" }).eq("is_active", true);
 
@@ -3471,6 +3916,14 @@
       await loadCareerProfile(currentSession.user.id);
       await loadResumes();
       profileSection.scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("jobDetailBackButton").addEventListener("click", () => {
+      document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("companyBackButton").addEventListener("click", () => {
+      document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
     });
 
     document.getElementById("heroSearchJobs").addEventListener("click", () => {
