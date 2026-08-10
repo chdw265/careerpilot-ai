@@ -2185,12 +2185,12 @@
           <div id="applicationRouteText" class="application-prep-help"></div>
           <div id="applicationRouteWarning"></div>
           <div class="application-prep-actions">
-            <button type="button" class="application-prep-button primary" id="continueApplicationButton">Continue to Employer Website</button>
+            <button type="button" class="application-prep-button primary" id="continueApplicationButton">Continue to Company Website</button>
             <button type="button" class="application-prep-button success" id="markApplicationAppliedButton" disabled>I Submitted My Application</button>
             <button type="button" class="application-prep-button" id="markApplicationAppliedElsewhereButton">I Applied Another Way</button>
           </div>
           <div class="application-prep-help">
-            If CareerPilot opens an employer website, return here after submitting and choose <strong>I Submitted My Application</strong>. If you apply through another legitimate route, use <strong>I Applied Another Way</strong> so CareerPilot can still track it.
+            If CareerPilot opens a company website, return here after submitting and choose <strong>I Submitted My Application</strong>. If you apply through another legitimate route, use <strong>I Applied Another Way</strong> so CareerPilot can still track it.
           </div>
         </div>
 
@@ -4279,7 +4279,7 @@
         const note = document.createElement("div");
         note.className = "application-note";
         note.style.marginTop = "10px";
-        note.textContent = "CareerPilot has not verified a direct employer application link for this job yet. Prepare Application can search for the exact employer-owned or trusted ATS page.";
+        note.textContent = "CareerPilot will automatically locate and verify the company application page when you prepare this application.";
         application.appendChild(note);
       }
 
@@ -5687,51 +5687,52 @@
 
       if (directUrl) {
         currentApplicationRouteMode = "direct";
-        continueButton.textContent = "Continue to Employer Website";
+        continueButton.textContent = "Continue to Company Website";
         continueButton.disabled = false;
         submittedButton.disabled = true;
         elsewhereButton.style.display = "inline-flex";
         const provider = job.ats_provider ? ` through ${job.ats_provider}` : "";
-        routeText.textContent = `CareerPilot verified the employer application route${provider}. Your application preparation will be recorded before the employer page opens.`;
+        routeText.textContent = `CareerPilot verified the company application route${provider}. Your application preparation will be recorded before the company website opens.`;
         return;
       }
 
       currentApplicationRouteMode = "resolve";
-      continueButton.textContent = "Find Employer Application";
-      continueButton.disabled = false;
+      continueButton.textContent = "Finding Company Website...";
+      continueButton.disabled = true;
       submittedButton.disabled = true;
       elsewhereButton.style.display = "inline-flex";
-      routeText.textContent = "CareerPilot has not verified a direct route yet. It can search for the exact employer-owned or trusted ATS application page for this listing.";
-      const warning = document.createElement("div");
-      warning.className = "application-prep-warning";
-      warning.textContent = "CareerPilot will not treat job-board or aggregator redirects as verified employer application pages.";
-      warningHost.appendChild(warning);
+      routeText.textContent = "CareerPilot is locating the verified company application page for this job.";
     }
 
-    async function resolveApplicationRoute(job, button) {
-      const originalText = button.textContent;
+    async function resolveApplicationRoute(job, button, options = {}) {
+      const silent = Boolean(options.silent);
       button.disabled = true;
-      button.textContent = "Finding Employer Application...";
+      button.textContent = "Finding Company Website...";
       const routeText = document.getElementById("applicationRouteText");
-      routeText.textContent = "CareerPilot is checking official employer and ATS sources for the exact job. This can take a little while.";
+      const warningHost = document.getElementById("applicationRouteWarning");
+      if (warningHost) warningHost.innerHTML = "";
+      routeText.textContent = "CareerPilot is locating and verifying the company application page for this job.";
 
       try {
         const { data, error } = await db.functions.invoke("resolve-application-route", {
           body: { job_id: job.id }
         });
-        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot could not verify the employer application route."));
-        if (!data?.success) throw new Error(data?.error || "CareerPilot could not verify the employer application route.");
+        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot could not verify the company application route."));
+        if (!data?.success) throw new Error(data?.error || "CareerPilot could not verify the company application route.");
 
         if (!data.verified || !safeExternalUrl(data.direct_apply_url)) {
-          renderApplicationRoute(job);
-          const warningHost = document.getElementById("applicationRouteWarning");
+          currentApplicationRouteMode = "resolve";
+          button.disabled = false;
+          button.textContent = "Try Again";
+          routeText.textContent = "CareerPilot could not verify the company application page automatically.";
+
           const resultNote = document.createElement("div");
           resultNote.className = "application-prep-warning";
           resultNote.textContent = data.verification_summary
-            ? `CareerPilot checked the listing but could not safely verify a direct route: ${data.verification_summary}`
-            : "CareerPilot checked the listing but could not safely verify an exact employer application page.";
+            ? `CareerPilot checked the listing but could not safely verify a company application route: ${data.verification_summary}`
+            : "CareerPilot checked the listing but could not safely verify an exact company application page.";
           warningHost.appendChild(resultNote);
-          showToast("No verified employer application route was found yet.");
+          if (!silent) showToast("No verified company application route was found yet.");
           return false;
         }
 
@@ -5749,32 +5750,29 @@
         renderApplicationRoute(job);
 
         if (data.source_location_mismatch && data.official_location) {
-          const warningHost = document.getElementById("applicationRouteWarning");
           const mismatch = document.createElement("div");
           mismatch.className = "application-prep-warning";
-          mismatch.textContent = `Data check: the official employer page lists the location as ${data.official_location}, while this CareerPilot record currently shows ${job.location_text || "a different location"}. CareerPilot kept the original record unchanged so the discrepancy can be reviewed.`;
+          mismatch.textContent = `Data check: the official company page lists the location as ${data.official_location}, while this CareerPilot record currently shows ${job.location_text || "a different location"}. CareerPilot kept the original record unchanged so the discrepancy can be reviewed.`;
           warningHost.appendChild(mismatch);
         }
 
-        showToast("Verified employer application route found.");
+        if (!silent) showToast("Verified company application route found.");
         return true;
       } catch (error) {
         console.error("Application route resolver error:", error);
-        renderApplicationRoute(job);
-        const warningHost = document.getElementById("applicationRouteWarning");
+        currentApplicationRouteMode = "resolve";
+        button.disabled = false;
+        button.textContent = "Try Again";
+        routeText.textContent = "CareerPilot could not verify the company application page automatically.";
         if (warningHost) {
+          warningHost.innerHTML = "";
           const failure = document.createElement("div");
           failure.className = "application-prep-warning";
-          failure.textContent = error?.message || "CareerPilot could not verify the employer application route right now.";
+          failure.textContent = error?.message || "CareerPilot could not verify the company application route right now.";
           warningHost.appendChild(failure);
         }
-        showToast(error?.message || "CareerPilot could not verify the employer application route.");
+        if (!silent) showToast(error?.message || "CareerPilot could not verify the company application route.");
         return false;
-      } finally {
-        if (currentApplicationRouteMode === "resolve") {
-          button.disabled = false;
-          button.textContent = "Find Employer Application";
-        }
       }
     }
 
@@ -5792,6 +5790,14 @@
       document.getElementById("markApplicationAppliedButton").disabled = true;
       document.getElementById("markApplicationAppliedButton").textContent = "I Submitted My Application";
       renderApplicationRoute(job);
+
+      // Resolve the company application route automatically while the rest of
+      // Prepare Application loads. In most cases the user will see the final
+      // Continue to Company Website button without an extra discovery click.
+      if (!verifiedDirectApplyUrl(job) && !careerPilotQuickApplySupported(job)) {
+        const routeButton = document.getElementById("continueApplicationButton");
+        void resolveApplicationRoute(job, routeButton, { silent: true });
+      }
 
       try {
         const fitData = await loadCareerFitData();
@@ -5856,7 +5862,7 @@
 
         window.open(directUrl, "_blank", "noopener,noreferrer");
         document.getElementById("markApplicationAppliedButton").disabled = false;
-        showToast("Employer application opened. Return here after submitting to mark it Applied.");
+        showToast("Company application opened. Return here after submitting to mark it Applied.");
         currentApplicationRecord = record;
       } catch (error) {
         console.error("Continue application error:", error);
