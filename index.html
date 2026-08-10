@@ -200,6 +200,219 @@
     .member-small { color: #cbd5e1; margin-top: 4px; font-size: 13px; }
 
     #savedJobsSection { display: none; }
+
+    #applicationsSection { display: none; }
+    .application-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .application-summary-card {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .application-summary-card strong {
+      display: block;
+      color: #14213d;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    .application-summary-card span { color: #667085; font-size: 12px; font-weight: 700; }
+    .application-toolbar {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .application-toolbar label {
+      display: block;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .application-toolbar select {
+      min-width: 210px;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: white;
+      color: #14213d;
+      font-weight: 700;
+    }
+    .application-list { display: grid; gap: 14px; }
+    .application-card {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.03);
+    }
+    .application-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .application-card-title { color: #14213d; font-size: 20px; font-weight: 850; margin-bottom: 4px; }
+    .application-card-company { color: #315ee8; font-weight: 800; margin-bottom: 5px; }
+    .application-card-meta { color: #667085; font-size: 13px; line-height: 1.5; }
+    .application-status-select {
+      border: 1px solid #cfd6e1;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: white;
+      color: #14213d;
+      font-weight: 800;
+    }
+    .application-metrics {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .application-metric {
+      border: 1px solid #d6e4ff;
+      background: #f8faff;
+      border-radius: 9px;
+      padding: 8px 10px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .application-card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .application-small-button {
+      border: 1px solid #cfd6e1;
+      background: white;
+      color: #14213d;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .application-small-button.primary { background: #315ee8; border-color: #315ee8; color: white; }
+    .application-small-button:hover { background: #f8fafc; }
+    .application-small-button.primary:hover { background: #244bc5; }
+    .application-notes {
+      margin-top: 14px;
+      display: grid;
+      gap: 8px;
+    }
+    .application-notes label { color: #344054; font-size: 12px; font-weight: 800; }
+    .application-notes textarea {
+      width: 100%;
+      min-height: 76px;
+      resize: vertical;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 10px 11px;
+      font: inherit;
+      color: #14213d;
+    }
+    .application-prep-modal {
+      background: #f8fafc;
+      width: min(760px, 94vw);
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: 16px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.28);
+    }
+    .application-prep-header {
+      background: #111827;
+      color: white;
+      padding: 20px 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .application-prep-header h2 { font-size: 21px; margin-bottom: 4px; }
+    .application-prep-subtitle { color: #cbd5e1; font-size: 13px; }
+    .application-prep-body { padding: 22px; }
+    .application-prep-card {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .application-prep-card h3 { color: #14213d; font-size: 16px; margin-bottom: 9px; }
+    .application-prep-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+    .application-prep-metric {
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fbfcfe;
+    }
+    .application-prep-metric span { display: block; color: #667085; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .application-prep-metric strong { display: block; color: #14213d; font-size: 18px; margin-top: 3px; }
+    .application-prep-card select,
+    .application-prep-card textarea {
+      width: 100%;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .application-prep-card textarea { min-height: 82px; resize: vertical; }
+    .application-prep-help { color: #667085; font-size: 12px; line-height: 1.5; margin-top: 7px; }
+    .application-prep-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .application-prep-button {
+      border: 1px solid #315ee8;
+      background: white;
+      color: #315ee8;
+      border-radius: 8px;
+      padding: 11px 15px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .application-prep-button.primary { background: #315ee8; color: white; }
+    .application-prep-button.success { background: #067647; border-color: #067647; color: white; }
+    .application-prep-button:disabled { opacity: .5; cursor: not-allowed; }
+    .application-prep-warning {
+      padding: 12px;
+      border-radius: 9px;
+      background: #fffaeb;
+      border: 1px solid #fedf89;
+      color: #7a2e0e;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    @media (max-width: 760px) {
+      .application-summary-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .application-prep-grid { grid-template-columns: 1fr; }
+    }
+
     .workspace-header {
       display: flex;
       justify-content: space-between;
@@ -1720,6 +1933,45 @@
 
 
 
+
+  <section class="section" id="applicationsSection">
+    <div class="workspace-header">
+      <div>
+        <h2>Applications</h2>
+        <p>Track every application, the resume you used, and what happens next.</p>
+      </div>
+      <div class="workspace-actions">
+        <button type="button" class="workspace-button" id="applicationsBackButton">Back to Job Search</button>
+      </div>
+    </div>
+
+    <div class="application-summary-grid">
+      <div class="application-summary-card"><strong id="applicationsPreparingCount">0</strong><span>Preparing</span></div>
+      <div class="application-summary-card"><strong id="applicationsAppliedCount">0</strong><span>Applied</span></div>
+      <div class="application-summary-card"><strong id="applicationsInterviewCount">0</strong><span>Interviewing</span></div>
+      <div class="application-summary-card"><strong id="applicationsOfferCount">0</strong><span>Offers</span></div>
+    </div>
+
+    <div class="application-toolbar">
+      <div>
+        <label for="applicationStatusFilter">Show applications</label>
+        <select id="applicationStatusFilter">
+          <option value="">All statuses</option>
+          <option value="started">Preparing</option>
+          <option value="applied">Applied</option>
+          <option value="interviewing">Interviewing</option>
+          <option value="offer">Offer</option>
+          <option value="rejected">Not selected</option>
+          <option value="withdrawn">Withdrawn</option>
+        </select>
+      </div>
+      <div class="application-prep-help">CareerPilot records the exact resume and match information used for each application.</div>
+    </div>
+
+    <p id="applicationsStatus"></p>
+    <div id="applicationsResults" class="application-list"></div>
+  </section>
+
   <section class="section" id="jobDetailSection">
     <div class="workspace-header">
       <div>
@@ -1885,6 +2137,7 @@
         <div class="tailored-toolbar">
           <div id="tailoredResumeStatus" class="tailored-status"></div>
           <div class="tailored-toolbar-actions">
+            <button type="button" class="tailored-button primary" id="applyWithTailoredResumeButton">Apply with This Resume</button>
             <button type="button" class="tailored-button" id="downloadTailoredPdfButton">Download PDF</button>
             <button type="button" class="tailored-button" id="downloadTailoredWordButton">Download Word</button>
           </div>
@@ -1892,6 +2145,55 @@
         <div class="tailored-preview-layout">
           <div id="tailoredResumePreview" class="tailored-paper"></div>
           <div id="tailoredResumeInsights"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal-backdrop" id="applicationPrepModal" role="dialog" aria-modal="true" aria-labelledby="applicationPrepTitle">
+    <div class="application-prep-modal">
+      <div class="application-prep-header">
+        <div>
+          <h2 id="applicationPrepTitle">Prepare Application</h2>
+          <div class="application-prep-subtitle" id="applicationPrepSubtitle"></div>
+        </div>
+        <button type="button" class="tailored-modal-close" id="closeApplicationPrepModal" aria-label="Close">×</button>
+      </div>
+      <div class="application-prep-body">
+        <div class="application-prep-card">
+          <h3>Your match snapshot</h3>
+          <div class="application-prep-grid">
+            <div class="application-prep-metric"><span>Career Fit</span><strong id="applicationPrepCareerFit">—</strong></div>
+            <div class="application-prep-metric"><span>Detailed AI Match</span><strong id="applicationPrepAiMatch">Not analyzed</strong></div>
+          </div>
+        </div>
+
+        <div class="application-prep-card">
+          <h3>Resume for this application</h3>
+          <select id="applicationResumeSelect"></select>
+          <div class="application-prep-help" id="applicationResumeHelp">Choose the resume you want CareerPilot to associate with this application.</div>
+          <div class="application-prep-actions">
+            <button type="button" class="application-prep-button" id="downloadApplicationResumeButton">Download Selected Resume</button>
+          </div>
+        </div>
+
+        <div class="application-prep-card">
+          <h3>Application route</h3>
+          <div id="applicationRouteText" class="application-prep-help"></div>
+          <div id="applicationRouteWarning"></div>
+          <div class="application-prep-actions">
+            <button type="button" class="application-prep-button primary" id="continueApplicationButton">Continue to Employer Website</button>
+            <button type="button" class="application-prep-button success" id="markApplicationAppliedButton" disabled>I Submitted My Application</button>
+          </div>
+          <div class="application-prep-help">
+            For employer websites, CareerPilot cannot see whether you completed a form on another domain. After submitting, return here and choose <strong>I Submitted My Application</strong>.
+          </div>
+        </div>
+
+        <div class="application-prep-card">
+          <h3>Notes</h3>
+          <textarea id="applicationPrepNotes" placeholder="Optional notes about this application, recruiter, referral, next step, etc."></textarea>
         </div>
       </div>
     </div>
@@ -1983,6 +2285,10 @@
     let careerFitData = null;
     let careerFitDataUserId = null;
     let currentCompanyName = "";
+    let currentApplicationJob = null;
+    let currentApplicationRecord = null;
+    let currentApplicationResumeOptions = new Map();
+    const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set([]); // Add provider slugs only after a real submission integration is deployed.
 
     const JOB_DETAIL_SELECT = `
       id,title,company_name,description,requirements,industry,category,city,state,country,
@@ -2155,6 +2461,7 @@
     const memberSection = document.getElementById("memberSection");
     const memberWelcome = document.getElementById("memberWelcome");
     const savedJobsSection = document.getElementById("savedJobsSection");
+    const applicationsSection = document.getElementById("applicationsSection");
     const profileSection = document.getElementById("profileSection");
     const jobDetailSection = document.getElementById("jobDetailSection");
     const companySection = document.getElementById("companySection");
@@ -2174,6 +2481,7 @@
     const forgotMessage = document.getElementById("forgotMessage");
     const resetPasswordModal = document.getElementById("resetPasswordModal");
     const tailoredResumeModal = document.getElementById("tailoredResumeModal");
+    const applicationPrepModal = document.getElementById("applicationPrepModal");
     const newPasswordMessage = document.getElementById("newPasswordMessage");
 
     function updateMatchSearchControls() {
@@ -2244,6 +2552,7 @@
         heroAccountButton.textContent = "Create Free Account";
         memberSection.style.display = "none";
         savedJobsSection.style.display = "none";
+        applicationsSection.style.display = "none";
         profileSection.style.display = "none";
         jobDetailSection.style.display = "none";
         companySection.style.display = "none";
@@ -3924,14 +4233,29 @@
       application.className = "job-side-card";
       const ah = document.createElement("h3"); ah.textContent = "Apply"; application.appendChild(ah);
       const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
-      if (directUrl) {
-        const link = document.createElement("a");
-        link.href = directUrl;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.className = "job-primary-action";
-        link.textContent = "Apply on Company Website";
-        application.appendChild(link);
+      const quickApplyReady = careerPilotQuickApplySupported(job);
+      if (quickApplyReady) {
+        const quickButton = document.createElement("button");
+        quickButton.type = "button";
+        quickButton.className = "job-primary-action";
+        quickButton.textContent = "CareerPilot Quick Apply";
+        quickButton.addEventListener("click", () => openApplicationPrep(job));
+        application.appendChild(quickButton);
+      } else if (directUrl) {
+        const prepButton = document.createElement("button");
+        prepButton.type = "button";
+        prepButton.className = "job-primary-action";
+        prepButton.textContent = "Prepare & Apply";
+        prepButton.addEventListener("click", () => openApplicationPrep(job));
+        application.appendChild(prepButton);
+
+        const directLink = document.createElement("a");
+        directLink.href = directUrl;
+        directLink.target = "_blank";
+        directLink.rel = "noopener noreferrer";
+        directLink.className = "job-secondary-action";
+        directLink.textContent = "Open Employer Application";
+        application.appendChild(directLink);
       } else {
         const note = document.createElement("div");
         note.className = "application-note";
@@ -4626,6 +4950,8 @@
       currentTailoredResume = resume;
       document.getElementById("tailoredResumeModalTitle").textContent = resume.name || "Tailored Resume";
       document.getElementById("tailoredResumeModalSubtitle").textContent = [resume.target_job_title, resume.target_company_name].filter(Boolean).join(" • ");
+      const applyButton = document.getElementById("applyWithTailoredResumeButton");
+      applyButton.style.display = resume.job_id ? "" : "none";
       renderTailoredResumePreview(resume);
       openModal(tailoredResumeModal);
     }
@@ -4960,6 +5286,648 @@
     document.getElementById("closeTailoredResumeModal").addEventListener("click", () => closeModal(tailoredResumeModal));
     document.getElementById("downloadTailoredPdfButton").addEventListener("click", () => downloadTailoredResumePdf());
     document.getElementById("downloadTailoredWordButton").addEventListener("click", () => downloadTailoredResumeWord());
+
+
+    function careerPilotQuickApplySupported(job) {
+      if (!job?.quick_apply_available || !job?.quick_apply_provider) return false;
+      return CAREERPILOT_QUICK_APPLY_PROVIDERS.has(String(job.quick_apply_provider).toLowerCase());
+    }
+
+    function applicationStatusLabel(status) {
+      const labels = {
+        started: "Preparing",
+        applied: "Applied",
+        interviewing: "Interviewing",
+        offer: "Offer",
+        rejected: "Not selected",
+        withdrawn: "Withdrawn"
+      };
+      return labels[status] || "Preparing";
+    }
+
+    function applicationResumeLabel(option) {
+      if (!option) return "Resume";
+      if (option.kind === "tailored") {
+        const before = scoreOrNull(option.resume.match_score_before);
+        const after = scoreOrNull(option.resume.match_score_after);
+        const alignment = before !== null && after !== null ? ` • ${before}% → ${after}% alignment` : "";
+        return `Tailored — ${option.resume.name || option.resume.target_job_title || "Job-specific resume"}${alignment}`;
+      }
+      return `Original — ${option.resume.resume_name || option.resume.original_filename || "Primary resume"}`;
+    }
+
+    async function loadApplicationResumeOptions(job, preferredTailoredResume = null) {
+      currentApplicationResumeOptions = new Map();
+      const select = document.getElementById("applicationResumeSelect");
+      select.innerHTML = "";
+
+      const [tailoredResult, sourceResult] = await Promise.all([
+        db.from("tailored_resumes")
+          .select("id,job_id,source_resume_id,name,target_job_title,target_company_name,status,tailored_content,change_summary,match_score_before,match_score_after,created_at,updated_at")
+          .eq("user_id", currentSession.user.id)
+          .eq("job_id", job.id)
+          .order("created_at", { ascending: false }),
+        db.from("resumes")
+          .select("id,resume_name,original_filename,storage_path,is_primary,created_at")
+          .eq("user_id", currentSession.user.id)
+          .eq("is_primary", true)
+          .limit(1)
+      ]);
+
+      if (tailoredResult.error) console.error("Application tailored resume load error:", tailoredResult.error);
+      if (sourceResult.error) console.error("Application primary resume load error:", sourceResult.error);
+
+      (tailoredResult.data || []).forEach(resume => {
+        const key = `tailored:${resume.id}`;
+        const optionData = { kind: "tailored", resume };
+        currentApplicationResumeOptions.set(key, optionData);
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = applicationResumeLabel(optionData);
+        select.appendChild(option);
+      });
+
+      (sourceResult.data || []).forEach(resume => {
+        const key = `source:${resume.id}`;
+        const optionData = { kind: "source", resume };
+        currentApplicationResumeOptions.set(key, optionData);
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = applicationResumeLabel(optionData);
+        select.appendChild(option);
+      });
+
+      if (preferredTailoredResume?.id && currentApplicationResumeOptions.has(`tailored:${preferredTailoredResume.id}`)) {
+        select.value = `tailored:${preferredTailoredResume.id}`;
+      } else if (select.options.length) {
+        select.selectedIndex = 0;
+      }
+
+      const help = document.getElementById("applicationResumeHelp");
+      if (!select.options.length) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "No resume available";
+        select.appendChild(option);
+        select.disabled = true;
+        help.textContent = "Upload a primary resume or create a tailored resume before applying.";
+      } else {
+        select.disabled = false;
+        help.textContent = "CareerPilot will remember exactly which resume you used for this application.";
+      }
+
+      updateApplicationResumeDownloadState();
+    }
+
+    function selectedApplicationResumeOption() {
+      const value = document.getElementById("applicationResumeSelect").value;
+      return currentApplicationResumeOptions.get(value) || null;
+    }
+
+    function updateApplicationResumeDownloadState() {
+      const selected = selectedApplicationResumeOption();
+      const button = document.getElementById("downloadApplicationResumeButton");
+      button.disabled = !selected;
+    }
+
+    async function downloadSelectedApplicationResume() {
+      const option = selectedApplicationResumeOption();
+      if (!option) return;
+      if (option.kind === "tailored") {
+        await downloadTailoredResumePdf(option.resume);
+        return;
+      }
+      await openResume(option.resume.storage_path, document.getElementById("downloadApplicationResumeButton"));
+    }
+
+    async function loadSavedMatchForApplication(jobId) {
+      if (!currentSession?.user) return null;
+      if (savedJobMatchMap.has(jobId)) return savedJobMatchMap.get(jobId);
+      const { data, error } = await db
+        .from("job_matches")
+        .select("id,job_id,match_score,match_level")
+        .eq("user_id", currentSession.user.id)
+        .eq("job_id", jobId)
+        .maybeSingle();
+      if (error) {
+        console.warn("Application AI Match lookup error:", error);
+        return null;
+      }
+      if (data) savedJobMatchMap.set(jobId, data);
+      return data || null;
+    }
+
+    async function findExistingApplication(jobId) {
+      const { data, error } = await db
+        .from("applications")
+        .select(`
+          id,user_id,job_id,status,job_title,company_name,location_text,application_url,
+          application_method,tailored_resume_id,source_resume_id,resume_used_name,
+          career_fit_score,ai_match_score,resume_alignment_before,resume_alignment_after,
+          external_application_completed,started_at,applied_at,last_status_at,follow_up_at,
+          notes,next_step,application_metadata,created_at,updated_at
+        `)
+        .eq("user_id", currentSession.user.id)
+        .eq("job_id", jobId)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data || null;
+    }
+
+    async function applicationSnapshot(job, statusOverride = null) {
+      let fit = careerFitScoreMap.get(job.id) || null;
+      if (!fit) {
+        try {
+          const fitData = await loadCareerFitData();
+          fit = fitData?.ready ? computeCareerFit(job, fitData) : null;
+          if (fit) careerFitScoreMap.set(job.id, fit);
+        } catch (error) {
+          console.warn("Application Career Fit unavailable:", error);
+        }
+      }
+
+      const aiMatch = await loadSavedMatchForApplication(job.id);
+      const selected = selectedApplicationResumeOption();
+      const tailored = selected?.kind === "tailored" ? selected.resume : null;
+      const source = selected?.kind === "source" ? selected.resume : null;
+      const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
+      const quickApply = careerPilotQuickApplySupported(job);
+
+      return {
+        user_id: currentSession.user.id,
+        job_id: job.id,
+        status: statusOverride || currentApplicationRecord?.status || "started",
+        job_title: job.title || null,
+        company_name: job.company_name || null,
+        location_text: job.location_text || null,
+        application_url: directUrl,
+        application_method: quickApply ? "careerpilot_quick_apply" : "external_apply",
+        tailored_resume_id: tailored?.id || null,
+        source_resume_id: tailored?.source_resume_id || source?.id || null,
+        resume_used_name: selected ? applicationResumeLabel(selected) : null,
+        career_fit_score: fit?.fit_score ?? null,
+        ai_match_score: aiMatch?.match_score ?? null,
+        resume_alignment_before: tailored ? scoreOrNull(tailored.match_score_before) : null,
+        resume_alignment_after: tailored ? scoreOrNull(tailored.match_score_after) : null,
+        notes: document.getElementById("applicationPrepNotes").value.trim() || null,
+        last_status_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        application_metadata: {
+          source_name: job.source_name || null,
+          ats_provider: job.ats_provider || null,
+          ats_job_id: job.ats_job_id || null,
+          quick_apply_provider: job.quick_apply_provider || null,
+          direct_apply_verified: Boolean(job.direct_apply_verified)
+        }
+      };
+    }
+
+    async function saveApplicationRecord(job, statusOverride = null) {
+      const payload = await applicationSnapshot(job, statusOverride);
+      let record = currentApplicationRecord || await findExistingApplication(job.id);
+
+      if (record?.id) {
+        if (record.started_at) delete payload.started_at;
+        const { data, error } = await db
+          .from("applications")
+          .update(payload)
+          .eq("user_id", currentSession.user.id)
+          .eq("id", record.id)
+          .select()
+          .single();
+        if (error) throw error;
+        currentApplicationRecord = data;
+      } else {
+        payload.started_at = new Date().toISOString();
+        payload.created_at = new Date().toISOString();
+        const { data, error } = await db
+          .from("applications")
+          .insert(payload)
+          .select()
+          .single();
+        if (error) throw error;
+        currentApplicationRecord = data;
+      }
+
+      await loadMemberDashboard(currentSession.user.id);
+      return currentApplicationRecord;
+    }
+
+    async function openApplicationPrep(job, preferredTailoredResume = null) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to prepare and track your application.");
+        return;
+      }
+      currentApplicationJob = job;
+      currentApplicationRecord = null;
+
+      document.getElementById("applicationPrepTitle").textContent = "Prepare Application";
+      document.getElementById("applicationPrepSubtitle").textContent = [job.title, job.company_name].filter(Boolean).join(" • ");
+      document.getElementById("applicationPrepNotes").value = "";
+      document.getElementById("markApplicationAppliedButton").disabled = true;
+
+      const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
+      const quickApply = careerPilotQuickApplySupported(job);
+      const continueButton = document.getElementById("continueApplicationButton");
+      const routeText = document.getElementById("applicationRouteText");
+      const warningHost = document.getElementById("applicationRouteWarning");
+      warningHost.innerHTML = "";
+
+      if (quickApply) {
+        continueButton.textContent = "CareerPilot Quick Apply";
+        continueButton.disabled = false;
+        routeText.textContent = `CareerPilot has an active Quick Apply integration for ${job.quick_apply_provider}.`;
+      } else if (directUrl) {
+        continueButton.textContent = "Continue to Employer Website";
+        continueButton.disabled = false;
+        routeText.textContent = "CareerPilot will record your application preparation, then open the verified employer application page in a new tab.";
+      } else {
+        continueButton.textContent = "Direct Application Unavailable";
+        continueButton.disabled = true;
+        routeText.textContent = "CareerPilot does not yet have a verified direct employer application route for this listing.";
+        const warning = document.createElement("div");
+        warning.className = "application-prep-warning";
+        warning.textContent = "CareerPilot will not route you through an unverified third-party application page. You can save the job and return when a direct route is available.";
+        warningHost.appendChild(warning);
+      }
+
+      try {
+        const fitData = await loadCareerFitData();
+        const fit = fitData?.ready ? computeCareerFit(job, fitData) : null;
+        document.getElementById("applicationPrepCareerFit").textContent = fit ? `${fit.fit_score}% ${fit.fit_level}` : "Not available";
+        if (fit) careerFitScoreMap.set(job.id, fit);
+      } catch {
+        document.getElementById("applicationPrepCareerFit").textContent = "Not available";
+      }
+
+      const aiMatch = await loadSavedMatchForApplication(job.id);
+      document.getElementById("applicationPrepAiMatch").textContent = aiMatch?.match_score !== null && aiMatch?.match_score !== undefined
+        ? `${aiMatch.match_score}% ${aiMatch.match_level || ""}`.trim()
+        : "Not analyzed";
+
+      await loadApplicationResumeOptions(job, preferredTailoredResume);
+
+      try {
+        currentApplicationRecord = await findExistingApplication(job.id);
+        if (currentApplicationRecord?.notes) document.getElementById("applicationPrepNotes").value = currentApplicationRecord.notes;
+        if (currentApplicationRecord?.status === "applied" || currentApplicationRecord?.external_application_completed) {
+          document.getElementById("markApplicationAppliedButton").disabled = true;
+          document.getElementById("markApplicationAppliedButton").textContent = "Application Marked Applied";
+        } else {
+          document.getElementById("markApplicationAppliedButton").textContent = "I Submitted My Application";
+        }
+      } catch (error) {
+        console.warn("Existing application lookup failed:", error);
+      }
+
+      openModal(applicationPrepModal);
+    }
+
+    async function continueApplication() {
+      if (!currentApplicationJob) return;
+      const button = document.getElementById("continueApplicationButton");
+      const original = button.textContent;
+      button.disabled = true;
+      button.textContent = "Preparing...";
+
+      try {
+        const selected = selectedApplicationResumeOption();
+        if (!selected) throw new Error("Choose a resume before continuing.");
+
+        const record = await saveApplicationRecord(currentApplicationJob, currentApplicationRecord?.status || "started");
+        const quickApply = careerPilotQuickApplySupported(currentApplicationJob);
+
+        if (quickApply) {
+          throw new Error("Quick Apply is not enabled for any provider in this beta build yet.");
+        }
+
+        const directUrl = currentApplicationJob.direct_apply_verified ? safeExternalUrl(currentApplicationJob.direct_apply_url) : null;
+        if (!directUrl) throw new Error("CareerPilot does not have a verified employer application URL for this job.");
+
+        window.open(directUrl, "_blank", "noopener,noreferrer");
+        document.getElementById("markApplicationAppliedButton").disabled = false;
+        showToast("Employer application opened. Return here after submitting to mark it Applied.");
+        currentApplicationRecord = record;
+      } catch (error) {
+        console.error("Continue application error:", error);
+        showToast(error?.message || "We couldn't prepare that application.");
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    }
+
+    async function markCurrentApplicationApplied() {
+      if (!currentApplicationJob) return;
+      const button = document.getElementById("markApplicationAppliedButton");
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      try {
+        let record = currentApplicationRecord || await saveApplicationRecord(currentApplicationJob, "started");
+        const now = new Date().toISOString();
+        const payload = await applicationSnapshot(currentApplicationJob, "applied");
+        payload.external_application_completed = true;
+        payload.applied_at = record.applied_at || now;
+        payload.last_status_at = now;
+        payload.updated_at = now;
+
+        const { data, error } = await db
+          .from("applications")
+          .update(payload)
+          .eq("user_id", currentSession.user.id)
+          .eq("id", record.id)
+          .select()
+          .single();
+        if (error) throw error;
+
+        currentApplicationRecord = data;
+        button.textContent = "Application Marked Applied";
+        await Promise.all([loadMemberDashboard(currentSession.user.id), loadApplicationsWorkspace()]);
+        showToast("Application marked as Applied.");
+      } catch (error) {
+        console.error("Mark applied error:", error);
+        button.disabled = false;
+        button.textContent = "I Submitted My Application";
+        showToast("We couldn't update that application.");
+      }
+    }
+
+    async function openApplicationFromTailoredResume() {
+      const resume = currentTailoredResume;
+      if (!resume?.job_id) {
+        showToast("This tailored resume is not linked to a job.");
+        return;
+      }
+      try {
+        let job = currentJobDetail?.id === resume.job_id ? currentJobDetail : null;
+        if (!job) {
+          const { data, error } = await db.from("jobs").select(JOB_DETAIL_SELECT).eq("id", resume.job_id).maybeSingle();
+          if (error) throw error;
+          job = data;
+        }
+        if (!job) throw new Error("The linked job could not be loaded.");
+        closeModal(tailoredResumeModal);
+        await openApplicationPrep(job, resume);
+      } catch (error) {
+        console.error("Apply tailored resume error:", error);
+        showToast("We couldn't prepare an application for that resume.");
+      }
+    }
+
+    async function updateApplicationStatus(applicationId, newStatus) {
+      const now = new Date().toISOString();
+      const updates = {
+        status: newStatus,
+        last_status_at: now,
+        updated_at: now
+      };
+      if (newStatus === "applied") {
+        updates.external_application_completed = true;
+        updates.applied_at = now;
+      }
+      const { error } = await db
+        .from("applications")
+        .update(updates)
+        .eq("user_id", currentSession.user.id)
+        .eq("id", applicationId);
+      if (error) throw error;
+    }
+
+    async function saveApplicationNotes(applicationId, notes, button) {
+      const original = button.textContent;
+      button.disabled = true;
+      button.textContent = "Saving...";
+      try {
+        const { error } = await db
+          .from("applications")
+          .update({ notes: notes.trim() || null, updated_at: new Date().toISOString() })
+          .eq("user_id", currentSession.user.id)
+          .eq("id", applicationId);
+        if (error) throw error;
+        showToast("Application notes saved.");
+      } catch (error) {
+        console.error("Application notes error:", error);
+        showToast("We couldn't save those notes.");
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    }
+
+    async function loadApplicationsWorkspace() {
+      const results = document.getElementById("applicationsResults");
+      const statusText = document.getElementById("applicationsStatus");
+      if (!results || !currentSession?.user) return [];
+
+      applicationsSection.style.display = "block";
+      results.innerHTML = "";
+      statusText.textContent = "Loading applications...";
+
+      let query = db
+        .from("applications")
+        .select(`
+          id,user_id,job_id,status,job_title,company_name,location_text,application_url,
+          application_method,tailored_resume_id,source_resume_id,resume_used_name,
+          career_fit_score,ai_match_score,resume_alignment_before,resume_alignment_after,
+          external_application_completed,started_at,applied_at,last_status_at,follow_up_at,
+          notes,next_step,application_metadata,created_at,updated_at
+        `)
+        .eq("user_id", currentSession.user.id)
+        .order("created_at", { ascending: false });
+
+      const filter = document.getElementById("applicationStatusFilter").value;
+      if (filter) query = query.eq("status", filter);
+
+      const { data, error } = await query;
+      if (error) {
+        console.error("Applications workspace error:", error);
+        statusText.textContent = "CareerPilot could not load your applications.";
+        return [];
+      }
+
+      // Separate summary query so counts remain accurate even while a status filter is active.
+      const { data: allRows, error: countError } = await db
+        .from("applications")
+        .select("status")
+        .eq("user_id", currentSession.user.id);
+
+      const summaryRows = countError ? (data || []) : (allRows || []);
+      const countStatus = value => summaryRows.filter(row => row.status === value).length;
+      document.getElementById("applicationsPreparingCount").textContent = countStatus("started");
+      document.getElementById("applicationsAppliedCount").textContent = countStatus("applied");
+      document.getElementById("applicationsInterviewCount").textContent = countStatus("interviewing");
+      document.getElementById("applicationsOfferCount").textContent = countStatus("offer");
+
+      const rows = data || [];
+      statusText.textContent = rows.length
+        ? `${rows.length} application${rows.length === 1 ? "" : "s"} shown`
+        : "No applications match this view.";
+
+      if (!rows.length) {
+        results.innerHTML = '<div class="saved-empty"><strong style="display:block;color:#14213d;margin-bottom:6px;">No applications yet</strong><span>When you prepare an employer application through CareerPilot, it will appear here automatically.</span></div>';
+        return rows;
+      }
+
+      rows.forEach(application => {
+        const card = document.createElement("article");
+        card.className = "application-card";
+
+        const top = document.createElement("div");
+        top.className = "application-card-top";
+        const left = document.createElement("div");
+        left.style.flex = "1";
+        const title = document.createElement("div");
+        title.className = "application-card-title";
+        title.textContent = application.job_title || "Job application";
+        const company = document.createElement("div");
+        company.className = "application-card-company";
+        company.textContent = application.company_name || "Employer";
+        const meta = document.createElement("div");
+        meta.className = "application-card-meta";
+        const started = application.started_at || application.created_at;
+        const applied = application.applied_at;
+        meta.textContent = [
+          application.location_text,
+          applied ? `Applied ${new Date(applied).toLocaleDateString()}` : started ? `Started ${new Date(started).toLocaleDateString()}` : null,
+          application.resume_used_name
+        ].filter(Boolean).join(" • ");
+        left.append(title, company, meta);
+
+        const statusSelect = document.createElement("select");
+        statusSelect.className = "application-status-select";
+        [
+          ["started", "Preparing"],
+          ["applied", "Applied"],
+          ["interviewing", "Interviewing"],
+          ["offer", "Offer"],
+          ["rejected", "Not selected"],
+          ["withdrawn", "Withdrawn"]
+        ].forEach(([value, label]) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = label;
+          statusSelect.appendChild(option);
+        });
+        statusSelect.value = application.status || "started";
+        statusSelect.addEventListener("change", async () => {
+          statusSelect.disabled = true;
+          try {
+            await updateApplicationStatus(application.id, statusSelect.value);
+            await Promise.all([loadApplicationsWorkspace(), loadMemberDashboard(currentSession.user.id)]);
+            showToast(`Application updated to ${applicationStatusLabel(statusSelect.value)}.`);
+          } catch (error) {
+            console.error("Application status update error:", error);
+            showToast("We couldn't update that application status.");
+            statusSelect.disabled = false;
+          }
+        });
+
+        top.append(left, statusSelect);
+        card.appendChild(top);
+
+        const metrics = document.createElement("div");
+        metrics.className = "application-metrics";
+        if (application.career_fit_score !== null && application.career_fit_score !== undefined) {
+          const metric = document.createElement("span");
+          metric.className = "application-metric";
+          metric.textContent = `Career Fit ${application.career_fit_score}%`;
+          metrics.appendChild(metric);
+        }
+        if (application.ai_match_score !== null && application.ai_match_score !== undefined) {
+          const metric = document.createElement("span");
+          metric.className = "application-metric";
+          metric.textContent = `AI Match ${application.ai_match_score}%`;
+          metrics.appendChild(metric);
+        }
+        if (application.resume_alignment_after !== null && application.resume_alignment_after !== undefined) {
+          const metric = document.createElement("span");
+          metric.className = "application-metric";
+          const before = application.resume_alignment_before;
+          metric.textContent = before !== null && before !== undefined
+            ? `Resume ${before}% → ${application.resume_alignment_after}%`
+            : `Resume Alignment ${application.resume_alignment_after}%`;
+          metrics.appendChild(metric);
+        }
+        if (metrics.childNodes.length) card.appendChild(metrics);
+
+        const actions = document.createElement("div");
+        actions.className = "application-card-actions";
+
+        if (application.job_id) {
+          const view = document.createElement("button");
+          view.type = "button";
+          view.className = "application-small-button primary";
+          view.textContent = "View Job";
+          view.addEventListener("click", () => openJobDetails(application.job_id));
+          actions.appendChild(view);
+        }
+
+        if (application.tailored_resume_id) {
+          const resumeButton = document.createElement("button");
+          resumeButton.type = "button";
+          resumeButton.className = "application-small-button";
+          resumeButton.textContent = "View Resume";
+          resumeButton.addEventListener("click", async () => {
+            const { data: resume, error: resumeError } = await db
+              .from("tailored_resumes")
+              .select("id,user_id,job_id,source_resume_id,name,target_job_title,target_company_name,status,tailored_content,change_summary,match_score_before,match_score_after,pdf_storage_path,docx_storage_path,created_at,updated_at")
+              .eq("user_id", currentSession.user.id)
+              .eq("id", application.tailored_resume_id)
+              .maybeSingle();
+            if (resumeError || !resume) {
+              showToast("That tailored resume is no longer available.");
+              return;
+            }
+            openTailoredResumePreview(resume);
+          });
+          actions.appendChild(resumeButton);
+        }
+
+        const appUrl = safeExternalUrl(application.application_url);
+        if (appUrl) {
+          const employer = document.createElement("a");
+          employer.className = "application-small-button";
+          employer.href = appUrl;
+          employer.target = "_blank";
+          employer.rel = "noopener noreferrer";
+          employer.textContent = "Employer Application";
+          actions.appendChild(employer);
+        }
+
+        card.appendChild(actions);
+
+        const notesWrap = document.createElement("div");
+        notesWrap.className = "application-notes";
+        const notesLabel = document.createElement("label");
+        notesLabel.textContent = "Notes";
+        const notes = document.createElement("textarea");
+        notes.value = application.notes || "";
+        notes.placeholder = "Recruiter name, interview details, follow-up reminder, etc.";
+        const saveNotes = document.createElement("button");
+        saveNotes.type = "button";
+        saveNotes.className = "application-small-button";
+        saveNotes.style.justifySelf = "start";
+        saveNotes.textContent = "Save Notes";
+        saveNotes.addEventListener("click", () => saveApplicationNotes(application.id, notes.value, saveNotes));
+        notesWrap.append(notesLabel, notes, saveNotes);
+        card.appendChild(notesWrap);
+
+        results.appendChild(card);
+      });
+
+      return rows;
+    }
+
+    document.getElementById("applicationResumeSelect").addEventListener("change", updateApplicationResumeDownloadState);
+    document.getElementById("downloadApplicationResumeButton").addEventListener("click", downloadSelectedApplicationResume);
+    document.getElementById("continueApplicationButton").addEventListener("click", continueApplication);
+    document.getElementById("markApplicationAppliedButton").addEventListener("click", markCurrentApplicationApplied);
+    document.getElementById("closeApplicationPrepModal").addEventListener("click", () => closeModal(applicationPrepModal));
+    document.getElementById("applyWithTailoredResumeButton").addEventListener("click", openApplicationFromTailoredResume);
+    document.getElementById("applicationStatusFilter").addEventListener("change", loadApplicationsWorkspace);
 
     async function openCompanyPage(companyName) {
       if (!companyName) return;
@@ -6000,9 +6968,17 @@
       savedJobsSection.scrollIntoView({ behavior: "smooth" });
     });
 
-    document.getElementById("applicationsButton").addEventListener("click", () => {
-      goToMemberSection();
-      showToast("Application tracking is connected and will be expanded next.");
+    document.getElementById("applicationsButton").addEventListener("click", async () => {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to view your applications.");
+        return;
+      }
+      await loadApplicationsWorkspace();
+      applicationsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("applicationsBackButton").addEventListener("click", () => {
+      document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
     });
 
     document.getElementById("profileButton").addEventListener("click", async () => {
@@ -6063,6 +7039,7 @@
       if (authModal.classList.contains("open")) closeModal(authModal);
       if (forgotPasswordModal.classList.contains("open")) closeModal(forgotPasswordModal);
       if (tailoredResumeModal.classList.contains("open")) closeModal(tailoredResumeModal);
+      if (applicationPrepModal.classList.contains("open")) closeModal(applicationPrepModal);
     });
 
     initializeAuth();
