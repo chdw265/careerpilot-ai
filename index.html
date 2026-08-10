@@ -2140,6 +2140,7 @@
             <button type="button" class="tailored-button primary" id="applyWithTailoredResumeButton">Apply with This Resume</button>
             <button type="button" class="tailored-button" id="downloadTailoredPdfButton">Download PDF</button>
             <button type="button" class="tailored-button" id="downloadTailoredWordButton">Download Word</button>
+            <button type="button" class="tailored-button" id="createNewTailoredVersionButton">Create New Version</button>
           </div>
         </div>
         <div class="tailored-preview-layout">
@@ -2281,6 +2282,7 @@
     let currentJobDetailId = null;
     let currentJobDetail = null;
     let currentJobMatch = null;
+    let currentJobTailoredResume = null;
     let currentTailoredResume = null;
     let savedJobMatchMap = new Map();
     let careerFitScoreMap = new Map();
@@ -4144,6 +4146,7 @@
 
       currentJobDetail = job;
       currentJobMatch = null;
+      currentJobTailoredResume = null;
       renderJobDetails(job);
     }
 
@@ -4266,9 +4269,17 @@
         directLink.textContent = "Open Employer Application";
         application.appendChild(directLink);
       } else {
+        const prepButton = document.createElement("button");
+        prepButton.type = "button";
+        prepButton.className = "job-primary-action";
+        prepButton.textContent = "Prepare Application";
+        prepButton.addEventListener("click", () => openApplicationPrep(job));
+        application.appendChild(prepButton);
+
         const note = document.createElement("div");
         note.className = "application-note";
-        note.textContent = "CareerPilot has not verified a direct employer application link for this job yet. We will not send you through a third-party apply page as if it were the employer site.";
+        note.style.marginTop = "10px";
+        note.textContent = "CareerPilot has not verified a direct employer application link for this job yet. Prepare Application can search for the exact employer-owned or trusted ATS page.";
         application.appendChild(note);
       }
 
@@ -4390,25 +4401,44 @@
       }
 
       const requestedJobId = job.id;
-      const { data, error } = await db
-        .from("job_matches")
-        .select(`
-          id,job_id,match_score,match_level,summary,why_match,matched_skills,missing_skills,
-          strengths,gaps,recommendations,model_name,analysis_version,analyzed_at,updated_at
-        `)
-        .eq("user_id", currentSession.user.id)
-        .eq("job_id", requestedJobId)
-        .maybeSingle();
+      const [matchResult, tailoredResult] = await Promise.all([
+        db
+          .from("job_matches")
+          .select(`
+            id,job_id,match_score,match_level,summary,why_match,matched_skills,missing_skills,
+            strengths,gaps,recommendations,model_name,analysis_version,analyzed_at,updated_at
+          `)
+          .eq("user_id", currentSession.user.id)
+          .eq("job_id", requestedJobId)
+          .maybeSingle(),
+        db
+          .from("tailored_resumes")
+          .select(`
+            id,user_id,job_id,source_resume_id,name,target_job_title,target_company_name,status,
+            tailored_content,change_summary,match_score_before,match_score_after,
+            pdf_storage_path,docx_storage_path,created_at,updated_at
+          `)
+          .eq("user_id", currentSession.user.id)
+          .eq("job_id", requestedJobId)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle()
+      ]);
 
       if (currentJobDetailId !== requestedJobId) return;
 
-      if (error) {
-        console.error("Job match load error:", error);
+      if (matchResult.error) {
+        console.error("Job match load error:", matchResult.error);
         renderJobMatchError(job, "CareerPilot couldn't load your saved match analysis.");
         return;
       }
 
-      currentJobMatch = data || null;
+      if (tailoredResult.error) {
+        console.warn("Job tailored resume lookup error:", tailoredResult.error);
+      }
+
+      currentJobMatch = matchResult.data || null;
+      currentJobTailoredResume = tailoredResult.error ? null : (tailoredResult.data || null);
       renderJobMatchPanel(job, currentJobMatch);
     }
 
@@ -4452,6 +4482,43 @@
       return list;
     }
 
+    function tailoredResumeAlignmentText(resume) {
+      if (!resume) return "";
+      const before = scoreOrNull(resume.match_score_before);
+      const after = scoreOrNull(resume.match_score_after);
+      if (before === null || after === null) return "Tailored resume saved for this job";
+      const delta = after - before;
+      return `Resume Alignment ${before}% → ${after}%${delta > 0 ? ` (+${delta})` : ""}`;
+    }
+
+    function createJobTailoredResumeButton(job, primaryWhenExisting = true) {
+      const button = document.createElement("button");
+      button.type = "button";
+
+      if (currentJobTailoredResume) {
+        button.className = primaryWhenExisting ? "ai-match-button" : "ai-match-button secondary";
+        button.textContent = "✓ View Tailored Resume";
+        button.title = "Open the tailored resume already saved for this job.";
+        button.addEventListener("click", () => openTailoredResumePreview(currentJobTailoredResume));
+      } else {
+        button.className = primaryWhenExisting ? "ai-match-button secondary" : "ai-match-button";
+        button.textContent = "Tailor Resume to This Job";
+        button.title = "Create one truthful job-specific resume from your verified Career Profile.";
+        button.addEventListener("click", () => tailorResumeForJob(job, button));
+      }
+
+      return button;
+    }
+
+    function appendTailoredResumeStatus(card) {
+      if (!currentJobTailoredResume) return;
+      const status = document.createElement("div");
+      status.className = "ai-match-status";
+      status.style.marginTop = "10px";
+      status.textContent = `${tailoredResumeAlignmentText(currentJobTailoredResume)} • Saved for this job. CareerPilot will reopen this version instead of tailoring again.`;
+      card.appendChild(status);
+    }
+
     function renderJobMatchPanel(job, match) {
       const host = document.getElementById("jobMatchPanel");
       if (!host) return;
@@ -4471,14 +4538,11 @@
         analyze.textContent = "Analyze My Match";
         analyze.addEventListener("click", () => analyzeJobMatch(job, analyze));
 
-        const tailor = document.createElement("button");
-        tailor.type = "button";
-        tailor.className = "ai-match-button secondary";
-        tailor.textContent = "Tailor Resume to This Job";
-        tailor.addEventListener("click", () => tailorResumeForJob(job, tailor));
+        const tailor = createJobTailoredResumeButton(job, true);
 
         actions.append(analyze, tailor);
         card.append(status, actions);
+        appendTailoredResumeStatus(card);
         host.appendChild(card);
         return;
       }
@@ -4572,15 +4636,11 @@
       reanalyze.textContent = "Re-analyze Match";
       reanalyze.addEventListener("click", () => analyzeJobMatch(job, reanalyze));
 
-      const tailor = document.createElement("button");
-      tailor.type = "button";
-      tailor.className = "ai-match-button";
-      tailor.textContent = "Tailor Resume to This Job";
-      tailor.title = "Create a job-specific resume using only verified Career Profile information.";
-      tailor.addEventListener("click", () => tailorResumeForJob(job, tailor));
+      const tailor = createJobTailoredResumeButton(job, true);
 
       actions.append(reanalyze, tailor);
       card.appendChild(actions);
+      appendTailoredResumeStatus(card);
       host.appendChild(card);
     }
 
@@ -4961,6 +5021,8 @@
       document.getElementById("tailoredResumeModalSubtitle").textContent = [resume.target_job_title, resume.target_company_name].filter(Boolean).join(" • ");
       const applyButton = document.getElementById("applyWithTailoredResumeButton");
       applyButton.style.display = resume.job_id ? "" : "none";
+      const newVersionButton = document.getElementById("createNewTailoredVersionButton");
+      newVersionButton.style.display = resume.job_id ? "" : "none";
       renderTailoredResumePreview(resume);
       openModal(tailoredResumeModal);
     }
@@ -5055,6 +5117,10 @@
             currentTailoredResume = null;
             closeModal(tailoredResumeModal);
           }
+          if (currentJobTailoredResume?.id === resume.id) {
+            currentJobTailoredResume = null;
+            if (currentJobDetail) await loadJobMatch(currentJobDetail);
+          }
           await loadTailoredResumes();
           showToast("Tailored resume deleted.");
         });
@@ -5080,19 +5146,28 @@
       }
     }
 
-    async function tailorResumeForJob(job, button) {
+    async function tailorResumeForJob(job, button, options = {}) {
       if (!currentSession?.user) {
         openAuth("signin", "Sign in to create a tailored resume for this job.");
         return;
       }
+
+      const forceNewVersion = options?.forceNewVersion === true;
+      if (!forceNewVersion && currentJobTailoredResume?.job_id === job.id) {
+        openTailoredResumePreview(currentJobTailoredResume);
+        return;
+      }
+
       if (!(await confirmTailoringForFit(job))) return;
 
-      const originalText = button?.textContent || "Tailor Resume to This Job";
+      const originalText = button?.textContent || (forceNewVersion ? "Create New Version" : "Tailor Resume to This Job");
       if (button) {
         button.disabled = true;
         button.textContent = "Tailoring Resume...";
       }
-      showToast("CareerPilot is tailoring your verified resume for this job...");
+      showToast(forceNewVersion
+        ? "CareerPilot is creating a new tailored version for this job..."
+        : "CareerPilot is tailoring your verified resume for this job...");
 
       try {
         let careerFit = null;
@@ -5107,7 +5182,8 @@
           body: {
             job_id: job.id,
             career_fit_score: careerFit?.fit_score ?? null,
-            career_fit_level: careerFit?.fit_level ?? null
+            career_fit_level: careerFit?.fit_level ?? null,
+            force_new_version: forceNewVersion
           }
         });
         if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot AI could not tailor this resume."));
@@ -5115,12 +5191,16 @@
           throw new Error(data?.error || "CareerPilot AI could not tailor this resume.");
         }
         currentTailoredResume = data.tailored_resume;
+        currentJobTailoredResume = data.tailored_resume;
         openTailoredResumePreview(currentTailoredResume);
         await loadTailoredResumes();
+        if (currentJobDetailId === job.id) renderJobMatchPanel(job, currentJobMatch);
         const before = scoreOrNull(currentTailoredResume.match_score_before);
         const after = scoreOrNull(currentTailoredResume.match_score_after);
-        if (before !== null && after !== null) {
-          showToast(`Tailored resume created. Resume Alignment improved from ${before}% to ${after}%.`);
+        if (data.reused_existing) {
+          showToast("Opened the tailored resume already saved for this job.");
+        } else if (before !== null && after !== null) {
+          showToast(`${forceNewVersion ? "New tailored version created" : "Tailored resume created"}. Resume Alignment: ${before}% → ${after}%.`);
         } else {
           showToast(data.message || "Tailored resume created and saved.");
         }
@@ -5132,6 +5212,34 @@
           button.disabled = false;
           button.textContent = originalText;
         }
+      }
+    }
+
+    async function createNewTailoredResumeVersion() {
+      const resume = currentTailoredResume;
+      if (!resume?.job_id) {
+        showToast("This tailored resume is not linked to a job.");
+        return;
+      }
+
+      const confirmed = confirm(
+        "Create a new tailored version for this job?\n\nYour current tailored resume will remain saved. The new version may use different wording and may receive a different Resume Alignment score."
+      );
+      if (!confirmed) return;
+
+      const button = document.getElementById("createNewTailoredVersionButton");
+      try {
+        let job = currentJobDetail?.id === resume.job_id ? currentJobDetail : null;
+        if (!job) {
+          const { data, error } = await db.from("jobs").select(JOB_DETAIL_SELECT).eq("id", resume.job_id).maybeSingle();
+          if (error) throw error;
+          job = data;
+        }
+        if (!job) throw new Error("The linked job could not be loaded.");
+        await tailorResumeForJob(job, button, { forceNewVersion: true });
+      } catch (error) {
+        console.error("Create tailored version error:", error);
+        showToast(error?.message || "CareerPilot could not create a new tailored version.");
       }
     }
 
@@ -5335,7 +5443,8 @@
           .select("id,job_id,source_resume_id,name,target_job_title,target_company_name,status,tailored_content,change_summary,match_score_before,match_score_after,created_at,updated_at")
           .eq("user_id", currentSession.user.id)
           .eq("job_id", job.id)
-          .order("created_at", { ascending: false }),
+          .order("created_at", { ascending: false })
+          .limit(1),
         db.from("resumes")
           .select("id,resume_name,original_filename,storage_path,is_primary,created_at")
           .eq("user_id", currentSession.user.id)
@@ -5346,7 +5455,12 @@
       if (tailoredResult.error) console.error("Application tailored resume load error:", tailoredResult.error);
       if (sourceResult.error) console.error("Application primary resume load error:", sourceResult.error);
 
-      (tailoredResult.data || []).forEach(resume => {
+      const tailoredRows = [...(tailoredResult.data || [])];
+      if (preferredTailoredResume?.id && !tailoredRows.some(resume => resume.id === preferredTailoredResume.id)) {
+        tailoredRows.unshift(preferredTailoredResume);
+      }
+
+      tailoredRows.forEach(resume => {
         const key = `tailored:${resume.id}`;
         const optionData = { kind: "tailored", resume };
         currentApplicationResumeOptions.set(key, optionData);
@@ -5647,6 +5761,13 @@
       } catch (error) {
         console.error("Application route resolver error:", error);
         renderApplicationRoute(job);
+        const warningHost = document.getElementById("applicationRouteWarning");
+        if (warningHost) {
+          const failure = document.createElement("div");
+          failure.className = "application-prep-warning";
+          failure.textContent = error?.message || "CareerPilot could not verify the employer application route right now.";
+          warningHost.appendChild(failure);
+        }
         showToast(error?.message || "CareerPilot could not verify the employer application route.");
         return false;
       } finally {
@@ -6103,6 +6224,7 @@
     document.getElementById("markApplicationAppliedElsewhereButton").addEventListener("click", markCurrentApplicationAppliedElsewhere);
     document.getElementById("closeApplicationPrepModal").addEventListener("click", () => closeModal(applicationPrepModal));
     document.getElementById("applyWithTailoredResumeButton").addEventListener("click", openApplicationFromTailoredResume);
+    document.getElementById("createNewTailoredVersionButton").addEventListener("click", createNewTailoredResumeVersion);
     document.getElementById("applicationStatusFilter").addEventListener("change", loadApplicationsWorkspace);
 
     async function openCompanyPage(companyName) {
