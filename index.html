@@ -357,7 +357,7 @@
     .application-prep-card h3 { color: #14213d; font-size: 16px; margin-bottom: 9px; }
     .application-prep-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
+      grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 10px;
     }
     .application-prep-metric {
@@ -2166,6 +2166,7 @@
           <div class="application-prep-grid">
             <div class="application-prep-metric"><span>Career Fit</span><strong id="applicationPrepCareerFit">—</strong></div>
             <div class="application-prep-metric"><span>Detailed AI Match</span><strong id="applicationPrepAiMatch">Not analyzed</strong></div>
+            <div class="application-prep-metric"><span>Resume Alignment</span><strong id="applicationPrepResumeAlignment">—</strong></div>
           </div>
         </div>
 
@@ -2185,9 +2186,10 @@
           <div class="application-prep-actions">
             <button type="button" class="application-prep-button primary" id="continueApplicationButton">Continue to Employer Website</button>
             <button type="button" class="application-prep-button success" id="markApplicationAppliedButton" disabled>I Submitted My Application</button>
+            <button type="button" class="application-prep-button" id="markApplicationAppliedElsewhereButton">I Applied Another Way</button>
           </div>
           <div class="application-prep-help">
-            For employer websites, CareerPilot cannot see whether you completed a form on another domain. After submitting, return here and choose <strong>I Submitted My Application</strong>.
+            If CareerPilot opens an employer website, return here after submitting and choose <strong>I Submitted My Application</strong>. If you apply through another legitimate route, use <strong>I Applied Another Way</strong> so CareerPilot can still track it.
           </div>
         </div>
 
@@ -2288,6 +2290,8 @@
     let currentApplicationJob = null;
     let currentApplicationRecord = null;
     let currentApplicationResumeOptions = new Map();
+    let currentApplicationRouteMode = "none";
+    let currentApplicationRouteOfficialLocation = null;
     const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set([]); // Add provider slugs only after a real submission integration is deployed.
 
     const JOB_DETAIL_SELECT = `
@@ -2295,7 +2299,8 @@
       location_text,work_setting,salary_min,salary_max,salary_currency,salary_period,
       employment_type,posted_at,expires_at,source_url,apply_url,source_name,
       applicant_count,applicant_count_source,employer_posted_at,experience_level,
-      job_function,benefits,direct_apply_url,direct_apply_verified,quick_apply_available,
+      job_function,benefits,direct_apply_url,direct_apply_verified,direct_apply_verification_method,
+      direct_apply_verified_at,direct_apply_verification_note,quick_apply_available,
       quick_apply_provider,visa_sponsorship,remote_region,work_authorization_notes,
       application_method,ats_provider,ats_job_id
     `;
@@ -2403,6 +2408,10 @@
       } catch {
         return null;
       }
+    }
+
+    function verifiedDirectApplyUrl(job) {
+      return job?.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
     }
 
     function formatWorkSetting(value) {
@@ -4232,7 +4241,7 @@
       const application = document.createElement("div");
       application.className = "job-side-card";
       const ah = document.createElement("h3"); ah.textContent = "Apply"; application.appendChild(ah);
-      const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
+      const directUrl = verifiedDirectApplyUrl(job);
       const quickApplyReady = careerPilotQuickApplySupported(job);
       if (quickApplyReady) {
         const quickButton = document.createElement("button");
@@ -5377,6 +5386,7 @@
       }
 
       updateApplicationResumeDownloadState();
+      updateApplicationResumeAlignmentState();
     }
 
     function selectedApplicationResumeOption() {
@@ -5388,6 +5398,28 @@
       const selected = selectedApplicationResumeOption();
       const button = document.getElementById("downloadApplicationResumeButton");
       button.disabled = !selected;
+    }
+
+    function updateApplicationResumeAlignmentState() {
+      const host = document.getElementById("applicationPrepResumeAlignment");
+      if (!host) return;
+      const selected = selectedApplicationResumeOption();
+      if (!selected) {
+        host.textContent = "—";
+        return;
+      }
+      if (selected.kind !== "tailored") {
+        host.textContent = "Original resume";
+        return;
+      }
+      const before = scoreOrNull(selected.resume?.match_score_before);
+      const after = scoreOrNull(selected.resume?.match_score_after);
+      if (before === null || after === null) {
+        host.textContent = "Tailored";
+        return;
+      }
+      const delta = after - before;
+      host.textContent = `${before}% → ${after}%${delta > 0 ? ` (+${delta})` : ""}`;
     }
 
     async function downloadSelectedApplicationResume() {
@@ -5452,7 +5484,7 @@
       const selected = selectedApplicationResumeOption();
       const tailored = selected?.kind === "tailored" ? selected.resume : null;
       const source = selected?.kind === "source" ? selected.resume : null;
-      const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
+      const directUrl = verifiedDirectApplyUrl(job);
       const quickApply = careerPilotQuickApplySupported(job);
 
       return {
@@ -5479,7 +5511,9 @@
           ats_provider: job.ats_provider || null,
           ats_job_id: job.ats_job_id || null,
           quick_apply_provider: job.quick_apply_provider || null,
-          direct_apply_verified: Boolean(job.direct_apply_verified)
+          direct_apply_verified: Boolean(job.direct_apply_verified),
+          direct_apply_verification_method: job.direct_apply_verification_method || null,
+          direct_apply_verified_at: job.direct_apply_verified_at || null
         }
       };
     }
@@ -5515,6 +5549,114 @@
       return currentApplicationRecord;
     }
 
+    function renderApplicationRoute(job) {
+      const continueButton = document.getElementById("continueApplicationButton");
+      const submittedButton = document.getElementById("markApplicationAppliedButton");
+      const elsewhereButton = document.getElementById("markApplicationAppliedElsewhereButton");
+      const routeText = document.getElementById("applicationRouteText");
+      const warningHost = document.getElementById("applicationRouteWarning");
+      warningHost.innerHTML = "";
+      currentApplicationRouteOfficialLocation = null;
+
+      const directUrl = verifiedDirectApplyUrl(job);
+      const quickApply = careerPilotQuickApplySupported(job);
+
+      if (quickApply) {
+        currentApplicationRouteMode = "quick";
+        continueButton.textContent = "CareerPilot Quick Apply";
+        continueButton.disabled = false;
+        submittedButton.disabled = true;
+        elsewhereButton.style.display = "inline-flex";
+        routeText.textContent = `CareerPilot has an active Quick Apply integration for ${job.quick_apply_provider}.`;
+        return;
+      }
+
+      if (directUrl) {
+        currentApplicationRouteMode = "direct";
+        continueButton.textContent = "Continue to Employer Website";
+        continueButton.disabled = false;
+        submittedButton.disabled = true;
+        elsewhereButton.style.display = "inline-flex";
+        const provider = job.ats_provider ? ` through ${job.ats_provider}` : "";
+        routeText.textContent = `CareerPilot verified the employer application route${provider}. Your application preparation will be recorded before the employer page opens.`;
+        return;
+      }
+
+      currentApplicationRouteMode = "resolve";
+      continueButton.textContent = "Find Employer Application";
+      continueButton.disabled = false;
+      submittedButton.disabled = true;
+      elsewhereButton.style.display = "inline-flex";
+      routeText.textContent = "CareerPilot has not verified a direct route yet. It can search for the exact employer-owned or trusted ATS application page for this listing.";
+      const warning = document.createElement("div");
+      warning.className = "application-prep-warning";
+      warning.textContent = "CareerPilot will not treat job-board or aggregator redirects as verified employer application pages.";
+      warningHost.appendChild(warning);
+    }
+
+    async function resolveApplicationRoute(job, button) {
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Finding Employer Application...";
+      const routeText = document.getElementById("applicationRouteText");
+      routeText.textContent = "CareerPilot is checking official employer and ATS sources for the exact job. This can take a little while.";
+
+      try {
+        const { data, error } = await db.functions.invoke("resolve-application-route", {
+          body: { job_id: job.id }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "CareerPilot could not verify the employer application route."));
+        if (!data?.success) throw new Error(data?.error || "CareerPilot could not verify the employer application route.");
+
+        if (!data.verified || !safeExternalUrl(data.direct_apply_url)) {
+          renderApplicationRoute(job);
+          const warningHost = document.getElementById("applicationRouteWarning");
+          const resultNote = document.createElement("div");
+          resultNote.className = "application-prep-warning";
+          resultNote.textContent = data.verification_summary
+            ? `CareerPilot checked the listing but could not safely verify a direct route: ${data.verification_summary}`
+            : "CareerPilot checked the listing but could not safely verify an exact employer application page.";
+          warningHost.appendChild(resultNote);
+          showToast("No verified employer application route was found yet.");
+          return false;
+        }
+
+        Object.assign(job, {
+          direct_apply_url: data.direct_apply_url,
+          direct_apply_verified: true,
+          direct_apply_verification_method: data.verification_method || "web_search_verified",
+          direct_apply_verified_at: new Date().toISOString(),
+          direct_apply_verification_note: data.verification_summary || null,
+          ats_provider: data.ats_provider || job.ats_provider || null,
+          ats_job_id: data.ats_job_id || job.ats_job_id || null
+        });
+
+        currentApplicationRouteOfficialLocation = data.official_location || null;
+        renderApplicationRoute(job);
+
+        if (data.source_location_mismatch && data.official_location) {
+          const warningHost = document.getElementById("applicationRouteWarning");
+          const mismatch = document.createElement("div");
+          mismatch.className = "application-prep-warning";
+          mismatch.textContent = `Data check: the official employer page lists the location as ${data.official_location}, while this CareerPilot record currently shows ${job.location_text || "a different location"}. CareerPilot kept the original record unchanged so the discrepancy can be reviewed.`;
+          warningHost.appendChild(mismatch);
+        }
+
+        showToast("Verified employer application route found.");
+        return true;
+      } catch (error) {
+        console.error("Application route resolver error:", error);
+        renderApplicationRoute(job);
+        showToast(error?.message || "CareerPilot could not verify the employer application route.");
+        return false;
+      } finally {
+        if (currentApplicationRouteMode === "resolve") {
+          button.disabled = false;
+          button.textContent = "Find Employer Application";
+        }
+      }
+    }
+
     async function openApplicationPrep(job, preferredTailoredResume = null) {
       if (!currentSession?.user) {
         openAuth("signin", "Sign in to prepare and track your application.");
@@ -5527,31 +5669,8 @@
       document.getElementById("applicationPrepSubtitle").textContent = [job.title, job.company_name].filter(Boolean).join(" • ");
       document.getElementById("applicationPrepNotes").value = "";
       document.getElementById("markApplicationAppliedButton").disabled = true;
-
-      const directUrl = job.direct_apply_verified ? safeExternalUrl(job.direct_apply_url) : null;
-      const quickApply = careerPilotQuickApplySupported(job);
-      const continueButton = document.getElementById("continueApplicationButton");
-      const routeText = document.getElementById("applicationRouteText");
-      const warningHost = document.getElementById("applicationRouteWarning");
-      warningHost.innerHTML = "";
-
-      if (quickApply) {
-        continueButton.textContent = "CareerPilot Quick Apply";
-        continueButton.disabled = false;
-        routeText.textContent = `CareerPilot has an active Quick Apply integration for ${job.quick_apply_provider}.`;
-      } else if (directUrl) {
-        continueButton.textContent = "Continue to Employer Website";
-        continueButton.disabled = false;
-        routeText.textContent = "CareerPilot will record your application preparation, then open the verified employer application page in a new tab.";
-      } else {
-        continueButton.textContent = "Direct Application Unavailable";
-        continueButton.disabled = true;
-        routeText.textContent = "CareerPilot does not yet have a verified direct employer application route for this listing.";
-        const warning = document.createElement("div");
-        warning.className = "application-prep-warning";
-        warning.textContent = "CareerPilot will not route you through an unverified third-party application page. You can save the job and return when a direct route is available.";
-        warningHost.appendChild(warning);
-      }
+      document.getElementById("markApplicationAppliedButton").textContent = "I Submitted My Application";
+      renderApplicationRoute(job);
 
       try {
         const fitData = await loadCareerFitData();
@@ -5575,8 +5694,10 @@
         if (currentApplicationRecord?.status === "applied" || currentApplicationRecord?.external_application_completed) {
           document.getElementById("markApplicationAppliedButton").disabled = true;
           document.getElementById("markApplicationAppliedButton").textContent = "Application Marked Applied";
+          document.getElementById("markApplicationAppliedElsewhereButton").disabled = true;
         } else {
           document.getElementById("markApplicationAppliedButton").textContent = "I Submitted My Application";
+          document.getElementById("markApplicationAppliedElsewhereButton").disabled = false;
         }
       } catch (error) {
         console.warn("Existing application lookup failed:", error);
@@ -5588,6 +5709,12 @@
     async function continueApplication() {
       if (!currentApplicationJob) return;
       const button = document.getElementById("continueApplicationButton");
+
+      if (currentApplicationRouteMode === "resolve") {
+        await resolveApplicationRoute(currentApplicationJob, button);
+        return;
+      }
+
       const original = button.textContent;
       button.disabled = true;
       button.textContent = "Preparing...";
@@ -5603,7 +5730,7 @@
           throw new Error("Quick Apply is not enabled for any provider in this beta build yet.");
         }
 
-        const directUrl = currentApplicationJob.direct_apply_verified ? safeExternalUrl(currentApplicationJob.direct_apply_url) : null;
+        const directUrl = verifiedDirectApplyUrl(currentApplicationJob);
         if (!directUrl) throw new Error("CareerPilot does not have a verified employer application URL for this job.");
 
         window.open(directUrl, "_blank", "noopener,noreferrer");
@@ -5645,12 +5772,57 @@
 
         currentApplicationRecord = data;
         button.textContent = "Application Marked Applied";
+        document.getElementById("markApplicationAppliedElsewhereButton").disabled = true;
         await Promise.all([loadMemberDashboard(currentSession.user.id), loadApplicationsWorkspace()]);
         showToast("Application marked as Applied.");
       } catch (error) {
         console.error("Mark applied error:", error);
         button.disabled = false;
         button.textContent = "I Submitted My Application";
+        showToast("We couldn't update that application.");
+      }
+    }
+
+    async function markCurrentApplicationAppliedElsewhere() {
+      if (!currentApplicationJob) return;
+      const button = document.getElementById("markApplicationAppliedElsewhereButton");
+      const submittedButton = document.getElementById("markApplicationAppliedButton");
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      try {
+        let record = currentApplicationRecord || await saveApplicationRecord(currentApplicationJob, "started");
+        const now = new Date().toISOString();
+        const payload = await applicationSnapshot(currentApplicationJob, "applied");
+        payload.external_application_completed = true;
+        payload.applied_at = record.applied_at || now;
+        payload.last_status_at = now;
+        payload.updated_at = now;
+        payload.application_method = "external_manual";
+        payload.application_metadata = {
+          ...(payload.application_metadata || {}),
+          applied_outside_careerpilot: true
+        };
+
+        const { data, error } = await db
+          .from("applications")
+          .update(payload)
+          .eq("user_id", currentSession.user.id)
+          .eq("id", record.id)
+          .select()
+          .single();
+        if (error) throw error;
+
+        currentApplicationRecord = data;
+        button.textContent = "Application Marked Applied";
+        submittedButton.disabled = true;
+        submittedButton.textContent = "Application Marked Applied";
+        await Promise.all([loadMemberDashboard(currentSession.user.id), loadApplicationsWorkspace()]);
+        showToast("Application marked as Applied using another route.");
+      } catch (error) {
+        console.error("Mark applied elsewhere error:", error);
+        button.disabled = false;
+        button.textContent = "I Applied Another Way";
         showToast("We couldn't update that application.");
       }
     }
@@ -5921,10 +6093,14 @@
       return rows;
     }
 
-    document.getElementById("applicationResumeSelect").addEventListener("change", updateApplicationResumeDownloadState);
+    document.getElementById("applicationResumeSelect").addEventListener("change", () => {
+      updateApplicationResumeDownloadState();
+      updateApplicationResumeAlignmentState();
+    });
     document.getElementById("downloadApplicationResumeButton").addEventListener("click", downloadSelectedApplicationResume);
     document.getElementById("continueApplicationButton").addEventListener("click", continueApplication);
     document.getElementById("markApplicationAppliedButton").addEventListener("click", markCurrentApplicationApplied);
+    document.getElementById("markApplicationAppliedElsewhereButton").addEventListener("click", markCurrentApplicationAppliedElsewhere);
     document.getElementById("closeApplicationPrepModal").addEventListener("click", () => closeModal(applicationPrepModal));
     document.getElementById("applyWithTailoredResumeButton").addEventListener("click", openApplicationFromTailoredResume);
     document.getElementById("applicationStatusFilter").addEventListener("change", loadApplicationsWorkspace);
