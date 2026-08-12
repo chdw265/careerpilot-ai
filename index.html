@@ -2399,6 +2399,30 @@
       })[character]);
     }
 
+    function plainTextFromJobMarkup(value) {
+      const source = String(value ?? "").trim();
+      if (!source) return "";
+
+      const parsed = new DOMParser().parseFromString(source, "text/html");
+      parsed.querySelectorAll("script,style,noscript,iframe,object,embed,svg,canvas").forEach(element => element.remove());
+      parsed.querySelectorAll("br").forEach(element => element.replaceWith("\n"));
+      parsed.querySelectorAll("li").forEach(element => {
+        element.insertBefore(parsed.createTextNode("• "), element.firstChild);
+        element.append("\n");
+      });
+      parsed.querySelectorAll("p,div,section,article,h1,h2,h3,h4,h5,h6,ul,ol,table,tr").forEach(element => {
+        element.append("\n");
+      });
+
+      return String(parsed.body.textContent || "")
+        .replace(/\u00a0/g, " ")
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/\n[ \t]+/g, "\n")
+        .replace(/[ \t]{2,}/g, " ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
     function deepClone(value) {
       return JSON.parse(JSON.stringify(value ?? null));
     }
@@ -4204,7 +4228,7 @@
         const block = document.createElement("section");
         block.className = "job-detail-block";
         const h = document.createElement("h3"); h.textContent = "Job description";
-        const copy = document.createElement("div"); copy.className = "job-detail-copy"; copy.textContent = job.description;
+        const copy = document.createElement("div"); copy.className = "job-detail-copy"; copy.textContent = plainTextFromJobMarkup(job.description);
         block.append(h, copy); main.appendChild(block);
       }
 
@@ -4212,7 +4236,7 @@
         const block = document.createElement("section");
         block.className = "job-detail-block";
         const h = document.createElement("h3"); h.textContent = "Requirements";
-        const copy = document.createElement("div"); copy.className = "job-detail-copy"; copy.textContent = job.requirements;
+        const copy = document.createElement("div"); copy.className = "job-detail-copy"; copy.textContent = plainTextFromJobMarkup(job.requirements);
         block.append(h, copy); main.appendChild(block);
       }
 
@@ -6591,7 +6615,7 @@
       const profile = data.profile || {};
       const jobTitle = job.title || "";
       const jobText = [job.title, job.industry, job.category, job.job_function, job.requirements, job.description]
-        .filter(Boolean).join(" ");
+        .map(plainTextFromJobMarkup).filter(Boolean).join(" ");
       const normalizedJobText = fitNormalizeText(jobText);
       const jobTokens = fitTokenSet(jobText);
 
@@ -6932,9 +6956,10 @@
         if (job.description) {
           const description = document.createElement("p");
           description.className = "job-description";
-          description.textContent = job.description.length > 300
-            ? job.description.substring(0, 300) + "..."
-            : job.description;
+          const descriptionText = plainTextFromJobMarkup(job.description);
+          description.textContent = descriptionText.length > 300
+            ? descriptionText.substring(0, 300).trimEnd() + "..."
+            : descriptionText;
           card.appendChild(description);
         }
 
