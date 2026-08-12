@@ -1,0 +1,46 @@
+project_id = "jebakbovivznzcmtyvcc"
+
+[functions.collect-adzuna-jobs]
+verify_jwt = false
+
+[functions.collect-remotive-jobs]
+verify_jwt = true
+
+[functions.parse-resume]
+verify_jwt = true
+
+[functions.analyze-resume]
+verify_jwt = true
+
+[functions.analyze-job-match]
+verify_jwt = true
+
+[functions.tailor-resume]
+verify_jwt = true
+
+[functions.resolve-application-route]
+verify_jwt = true
+
+[functions.preverify-job-routes]
+verify_jwt = false
+
+[functions.check-job-route-health]
+verify_jwt = false
+
+[functions.collect-greenhouse-jobs]
+verify_jwt = false
+
+[functions.validate-greenhouse-employers]
+verify_jwt = false
+
+[functions.discover-greenhouse-employers]
+verify_jwt = false
+
+[functions.discover-lever-employers]
+verify_jwt = false
+
+[functions.validate-lever-employers]
+verify_jwt = false
+
+[functions.collect-lever-jobs]
+verify_jwt = false
