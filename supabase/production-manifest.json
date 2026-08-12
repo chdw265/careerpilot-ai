@@ -1,0 +1,172 @@
+{
+  "project_id": "jebakbovivznzcmtyvcc",
+  "project_name": "careerpilot-ai",
+  "exported_at": "2026-08-12",
+  "edge_functions": [
+    {
+      "slug": "collect-adzuna-jobs",
+      "version": 8,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786222254236,
+      "sha256": "7dd961d085ce0d6b47a4577b425083c37a23d7c2c1db0be3a021c60dd1be1153",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "collect-remotive-jobs",
+      "version": 4,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "updated_at": 1786223009353,
+      "sha256": "0d9b498d81d3691efc9f76e9cf4bbe1d3227a60105c14635ce2d00f37c799ec3",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "parse-resume",
+      "version": 4,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "updated_at": 1786289502019,
+      "sha256": "7b04347c6f6ca7f4b046f0016770904665040ded4b786d8375c75b6519b7360f",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "analyze-resume",
+      "version": 4,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "updated_at": 1786297101784,
+      "sha256": "f0cd2ce9d910d58b8bddd58cb4f4a4b87d0096b3c5ba0b6fc6d264fcae5bdda4",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "analyze-job-match",
+      "version": 3,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "updated_at": 1786300561161,
+      "sha256": "2dfc60fd781ec8e00aa53cebb0e933fc69ad94505d05ec654bb092b55d12bc5e",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "tailor-resume",
+      "version": 6,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "updated_at": 1786389591573,
+      "sha256": "7a8432ab841225ed4281bff53a1a9153022cd333192ae1391beb35b96c374136",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "resolve-application-route",
+      "version": 15,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "updated_at": 1786460627164,
+      "sha256": "1a0063e20ae6cbfa60054bc8bcc359e9f74bf73ff407a4c872905ded5aa0f2b3",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "preverify-job-routes",
+      "version": 7,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786462959388,
+      "sha256": "551cbd1d9b059c20043d2f56936f3167e97bbc2b1b4e044ee584c1e6d27e0c24",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "check-job-route-health",
+      "version": 6,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786460364599,
+      "sha256": "c267c00c003cb98b16cd772bfce9664f15b59445eb296761c958d8bc448f6309",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "collect-greenhouse-jobs",
+      "version": 4,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786477291623,
+      "sha256": "cef6f48a2753cc2840d8ba361c992839baa1d377f3baf72fe34951f6ecc56099",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "validate-greenhouse-employers",
+      "version": 1,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786484118797,
+      "sha256": "2e911f276909ecc86a4398ea5d237a5599f60ee8cd8cac687abb592b01233b42",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "discover-greenhouse-employers",
+      "version": 1,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786545382956,
+      "sha256": "afecfd52d8ecf3a184aa4fc1a6cc6fb215209e8785e1519b57fe45980aa93687",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "discover-lever-employers",
+      "version": 1,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786559064002,
+      "sha256": "c0eb740e52f4a5634cd35af9df1d2040f518abeb5a6e8cc5f017c6f4a8546ac4",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "validate-lever-employers",
+      "version": 1,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786559180669,
+      "sha256": "f3355c1c89fce88ad4917b177b01ad629a5c656672e0fd5324b3b4aed501fb4f",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "collect-lever-jobs",
+      "version": 2,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "updated_at": 1786563234657,
+      "sha256": "6aca5897a34b0260acda91662622c4d32452e9cb3c556b4b0045b4d422e9d2b0",
+      "files": [
+        "index.ts"
+      ]
+    }
+  ]
+}
