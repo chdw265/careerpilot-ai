@@ -2269,6 +2269,8 @@
     const SITE_URL = "https://chdw265.github.io/careerpilot-ai/";
 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Public job reads must use the normalized, U.S.-eligible, canonical inventory.
+    const PUBLIC_JOBS_SOURCE = "careerpilot_active_us_jobs";
 
     let currentSession = null;
     let authMode = "signin";
@@ -4057,7 +4059,7 @@
         return;
       }
 
-      const { data: jobs, error: jobsError } = await db.from("jobs").select(`
+      const { data: jobs, error: jobsError } = await db.from(PUBLIC_JOBS_SOURCE).select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
         employer_posted_at,applicant_count,applicant_count_source,experience_level,
@@ -4133,7 +4135,7 @@
       jobDetailSection.scrollIntoView({ behavior: "smooth", block: "start" });
 
       const { data: job, error } = await db
-        .from("jobs")
+        .from(PUBLIC_JOBS_SOURCE)
         .select(JOB_DETAIL_SELECT)
         .eq("id", jobId)
         .single();
@@ -5231,7 +5233,7 @@
       try {
         let job = currentJobDetail?.id === resume.job_id ? currentJobDetail : null;
         if (!job) {
-          const { data, error } = await db.from("jobs").select(JOB_DETAIL_SELECT).eq("id", resume.job_id).maybeSingle();
+          const { data, error } = await db.from(PUBLIC_JOBS_SOURCE).select(JOB_DETAIL_SELECT).eq("id", resume.job_id).maybeSingle();
           if (error) throw error;
           job = data;
         }
@@ -5963,7 +5965,7 @@
       try {
         let job = currentJobDetail?.id === resume.job_id ? currentJobDetail : null;
         if (!job) {
-          const { data, error } = await db.from("jobs").select(JOB_DETAIL_SELECT).eq("id", resume.job_id).maybeSingle();
+          const { data, error } = await db.from(PUBLIC_JOBS_SOURCE).select(JOB_DETAIL_SELECT).eq("id", resume.job_id).maybeSingle();
           if (error) throw error;
           job = data;
         }
@@ -6244,7 +6246,7 @@
       document.getElementById("companyJobsStatus").textContent = "Loading current opportunities...";
       companySection.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      const { data: jobs, error } = await db.from("jobs").select(`
+      const { data: jobs, error } = await db.from(PUBLIC_JOBS_SOURCE).select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,posted_at,
         employer_posted_at,applicant_count,applicant_count_source,experience_level,
@@ -7015,7 +7017,7 @@
       const usingFitFilter = signedIn && Boolean(minimumFit);
       const usingBestMatchSort = signedIn && sortBy === "best-match";
 
-      let query = db.from("jobs").select(`
+      let query = db.from(PUBLIC_JOBS_SOURCE).select(`
         id,title,company_name,location_text,work_setting,salary_min,salary_max,
         salary_currency,salary_period,employment_type,industry,category,job_function,
         requirements,posted_at,employer_posted_at,applicant_count,applicant_count_source,
@@ -7118,7 +7120,7 @@
       if (term.length < 2) return [];
 
       const { data, error } = await db
-        .from("jobs")
+        .from(PUBLIC_JOBS_SOURCE)
         .select(databaseField)
         .eq("is_active", true)
         .ilike(databaseField, `%${term}%`)
