@@ -1030,6 +1030,126 @@
       margin-bottom: 16px;
     }
 
+    .career-evidence-composer {
+      border: 1px solid #c7d2fe;
+      background: #f8faff;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .career-evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .career-evidence-grid .full { grid-column: 1 / -1; }
+    .career-evidence-field { display: flex; flex-direction: column; gap: 6px; }
+    .career-evidence-field label { color: #344054; font-size: 13px; font-weight: 800; }
+    .career-evidence-field input,
+    .career-evidence-field select,
+    .career-evidence-field textarea {
+      width: 100%;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .career-evidence-field textarea { min-height: 150px; resize: vertical; }
+    .career-evidence-field input:focus,
+    .career-evidence-field select:focus,
+    .career-evidence-field textarea:focus {
+      outline: 2px solid #315ee8;
+      outline-offset: 1px;
+      border-color: #315ee8;
+    }
+    .career-evidence-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .career-evidence-status { color: #667085; font-size: 13px; }
+    .career-evidence-list { display: grid; gap: 12px; margin-top: 18px; }
+    .career-evidence-card {
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 16px;
+      background: white;
+    }
+    .career-evidence-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .career-evidence-card-title { font-weight: 800; color: #14213d; }
+    .career-evidence-card-copy { color: #667085; font-size: 13px; margin-top: 5px; }
+    .career-evidence-badge {
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      background: #f2f4f7;
+      color: #475467;
+    }
+    .career-evidence-badge.ready_for_review { background: #eef2ff; color: #244bc5; }
+    .career-evidence-badge.approved { background: #ecfdf3; color: #067647; }
+    .career-evidence-review {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #eaecf0;
+    }
+    .career-evidence-review.show { display: block; }
+    .career-evidence-suggestion {
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+      background: #fafbfc;
+    }
+    .career-evidence-choice {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .career-evidence-choice input[type="checkbox"] { width: 18px; height: 18px; margin-top: 11px; }
+    .career-evidence-choice input[type="text"],
+    .career-evidence-choice textarea {
+      width: 100%;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 9px 10px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .career-evidence-choice textarea { min-height: 78px; resize: vertical; }
+    .career-evidence-support { color: #667085; font-size: 12px; margin: 7px 0 0 28px; }
+    .career-evidence-section-title { font-weight: 800; margin-top: 16px; color: #14213d; }
+    .readiness-card {
+      border: 1px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 18px;
+      background: #f8faff;
+    }
+    .readiness-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .readiness-status { font-size: 20px; font-weight: 900; color: #14213d; }
+    .readiness-score { font-size: 24px; font-weight: 900; color: #315ee8; }
+    .readiness-meta { color: #667085; font-size: 12px; margin-top: 4px; }
+    .readiness-list { margin: 10px 0 0 18px; color: #344054; }
+
     .profile-placeholder-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
@@ -1638,6 +1758,8 @@
       .analysis-count-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .review-grid { grid-template-columns: 1fr; }
       .review-field.full { grid-column: auto; }
+      .career-evidence-grid { grid-template-columns: 1fr; }
+      .career-evidence-grid .full { grid-column: auto; }
       .job-detail-grid { grid-template-columns: 1fr; }
       .company-summary-grid { grid-template-columns: 1fr; }
       .tailored-preview-layout { grid-template-columns: 1fr; }
@@ -1724,6 +1846,7 @@
           <h2 id="memberWelcome">My ApplyStronger</h2>
           <p>Your personal career workspace is connected to your ApplyStronger account.</p>
         </div>
+        <button type="button" class="workspace-button" id="recommendedJobsButton">Recommended Jobs</button>
       </div>
       <div class="member-grid">
         <div class="member-card">
@@ -1855,6 +1978,36 @@
           <div id="resumeUploadStatus" class="resume-note"></div>
         </div>
         <div class="resume-list" id="resumeList"></div>
+      </div>
+
+      <div class="profile-block" id="careerEvidenceBlock">
+        <h3>Career Evidence</h3>
+        <p class="profile-block-subtitle">Describe work you actually do that may be missing from your resume. ApplyStronger will suggest truthful skills and resume bullets for your review—it will never add them automatically.</p>
+
+        <div class="career-evidence-composer">
+          <div class="review-note">Do not include patient names, medical record numbers, Social Security numbers, passwords, or confidential employer information.</div>
+          <div class="career-evidence-grid">
+            <div class="career-evidence-field">
+              <label for="careerEvidenceContext">Optional label</label>
+              <input id="careerEvidenceContext" type="text" maxlength="500" placeholder="e.g. Weekly revenue-cycle work">
+            </div>
+            <div class="career-evidence-field">
+              <label for="careerEvidenceExperience">Related work experience</label>
+              <select id="careerEvidenceExperience"><option value="">Choose later</option></select>
+            </div>
+            <div class="career-evidence-field full">
+              <label for="careerEvidenceText">What did you do?</label>
+              <textarea id="careerEvidenceText" maxlength="12000" placeholder="Describe the responsibilities, projects, tools, problems solved, people supported, or outcomes from your day-to-day work. Use only facts you can verify."></textarea>
+              <span class="field-help">At least 20 characters. You will review and edit every suggestion before approval.</span>
+            </div>
+          </div>
+          <div class="career-evidence-actions">
+            <button type="button" class="resume-action-button" id="analyzeCareerEvidenceButton">Analyze My Career Evidence</button>
+            <span class="career-evidence-status" id="careerEvidenceStatus"></span>
+          </div>
+        </div>
+
+        <div class="career-evidence-list" id="careerEvidenceList"></div>
       </div>
 
       <div class="profile-block" id="tailoredResumesBlock">
@@ -2281,9 +2434,12 @@
     let currentReviewResumeId = null;
     let currentReviewResumeName = "";
     let currentReviewAnalysis = null;
+    let careerEvidenceEntries = [];
+    let careerEvidenceExperienceMap = new Map();
     let currentJobDetailId = null;
     let currentJobDetail = null;
     let currentJobMatch = null;
+    let currentApplicationReadiness = null;
     let currentJobTailoredResume = null;
     let currentTailoredResume = null;
     let savedJobMatchMap = new Map();
@@ -2569,7 +2725,8 @@
         await Promise.all([
           loadMemberDashboard(user.id),
           loadResumes(),
-          loadTailoredResumes()
+          loadTailoredResumes(),
+          loadCareerEvidence()
         ]);
 
         syncSaveButtons();
@@ -2596,6 +2753,7 @@
         currentProfile = null;
         currentJobDetail = null;
         currentJobMatch = null;
+        currentApplicationReadiness = null;
         savedJobIds = new Set();
         document.getElementById("savedJobsCount").textContent = "0";
         document.getElementById("applicationsCount").textContent = "0";
@@ -2603,6 +2761,10 @@
         document.getElementById("profileStatus").textContent = "Getting started";
         document.getElementById("resumeList").innerHTML = "";
         document.getElementById("tailoredResumeList").innerHTML = "";
+        document.getElementById("careerEvidenceList").innerHTML = "";
+        document.getElementById("careerEvidenceExperience").innerHTML = '<option value="">Choose later</option>';
+        careerEvidenceEntries = [];
+        careerEvidenceExperienceMap = new Map();
         currentTailoredResume = null;
         resetCareerAnalysisUI();
         syncSaveButtons();
@@ -3745,6 +3907,413 @@
     document.getElementById("saveResumeReviewButton").addEventListener("click", () => saveResumeReview(false));
     document.getElementById("approveResumeReviewButton").addEventListener("click", () => saveResumeReview(true));
 
+    function careerEvidenceStatusLabel(value) {
+      return ({
+        draft: "Draft",
+        ready_for_review: "Ready for review",
+        approved: "Approved",
+        archived: "Archived"
+      })[value] || "Draft";
+    }
+
+    function addCareerEvidenceExperienceOptions(select, selectedId = "") {
+      select.innerHTML = "";
+      const empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = "Choose later";
+      select.appendChild(empty);
+      careerEvidenceExperienceMap.forEach((experience, id) => {
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent = [experience.job_title, experience.company_name].filter(Boolean).join(" — ") || "Work experience";
+        option.selected = id === selectedId;
+        select.appendChild(option);
+      });
+    }
+
+    async function loadCareerEvidence(openEntryId = "") {
+      if (!currentSession?.user) return;
+
+      const [entriesResult, experiencesResult] = await Promise.all([
+        db
+          .from("career_evidence_entries")
+          .select("id,experience_id,context_label,original_text,status,analysis,reviewed_data,analyzed_at,reviewed_at,approved_at,created_at,updated_at")
+          .eq("user_id", currentSession.user.id)
+          .order("updated_at", { ascending: false })
+          .limit(50),
+        db
+          .from("experiences")
+          .select("id,job_title,company_name,start_date,end_date,is_current")
+          .eq("user_id", currentSession.user.id)
+          .order("start_date", { ascending: false, nullsFirst: false })
+          .limit(100)
+      ]);
+
+      if (experiencesResult.error) {
+        console.error("Career Evidence experience load error:", experiencesResult.error);
+      }
+      careerEvidenceExperienceMap = new Map((experiencesResult.data || []).map(item => [item.id, item]));
+      addCareerEvidenceExperienceOptions(document.getElementById("careerEvidenceExperience"));
+
+      if (entriesResult.error) {
+        console.error("Career Evidence load error:", entriesResult.error);
+        document.getElementById("careerEvidenceList").textContent = "Career Evidence is not available yet.";
+        return;
+      }
+
+      careerEvidenceEntries = entriesResult.data || [];
+      renderCareerEvidenceList(openEntryId);
+    }
+
+    function collectCareerEvidenceReview(review) {
+      const skillReviews = [...review.querySelectorAll("[data-evidence-skill]")].map(input => ({
+        value: input.value.trim(),
+        selected: Boolean(input.closest(".career-evidence-choice")?.querySelector("[data-evidence-select]")?.checked)
+      }));
+      const bulletReviews = [...review.querySelectorAll("[data-evidence-bullet]")].map(input => ({
+        value: input.value.trim(),
+        selected: Boolean(input.closest(".career-evidence-choice")?.querySelector("[data-evidence-select]")?.checked)
+      }));
+      const skills = skillReviews.filter(item => item.selected).map(item => item.value).filter(Boolean);
+      const resumeBullets = bulletReviews.filter(item => item.selected).map(item => item.value).filter(Boolean);
+      return {
+        experience_id: review.querySelector("[data-evidence-experience]")?.value || "",
+        skills: [...new Set(skills)],
+        resume_bullets: [...new Set(resumeBullets)],
+        skill_reviews: skillReviews,
+        resume_bullet_reviews: bulletReviews
+      };
+    }
+
+    function makeCareerEvidenceSuggestion({ value, evidence, type, selected }) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "career-evidence-suggestion";
+      const choice = document.createElement("label");
+      choice.className = "career-evidence-choice";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.dataset.evidenceSelect = "true";
+      checkbox.checked = Boolean(selected);
+      const editor = type === "bullet" ? document.createElement("textarea") : document.createElement("input");
+      if (type !== "bullet") editor.type = "text";
+      editor.value = value || "";
+      editor.dataset[type === "bullet" ? "evidenceBullet" : "evidenceSkill"] = "true";
+      editor.setAttribute("aria-label", type === "bullet" ? "Editable resume bullet" : "Editable skill");
+      choice.append(checkbox, editor);
+      const support = document.createElement("div");
+      support.className = "career-evidence-support";
+      support.textContent = evidence ? `Supported by your statement: ${evidence}` : "Verify this suggestion against your original statement before selecting it.";
+      wrapper.append(choice, support);
+      return wrapper;
+    }
+
+    function buildCareerEvidenceReview(entry) {
+      const review = document.createElement("div");
+      review.className = "career-evidence-review";
+      review.dataset.evidenceReview = entry.id;
+
+      const analysis = entry.analysis && typeof entry.analysis === "object" ? entry.analysis : {};
+      const reviewed = entry.reviewed_data && typeof entry.reviewed_data === "object" ? entry.reviewed_data : {};
+      const reviewedSkills = new Set(Array.isArray(reviewed.skills) ? reviewed.skills : []);
+      const reviewedBullets = new Set(Array.isArray(reviewed.resume_bullets) ? reviewed.resume_bullets : []);
+      const skillReviews = Array.isArray(reviewed.skill_reviews) ? reviewed.skill_reviews : [];
+      const bulletReviews = Array.isArray(reviewed.resume_bullet_reviews) ? reviewed.resume_bullet_reviews : [];
+
+      if (analysis.summary) {
+        const summary = document.createElement("p");
+        summary.className = "career-evidence-card-copy";
+        summary.textContent = analysis.summary;
+        review.appendChild(summary);
+      }
+
+      const experienceField = document.createElement("div");
+      experienceField.className = "career-evidence-field";
+      experienceField.style.marginTop = "14px";
+      const experienceLabel = document.createElement("label");
+      experienceLabel.textContent = "Work experience that should receive selected resume bullets";
+      const experienceSelect = document.createElement("select");
+      experienceSelect.dataset.evidenceExperience = "true";
+      addCareerEvidenceExperienceOptions(experienceSelect, reviewed.experience_id || entry.experience_id || "");
+      experienceField.append(experienceLabel, experienceSelect);
+      review.appendChild(experienceField);
+
+      const skillTitle = document.createElement("div");
+      skillTitle.className = "career-evidence-section-title";
+      skillTitle.textContent = "Suggested skills";
+      review.appendChild(skillTitle);
+      const skills = Array.isArray(analysis.suggested_skills) ? analysis.suggested_skills : [];
+      if (!skills.length) {
+        const empty = document.createElement("div");
+        empty.className = "career-evidence-card-copy";
+        empty.textContent = "No supported new skills were identified.";
+        review.appendChild(empty);
+      }
+      skills.forEach((item, index) => review.appendChild(makeCareerEvidenceSuggestion({
+        value: skillReviews[index]?.value || item?.name,
+        evidence: item?.evidence,
+        type: "skill",
+        selected: skillReviews[index]?.selected ?? reviewedSkills.has(item?.name)
+      })));
+
+      const bulletTitle = document.createElement("div");
+      bulletTitle.className = "career-evidence-section-title";
+      bulletTitle.textContent = "Suggested resume bullets";
+      review.appendChild(bulletTitle);
+      const bullets = Array.isArray(analysis.resume_bullets) ? analysis.resume_bullets : [];
+      if (!bullets.length) {
+        const empty = document.createElement("div");
+        empty.className = "career-evidence-card-copy";
+        empty.textContent = "No supported resume bullets were identified.";
+        review.appendChild(empty);
+      }
+      bullets.forEach((item, index) => review.appendChild(makeCareerEvidenceSuggestion({
+        value: bulletReviews[index]?.value || item?.text,
+        evidence: item?.evidence,
+        type: "bullet",
+        selected: bulletReviews[index]?.selected ?? reviewedBullets.has(item?.text)
+      })));
+
+      if (Array.isArray(analysis.follow_up_questions) && analysis.follow_up_questions.length) {
+        const questionTitle = document.createElement("div");
+        questionTitle.className = "career-evidence-section-title";
+        questionTitle.textContent = "Questions that could strengthen the evidence";
+        review.appendChild(questionTitle);
+        const questions = document.createElement("ul");
+        questions.className = "readiness-list";
+        analysis.follow_up_questions.forEach(value => {
+          const item = document.createElement("li");
+          item.textContent = String(value);
+          questions.appendChild(item);
+        });
+        review.appendChild(questions);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const save = document.createElement("button");
+      save.type = "button";
+      save.className = "review-secondary-button";
+      save.textContent = "Save Review";
+      save.addEventListener("click", () => saveCareerEvidenceReview(entry, review, false, save));
+      const approve = document.createElement("button");
+      approve.type = "button";
+      approve.className = "review-primary-button";
+      approve.textContent = "Approve Selected Items";
+      approve.addEventListener("click", () => saveCareerEvidenceReview(entry, review, true, approve));
+      const status = document.createElement("span");
+      status.className = "career-evidence-status";
+      status.dataset.evidenceReviewStatus = "true";
+      actions.append(save, approve, status);
+      review.appendChild(actions);
+      return review;
+    }
+
+    function renderCareerEvidenceList(openEntryId = "") {
+      const container = document.getElementById("careerEvidenceList");
+      container.innerHTML = "";
+      if (!careerEvidenceEntries.length) {
+        const empty = document.createElement("div");
+        empty.className = "career-evidence-card-copy";
+        empty.textContent = "No Career Evidence entries yet.";
+        container.appendChild(empty);
+        return;
+      }
+
+      careerEvidenceEntries.forEach(entry => {
+        const card = document.createElement("div");
+        card.className = "career-evidence-card";
+        const top = document.createElement("div");
+        top.className = "career-evidence-card-top";
+        const text = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "career-evidence-card-title";
+        title.textContent = entry.context_label || "Career Evidence";
+        const copy = document.createElement("div");
+        copy.className = "career-evidence-card-copy";
+        const source = String(entry.original_text || "");
+        copy.textContent = source.length > 240 ? `${source.slice(0, 237)}...` : source;
+        text.append(title, copy);
+        const badge = document.createElement("span");
+        badge.className = `career-evidence-badge ${entry.status || "draft"}`;
+        badge.textContent = careerEvidenceStatusLabel(entry.status);
+        top.append(text, badge);
+        card.appendChild(top);
+
+        if (entry.status === "draft") {
+          const actions = document.createElement("div");
+          actions.className = "career-evidence-actions";
+          const analyze = document.createElement("button");
+          analyze.type = "button";
+          analyze.className = "review-primary-button";
+          analyze.textContent = "Analyze Draft";
+          analyze.addEventListener("click", () => analyzeExistingCareerEvidence(entry.id, analyze));
+          actions.appendChild(analyze);
+          card.appendChild(actions);
+        } else if (entry.status === "ready_for_review") {
+          const review = buildCareerEvidenceReview(entry);
+          const actions = document.createElement("div");
+          actions.className = "career-evidence-actions";
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "review-secondary-button";
+          toggle.textContent = "Review Suggestions";
+          toggle.addEventListener("click", () => {
+            review.classList.toggle("show");
+            toggle.textContent = review.classList.contains("show") ? "Close Review" : "Review Suggestions";
+          });
+          actions.appendChild(toggle);
+          card.append(actions, review);
+          if (entry.id === openEntryId) {
+            review.classList.add("show");
+            toggle.textContent = "Close Review";
+          }
+        } else if (entry.status === "approved") {
+          const approved = document.createElement("div");
+          approved.className = "career-evidence-card-copy";
+          const skills = Array.isArray(entry.reviewed_data?.skills) ? entry.reviewed_data.skills.length : 0;
+          const bullets = Array.isArray(entry.reviewed_data?.resume_bullets) ? entry.reviewed_data.resume_bullets.length : 0;
+          approved.textContent = `${skills} selected skill${skills === 1 ? "" : "s"} and ${bullets} selected resume bullet${bullets === 1 ? "" : "s"} were approved.`;
+          card.appendChild(approved);
+        }
+        container.appendChild(card);
+      });
+    }
+
+    async function analyzeExistingCareerEvidence(entryId, button) {
+      const original = button?.textContent || "Analyze Draft";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Analyzing...";
+      }
+      try {
+        const { data, error } = await db.functions.invoke("analyze-career-evidence", {
+          body: { evidence_id: entryId }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not analyze this Career Evidence."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not analyze this Career Evidence.");
+        await loadCareerEvidence(data.evidence?.id || entryId);
+        showToast("Career Evidence is ready for your review.");
+      } catch (error) {
+        console.error("Career Evidence analysis error:", error);
+        showToast(error?.message || "We couldn't analyze this Career Evidence.");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = original;
+        }
+      }
+    }
+
+    async function createCareerEvidence() {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to build your Career Evidence.");
+        return;
+      }
+      const textInput = document.getElementById("careerEvidenceText");
+      const contextInput = document.getElementById("careerEvidenceContext");
+      const experienceInput = document.getElementById("careerEvidenceExperience");
+      const button = document.getElementById("analyzeCareerEvidenceButton");
+      const status = document.getElementById("careerEvidenceStatus");
+      const originalText = textInput.value.replace(/\s+/g, " ").trim();
+      if (originalText.length < 20) {
+        status.textContent = "Describe at least one responsibility, project, tool, or accomplishment.";
+        textInput.focus();
+        return;
+      }
+      if (/\b\d{3}-\d{2}-\d{4}\b/.test(originalText) || /\b(?:medical record number|mrn)\s*[:#-]?\s*[a-z0-9-]{4,}\b/i.test(originalText)) {
+        status.textContent = "Remove private identifiers before continuing.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Saving and analyzing your evidence...";
+      try {
+        const { data: entry, error: insertError } = await db
+          .from("career_evidence_entries")
+          .insert({
+            user_id: currentSession.user.id,
+            experience_id: experienceInput.value || null,
+            context_label: contextInput.value.trim() || null,
+            original_text: originalText,
+            status: "draft"
+          })
+          .select("id")
+          .single();
+        if (insertError || !entry) throw insertError || new Error("Career Evidence could not be saved.");
+
+        const { data, error } = await db.functions.invoke("analyze-career-evidence", {
+          body: { evidence_id: entry.id }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not analyze this Career Evidence."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not analyze this Career Evidence.");
+
+        textInput.value = "";
+        contextInput.value = "";
+        experienceInput.value = "";
+        status.textContent = "Analysis ready. Review every suggestion before approval.";
+        await loadCareerEvidence(data.evidence?.id || entry.id);
+        showToast("Career Evidence is ready for your review.");
+      } catch (error) {
+        console.error("Create Career Evidence error:", error);
+        status.textContent = error?.message || "We couldn't analyze this Career Evidence.";
+        await loadCareerEvidence();
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function saveCareerEvidenceReview(entry, review, approve, button) {
+      const payload = collectCareerEvidenceReview(review);
+      const status = review.querySelector("[data-evidence-review-status]");
+      if (approve && !payload.skills.length && !payload.resume_bullets.length) {
+        status.textContent = "Select at least one truthful skill or resume bullet.";
+        return;
+      }
+      if (approve && payload.resume_bullets.length && !payload.experience_id) {
+        status.textContent = "Choose the work experience that should receive the selected resume bullets.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = approve ? "Approving selected items..." : "Saving your review...";
+      try {
+        if (!approve) {
+          const { error } = await db
+            .from("career_evidence_entries")
+            .update({ reviewed_data: payload, reviewed_at: new Date().toISOString() })
+            .eq("id", entry.id)
+            .eq("user_id", currentSession.user.id);
+          if (error) throw error;
+          status.textContent = "Review saved. Nothing was added to your Career Profile.";
+          showToast("Career Evidence review saved.");
+          return;
+        }
+
+        const { data, error } = await db.rpc("applystronger_approve_career_evidence", {
+          p_evidence_id: entry.id,
+          p_reviewed_data: payload
+        });
+        if (error) throw error;
+        if (!data?.success) throw new Error("ApplyStronger could not approve these Career Evidence selections.");
+        await Promise.all([
+          loadCareerEvidence(),
+          loadCareerProfile(currentSession.user.id),
+          loadMemberDashboard(currentSession.user.id)
+        ]);
+        careerFitData = null;
+        careerFitDataUserId = null;
+        careerFitScoreMap = new Map();
+        showToast("Approved Career Evidence was added to your Career Profile.");
+      } catch (error) {
+        console.error("Career Evidence review error:", error);
+        status.textContent = error?.message || "We couldn't save this Career Evidence review.";
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById("analyzeCareerEvidenceButton").addEventListener("click", createCareerEvidence);
+
     function setAuthMode(mode) {
       authMode = mode;
       clearMessage(authMessage);
@@ -4172,6 +4741,7 @@
 
       currentJobDetail = job;
       currentJobMatch = null;
+      currentApplicationReadiness = null;
       currentJobTailoredResume = null;
       renderJobDetails(job);
     }
@@ -4215,12 +4785,16 @@
 
       const matchHost = document.createElement("div");
       matchHost.id = "jobMatchPanel";
-      main.appendChild(matchHost);
+      const readinessHost = document.createElement("div");
+      readinessHost.id = "jobReadinessPanel";
+      main.append(readinessHost, matchHost);
 
       if (currentSession?.user) {
+        renderApplicationReadinessLoading();
         renderJobMatchLoading(job);
         loadJobMatch(job);
       } else {
+        renderApplicationReadinessSignedOut(job);
         renderJobMatchSignedOut(job);
       }
 
@@ -4432,7 +5006,9 @@
           .from("job_matches")
           .select(`
             id,job_id,match_score,match_level,summary,why_match,matched_skills,missing_skills,
-            strengths,gaps,recommendations,model_name,analysis_version,analyzed_at,updated_at
+            strengths,gaps,recommendations,model_name,analysis_version,analyzed_at,updated_at,
+            application_readiness_status,application_readiness_score,application_quality,
+            application_quality_version,application_quality_analyzed_at
           `)
           .eq("user_id", currentSession.user.id)
           .eq("job_id", requestedJobId)
@@ -4455,6 +5031,7 @@
 
       if (matchResult.error) {
         console.error("Job match load error:", matchResult.error);
+        renderApplicationReadinessError(job, "ApplyStronger couldn't load your saved Application Readiness review.");
         renderJobMatchError(job, "ApplyStronger couldn't load your saved match analysis.");
         return;
       }
@@ -4463,9 +5040,209 @@
         console.warn("Job tailored resume lookup error:", tailoredResult.error);
       }
 
-      currentJobMatch = matchResult.data || null;
+      currentApplicationReadiness = matchResult.data?.application_readiness_status
+        ? matchResult.data
+        : null;
+      currentJobMatch = matchResult.data?.match_score !== null && matchResult.data?.match_score !== undefined
+        ? matchResult.data
+        : null;
       currentJobTailoredResume = tailoredResult.error ? null : (tailoredResult.data || null);
+      renderApplicationReadinessPanel(job, currentApplicationReadiness);
       renderJobMatchPanel(job, currentJobMatch);
+    }
+
+    function readinessStatusLabel(value) {
+      return ({
+        strong_apply: "Strong Apply",
+        stretch: "Stretch",
+        skip: "Skip",
+        closed: "Closed"
+      })[value] || "Application Readiness";
+    }
+
+    function createReadinessBase() {
+      const card = document.createElement("section");
+      card.className = "readiness-card";
+      const head = document.createElement("div");
+      head.className = "readiness-card-head";
+      const text = document.createElement("div");
+      const title = document.createElement("h3");
+      title.textContent = "Application Readiness";
+      const subtitle = document.createElement("div");
+      subtitle.className = "readiness-meta";
+      subtitle.textContent = "Checks exact specialty, mandatory qualifications, preferences, freshness, and application-route health.";
+      text.append(title, subtitle);
+      head.appendChild(text);
+      card.appendChild(head);
+      return { card, head };
+    }
+
+    function renderApplicationReadinessLoading() {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createReadinessBase();
+      const status = document.createElement("div");
+      status.className = "readiness-meta";
+      status.style.marginTop = "12px";
+      status.textContent = "Checking for an existing Application Readiness review...";
+      card.appendChild(status);
+      host.appendChild(card);
+    }
+
+    function renderApplicationReadinessSignedOut(job) {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createReadinessBase();
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "review-primary-button";
+      button.textContent = "Sign In to Check Readiness";
+      button.addEventListener("click", () => openAuth("signin", `Sign in to check your readiness for ${job.title || "this job"}.`));
+      actions.appendChild(button);
+      card.appendChild(actions);
+      host.appendChild(card);
+    }
+
+    function renderApplicationReadinessError(job, message) {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createReadinessBase();
+      const status = document.createElement("div");
+      status.className = "readiness-meta";
+      status.style.marginTop = "12px";
+      status.textContent = message;
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "review-secondary-button";
+      retry.textContent = "Try Again";
+      retry.addEventListener("click", () => loadJobMatch(job));
+      actions.appendChild(retry);
+      card.append(status, actions);
+      host.appendChild(card);
+    }
+
+    function renderApplicationReadinessPanel(job, review) {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card, head } = createReadinessBase();
+
+      if (!review) {
+        const copy = document.createElement("p");
+        copy.className = "readiness-meta";
+        copy.style.marginTop = "12px";
+        copy.textContent = "Use your verified Career Profile to decide whether this opportunity is worth the time to apply.";
+        const actions = document.createElement("div");
+        actions.className = "career-evidence-actions";
+        const analyze = document.createElement("button");
+        analyze.type = "button";
+        analyze.className = "review-primary-button";
+        analyze.textContent = "Check Application Readiness";
+        analyze.addEventListener("click", () => analyzeApplicationReadiness(job, analyze));
+        actions.appendChild(analyze);
+        card.append(copy, actions);
+        host.appendChild(card);
+        return;
+      }
+
+      const quality = review.application_quality && typeof review.application_quality === "object"
+        ? review.application_quality
+        : {};
+      const scoreBox = document.createElement("div");
+      const status = document.createElement("div");
+      status.className = "readiness-status";
+      status.textContent = readinessStatusLabel(review.application_readiness_status);
+      const score = document.createElement("div");
+      score.className = "readiness-score";
+      score.textContent = `${Number(review.application_readiness_score || 0)} / 100`;
+      scoreBox.append(status, score);
+      head.appendChild(scoreBox);
+
+      if (quality.summary) {
+        const summary = document.createElement("p");
+        summary.style.marginTop = "14px";
+        summary.textContent = quality.summary;
+        card.appendChild(summary);
+      }
+
+      const context = document.createElement("div");
+      context.className = "readiness-meta";
+      context.style.marginTop = "8px";
+      context.textContent = [
+        quality.freshness ? `Freshness: ${quality.freshness}` : "",
+        quality.competition_risk ? `Competition context: ${quality.competition_risk}` : "",
+        quality.route_verified === true ? "Application route verified" : "Application route needs verification"
+      ].filter(Boolean).join(" • ");
+      card.appendChild(context);
+
+      const guidance = [
+        ...(Array.isArray(quality.blockers) ? quality.blockers : []),
+        ...(Array.isArray(quality.warnings) ? quality.warnings : [])
+      ].filter(Boolean);
+      if (guidance.length) {
+        const list = document.createElement("ul");
+        list.className = "readiness-list";
+        guidance.forEach(value => {
+          const item = document.createElement("li");
+          item.textContent = String(value);
+          list.appendChild(item);
+        });
+        card.appendChild(list);
+      }
+
+      const disclaimer = document.createElement("div");
+      disclaimer.className = "readiness-meta";
+      disclaimer.style.marginTop = "12px";
+      disclaimer.textContent = "This is an evidence-based application-readiness review, not an interview or hiring probability.";
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const refresh = document.createElement("button");
+      refresh.type = "button";
+      refresh.className = "review-secondary-button";
+      refresh.textContent = "Refresh Readiness";
+      refresh.addEventListener("click", () => analyzeApplicationReadiness(job, refresh));
+      actions.appendChild(refresh);
+      card.append(disclaimer, actions);
+      host.appendChild(card);
+    }
+
+    async function analyzeApplicationReadiness(job, button) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to check Application Readiness.");
+        return;
+      }
+      const original = button?.textContent || "Check Application Readiness";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Checking...";
+      }
+      renderApplicationReadinessLoading();
+      try {
+        const { data, error } = await db.functions.invoke("analyze-application-readiness", {
+          body: { job_id: job.id }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not check Application Readiness."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not check Application Readiness.");
+        currentApplicationReadiness = data.review || null;
+        renderApplicationReadinessPanel(job, currentApplicationReadiness);
+        showToast("Application Readiness review complete.");
+      } catch (error) {
+        console.error("Application Readiness error:", error);
+        renderApplicationReadinessError(job, error?.message || "ApplyStronger could not check Application Readiness.");
+        showToast("We couldn't check Application Readiness.");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = original;
+        }
+      }
     }
 
     function renderJobMatchError(job, message) {
@@ -7294,6 +8071,19 @@
 
     document.getElementById("myApplyStrongerButton").addEventListener("click", goToMemberSection);
 
+    document.getElementById("recommendedJobsButton").addEventListener("click", async () => {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to see jobs recommended from your Career Profile.");
+        return;
+      }
+      document.getElementById("jobMinimumMatch").value = "60";
+      document.getElementById("jobSort").value = "best-match";
+      document.getElementById("jobPosted").value = "14";
+      await searchJobs();
+      document.getElementById("job-search").scrollIntoView({ behavior: "smooth", block: "start" });
+      showToast("Showing recent jobs ranked by your Career Profile.");
+    });
+
     document.getElementById("savedJobsButton").addEventListener("click", async () => {
       await loadSavedJobsWorkspace();
       savedJobsSection.scrollIntoView({ behavior: "smooth" });
@@ -7320,7 +8110,7 @@
 
       profileSection.style.display = "block";
       await loadCareerProfile(currentSession.user.id);
-      await Promise.all([loadResumes(), loadTailoredResumes()]);
+      await Promise.all([loadResumes(), loadTailoredResumes(), loadCareerEvidence()]);
       profileSection.scrollIntoView({ behavior: "smooth" });
     });
 
