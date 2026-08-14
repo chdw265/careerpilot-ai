@@ -1,0 +1,342 @@
+    function readinessStatusLabel(value) {
+      return ({
+        strong_apply: "Strong Apply",
+        stretch: "Stretch",
+        skip: "Skip",
+        closed: "Closed"
+      })[value] || "Application Readiness";
+    }
+
+    function createReadinessBase() {
+      const card = document.createElement("section");
+      card.className = "readiness-card";
+      const head = document.createElement("div");
+      head.className = "readiness-card-head";
+      const text = document.createElement("div");
+      const title = document.createElement("h3");
+      title.textContent = "Application Readiness";
+      const subtitle = document.createElement("div");
+      subtitle.className = "readiness-meta";
+      subtitle.textContent = "Checks exact specialty, mandatory qualifications, verified Career Evidence, preferences, freshness, and application-route health.";
+      text.append(title, subtitle);
+      head.appendChild(text);
+      card.appendChild(head);
+      return { card, head };
+    }
+
+    function renderApplicationReadinessLoading() {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createReadinessBase();
+      const status = document.createElement("div");
+      status.className = "readiness-meta";
+      status.style.marginTop = "12px";
+      status.textContent = "Checking for an existing Application Readiness review...";
+      card.appendChild(status);
+      host.appendChild(card);
+    }
+
+    function renderApplicationReadinessSignedOut(job) {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createReadinessBase();
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "review-primary-button";
+      button.textContent = "Sign In to Check Readiness";
+      button.addEventListener("click", () => openAuth("signin", `Sign in to check your readiness for ${job.title || "this job"}.`));
+      actions.appendChild(button);
+      card.appendChild(actions);
+      host.appendChild(card);
+    }
+
+    function renderApplicationReadinessError(job, message) {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card } = createReadinessBase();
+      const status = document.createElement("div");
+      status.className = "readiness-meta";
+      status.style.marginTop = "12px";
+      status.textContent = message;
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "review-secondary-button";
+      retry.textContent = "Try Again";
+      retry.addEventListener("click", () => loadJobMatch(job));
+      actions.appendChild(retry);
+      card.append(status, actions);
+      host.appendChild(card);
+    }
+
+    function readinessFreshnessText(review) {
+      if (review?.__stale === true) return "Refresh required";
+      if (review?.__stale === false) return "Current";
+      if (review?.__stalenessUnknown === true) return "Freshness could not be verified";
+      return "Checking freshness...";
+    }
+
+    function readinessFunctionErrorMessage(error, fallback) {
+      const raw = String(error?.message || "").trim();
+      if (/401|unauthorized|authorization|signed in/i.test(raw)) return "Your session expired. Sign in again to check Application Readiness.";
+      if (/429|rate.?limit|wait [0-9]+ seconds/i.test(raw)) return raw || "Application Readiness is temporarily rate-limited. Try again shortly.";
+      if (/409|already running|in progress|changed/i.test(raw)) return raw || "A readiness review is already running. Try again shortly.";
+      return raw || fallback;
+    }
+
+    async function checkApplicationReadinessStaleness(job, review) {
+      if (!currentSession?.user || !job?.id || !review) return;
+      if (review.__stalenessChecked || review.__stalenessChecking) return;
+      review.__stalenessChecking = true;
+      try {
+        const { data, error } = await db.functions.invoke("analyze-application-readiness", {
+          body: { job_id: job.id, check_only: true }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not verify whether this readiness review is current."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not verify whether this readiness review is current.");
+        if (data.review && typeof data.review === "object") Object.assign(review, data.review);
+        review.__stale = data.stale === true;
+        review.__stalenessUnknown = data.stale !== true && data.stale !== false;
+      } catch (error) {
+        console.error("Application Readiness staleness check error:", error);
+        review.__stalenessUnknown = true;
+      } finally {
+        review.__stalenessChecking = false;
+        review.__stalenessChecked = true;
+        if (currentJobDetailId === job.id) renderApplicationReadinessPanel(job, review);
+      }
+    }
+
+    async function startCareerEvidenceForRequirement(requirement, job) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to add missing Career Evidence.");
+        return;
+      }
+      try {
+        jobDetailSection.style.display = "none";
+        companySection.style.display = "none";
+        savedJobsSection.style.display = "none";
+        applicationsSection.style.display = "none";
+        profileSection.style.display = "block";
+        await Promise.all([
+          loadCareerProfile(currentSession.user.id),
+          loadCareerEvidence()
+        ]);
+        const context = document.getElementById("careerEvidenceContext");
+        const text = document.getElementById("careerEvidenceText");
+        const requirementText = String(requirement?.requirement || "required experience");
+        context.value = `Evidence for ${job.title || "job"}: ${requirementText}`.slice(0, 500);
+        text.value = "";
+        document.getElementById("careerEvidenceStatus").textContent = "Describe only experience you actually have. If you do not have this requirement, leave it as a genuine gap.";
+        document.getElementById("careerEvidenceBlock").scrollIntoView({ behavior: "smooth", block: "start" });
+        setTimeout(() => text.focus(), 300);
+      } catch (error) {
+        console.error("Open Career Evidence from readiness error:", error);
+        showToast("We couldn't open Career Evidence for this requirement.");
+      }
+    }
+
+    function renderApplicationReadinessPanel(job, review) {
+      const host = document.getElementById("jobReadinessPanel");
+      if (!host) return;
+      host.innerHTML = "";
+      const { card, head } = createReadinessBase();
+
+      if (!review) {
+        const state = document.createElement("span");
+        state.className = "career-evidence-badge";
+        state.textContent = "No readiness review yet";
+        head.appendChild(state);
+        const copy = document.createElement("p");
+        copy.className = "readiness-meta";
+        copy.style.marginTop = "12px";
+        copy.textContent = "Use your verified Career Profile and approved Career Evidence to decide whether this opportunity is worth the time to apply.";
+        const actions = document.createElement("div");
+        actions.className = "career-evidence-actions";
+        const analyze = document.createElement("button");
+        analyze.type = "button";
+        analyze.className = "review-primary-button";
+        analyze.textContent = "Check Application Readiness";
+        analyze.addEventListener("click", () => analyzeApplicationReadiness(job, analyze));
+        actions.appendChild(analyze);
+        card.append(copy, actions);
+        host.appendChild(card);
+        return;
+      }
+
+      const quality = review.application_quality && typeof review.application_quality === "object"
+        ? review.application_quality
+        : {};
+      const scoreBox = document.createElement("div");
+      const state = document.createElement("span");
+      state.className = "career-evidence-badge";
+      state.textContent = readinessFreshnessText(review);
+      if (review.__stale === true) {
+        state.style.background = "#fffaeb";
+        state.style.color = "#7a2e0e";
+      } else if (review.__stale === false) {
+        state.style.background = "#ecfdf3";
+        state.style.color = "#067647";
+      }
+      const status = document.createElement("div");
+      status.className = "readiness-status";
+      status.textContent = review.__stale === true
+        ? `Saved review: ${readinessStatusLabel(review.application_readiness_status)}`
+        : readinessStatusLabel(review.application_readiness_status);
+      const score = document.createElement("div");
+      score.className = "readiness-score";
+      score.textContent = `${Number(review.application_readiness_score || 0)} / 100`;
+      scoreBox.append(state, status, score);
+      head.appendChild(scoreBox);
+
+      if (review.__stale === true) {
+        const staleNotice = document.createElement("div");
+        staleNotice.className = "review-note";
+        staleNotice.style.marginTop = "14px";
+        staleNotice.textContent = "Refresh required: your Career Profile, approved evidence, the job listing, application route, or analysis contract changed after this saved review.";
+        card.appendChild(staleNotice);
+      } else if (review.__stalenessUnknown === true) {
+        const unknownNotice = document.createElement("div");
+        unknownNotice.className = "review-note";
+        unknownNotice.style.marginTop = "14px";
+        unknownNotice.textContent = "ApplyStronger could not confirm whether this saved review is current. Refresh it before relying on the recommendation.";
+        card.appendChild(unknownNotice);
+      }
+
+      if (quality.summary) {
+        const summary = document.createElement("p");
+        summary.style.marginTop = "14px";
+        summary.textContent = quality.summary;
+        card.appendChild(summary);
+      }
+
+      const context = document.createElement("div");
+      context.className = "readiness-meta";
+      context.style.marginTop = "8px";
+      context.textContent = [
+        quality.freshness ? `Listing freshness: ${quality.freshness}` : "",
+        quality.competition_risk ? `Competition context: ${quality.competition_risk}` : "",
+        quality.route_verified === true ? "Application route verified" : "Application route needs verification"
+      ].filter(Boolean).join(" • ");
+      card.appendChild(context);
+
+      const guidance = [
+        ...(Array.isArray(quality.blockers) ? quality.blockers : []),
+        ...(Array.isArray(quality.warnings) ? quality.warnings : [])
+      ].filter(Boolean);
+      if (guidance.length) {
+        const list = document.createElement("ul");
+        list.className = "readiness-list";
+        guidance.forEach(value => {
+          const item = document.createElement("li");
+          item.textContent = String(value);
+          list.appendChild(item);
+        });
+        card.appendChild(list);
+      }
+
+      const recoverableRequirements = (Array.isArray(quality.requirements) ? quality.requirements : [])
+        .filter(item => item?.importance === "mandatory" && ["not_demonstrated", "unclear"].includes(item?.status))
+        .slice(0, 8);
+      if (recoverableRequirements.length) {
+        const recoveryTitle = document.createElement("div");
+        recoveryTitle.className = "career-evidence-section-title";
+        recoveryTitle.textContent = "Have you done this but left it off your resume?";
+        card.appendChild(recoveryTitle);
+        const recoveryHelp = document.createElement("div");
+        recoveryHelp.className = "readiness-meta";
+        recoveryHelp.textContent = "If yes, add truthful Career Evidence and refresh this review. If no, keep the requirement as a genuine gap.";
+        card.appendChild(recoveryHelp);
+        recoverableRequirements.forEach(requirement => {
+          const row = document.createElement("div");
+          row.className = "career-evidence-suggestion";
+          const text = document.createElement("div");
+          text.className = "career-evidence-card-copy";
+          text.textContent = requirement.requirement || "Mandatory requirement";
+          const actions = document.createElement("div");
+          actions.className = "career-evidence-actions";
+          actions.style.marginTop = "8px";
+          const add = document.createElement("button");
+          add.type = "button";
+          add.className = "review-secondary-button";
+          add.textContent = "Add Career Evidence";
+          add.addEventListener("click", () => startCareerEvidenceForRequirement(requirement, job));
+          actions.appendChild(add);
+          row.append(text, actions);
+          card.appendChild(row);
+        });
+      }
+
+      const disclaimer = document.createElement("div");
+      disclaimer.className = "readiness-meta";
+      disclaimer.style.marginTop = "12px";
+      disclaimer.textContent = "This is evidence-based application-readiness guidance, not an interview or hiring probability. ApplyStronger never manufactures a missing qualification.";
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const refresh = document.createElement("button");
+      refresh.type = "button";
+      refresh.className = review.__stale === true ? "review-primary-button" : "review-secondary-button";
+      refresh.textContent = review.__stale === true ? "Refresh Required" : "Refresh Readiness";
+      refresh.addEventListener("click", () => analyzeApplicationReadiness(job, refresh));
+      actions.appendChild(refresh);
+      card.append(disclaimer, actions);
+      host.appendChild(card);
+
+      if (!review.__stalenessChecked && !review.__stalenessChecking) {
+        review.__stalenessChecking = true;
+        Promise.resolve().then(async () => {
+          review.__stalenessChecking = false;
+          await checkApplicationReadinessStaleness(job, review);
+        });
+      }
+    }
+
+    async function analyzeApplicationReadiness(job, button) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to check Application Readiness.");
+        return;
+      }
+      const original = button?.textContent || "Check Application Readiness";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Checking...";
+      }
+      renderApplicationReadinessLoading();
+      try {
+        const { data, error } = await db.functions.invoke("analyze-application-readiness", {
+          body: { job_id: job.id }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not check Application Readiness."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not check Application Readiness.");
+        currentApplicationReadiness = data.review || null;
+        if (currentApplicationReadiness) {
+          currentApplicationReadiness.__stalenessChecked = true;
+          currentApplicationReadiness.__stalenessChecking = false;
+          currentApplicationReadiness.__stale = false;
+          currentApplicationReadiness.__stalenessUnknown = false;
+        }
+        renderApplicationReadinessPanel(job, currentApplicationReadiness);
+        showToast(data.cached ? "Current Application Readiness review loaded." : "Application Readiness review complete.");
+      } catch (error) {
+        console.error("Application Readiness error:", error);
+        const message = readinessFunctionErrorMessage(error, "ApplyStronger could not check Application Readiness.");
+        if (/already running|in progress|changed/i.test(message)) {
+          await loadJobMatch(job);
+          showToast(message);
+        } else {
+          renderApplicationReadinessError(job, message);
+          showToast(message);
+        }
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = original;
+        }
+      }
+    }
