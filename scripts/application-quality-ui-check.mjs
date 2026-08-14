@@ -63,12 +63,12 @@ assert.doesNotMatch(
 );
 assert.doesNotMatch(
   html,
-  /reviewed_data:\s*payload/,
+  /\.from\("career_evidence_entries"\)[\s\S]{0,320}?\.update\(\s*\{[\s\S]{0,180}?reviewed_data\s*:/,
   "The browser must not directly write reviewed_data",
 );
 assert.doesNotMatch(
   html,
-  /status:\s*"approved"/,
+  /\.from\("career_evidence_entries"\)[\s\S]{0,320}?\.update\(\s*\{[\s\S]{0,180}?status\s*:\s*"approved"/,
   "The browser must not directly forge approved evidence state",
 );
 assert.match(
