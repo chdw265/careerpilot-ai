@@ -15,10 +15,17 @@ function replaceExactlyOnce(source, pattern, replacement, label) {
   return source.replace(pattern, replacement);
 }
 
-const alreadyHardened = html.includes('rpc("applystronger_create_career_evidence"')
-  && html.includes('rpc("applystronger_save_career_evidence_review"')
-  && html.includes('body: { job_id: job.id, check_only: true }')
-  && !/\.from\("career_evidence_entries"\)[\s\S]{0,240}?\.(?:insert|update)\(/.test(html);
+const lifecycleRpcs = [
+  "applystronger_create_career_evidence",
+  "applystronger_update_career_evidence",
+  "applystronger_save_career_evidence_review",
+  "applystronger_approve_career_evidence",
+  "applystronger_archive_career_evidence",
+];
+
+const alreadyHardened = lifecycleRpcs.every((rpc) => html.includes(rpc))
+  && html.includes("body: { job_id: job.id, check_only: true }")
+  && !/\.from\("career_evidence_entries"\)[\s\S]{0,240}?\.(?:insert|update|delete)\(/.test(html);
 
 if (!alreadyHardened) {
   html = replaceExactlyOnce(
@@ -36,11 +43,9 @@ if (!alreadyHardened) {
   );
 }
 
-assert.match(html, /rpc\("applystronger_create_career_evidence"/);
-assert.match(html, /rpc\("applystronger_update_career_evidence"/);
-assert.match(html, /rpc\("applystronger_save_career_evidence_review"/);
-assert.match(html, /rpc\("applystronger_approve_career_evidence"/);
-assert.match(html, /rpc\("applystronger_archive_career_evidence"/);
+for (const rpc of lifecycleRpcs) assert.match(html, new RegExp(rpc));
+assert.match(html, /const rpcName = approve[\s\S]{0,180}?applystronger_approve_career_evidence[\s\S]{0,180}?applystronger_save_career_evidence_review/);
+assert.match(html, /db\.rpc\(rpcName, \{/);
 assert.match(html, /p_expected_updated_at: entry\.updated_at/);
 assert.match(html, /career_evidence_approved_items/);
 assert.match(html, /data-evidence-attestation/);
