@@ -1,0 +1,50 @@
+name: Mobile Navigation UI
+
+on:
+  pull_request:
+    paths:
+      - index.html
+      - scripts/fix-mobile-safari-navigation.mjs
+      - scripts/mobile-header-browser-check.mjs
+      - .github/workflows/mobile-navigation-ui.yml
+  push:
+    branches:
+      - main
+      - fix/mobile-safari-navigation
+    paths:
+      - index.html
+      - scripts/fix-mobile-safari-navigation.mjs
+      - scripts/mobile-header-browser-check.mjs
+      - .github/workflows/mobile-navigation-ui.yml
+
+permissions:
+  contents: read
+
+jobs:
+  browser-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Confirm the mobile transform is committed
+        run: |
+          node scripts/fix-mobile-safari-navigation.mjs
+          git diff --exit-code -- index.html
+
+      - name: Install browser test tools
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium webkit
+
+      - name: Test signed-in and signed-out navigation
+        run: node scripts/mobile-header-browser-check.mjs
+
+      - name: Check whitespace
+        run: git diff --check
