@@ -32,8 +32,10 @@ for (const rpc of [
   "applystronger_approve_career_evidence",
   "applystronger_archive_career_evidence",
 ]) {
-  assert.match(html, new RegExp(`rpc\\("${rpc}"`));
+  assert.match(html, new RegExp(rpc));
 }
+assert.match(html, /const rpcName = approve[\s\S]{0,180}?applystronger_approve_career_evidence[\s\S]{0,180}?applystronger_save_career_evidence_review/);
+assert.match(html, /db\.rpc\(rpcName, \{/);
 
 assert.match(html, /functions\.invoke\("analyze-career-evidence"/);
 assert.match(html, /functions\.invoke\("analyze-application-readiness"/);
