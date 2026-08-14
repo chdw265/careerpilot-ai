@@ -25,13 +25,50 @@ for (const id of [
   assert.match(html, new RegExp(`id="${id}"`));
 }
 
+for (const rpc of [
+  "applystronger_create_career_evidence",
+  "applystronger_update_career_evidence",
+  "applystronger_save_career_evidence_review",
+  "applystronger_approve_career_evidence",
+  "applystronger_archive_career_evidence",
+]) {
+  assert.match(html, new RegExp(`rpc\\("${rpc}"`));
+}
+
 assert.match(html, /functions\.invoke\("analyze-career-evidence"/);
-assert.match(html, /rpc\("applystronger_approve_career_evidence"/);
 assert.match(html, /functions\.invoke\("analyze-application-readiness"/);
+assert.match(html, /body: \{ job_id: job\.id, check_only: true \}/);
+assert.match(html, /p_expected_updated_at: entry\.updated_at/);
+assert.match(html, /career_evidence_approved_items/);
+assert.match(html, /current_text/);
+assert.match(html, /data-evidence-attestation/);
+assert.match(html, /attested:/);
+assert.match(html, /Evidence Bank only/);
+assert.match(html, /Career Profile skill/);
+assert.match(html, /Master resume bullet/);
+assert.match(html, /Archive Evidence/);
+assert.match(html, /Refresh required/);
+assert.match(html, /No readiness review yet/);
+assert.match(html, /Have you done this but left it off your resume\?/);
+assert.match(html, /never manufactures a missing qualification/);
 assert.match(html, /not an interview or hiring probability/);
-assert.match(html, /status: "draft"/);
-assert.match(html, /reviewed_data: payload/);
 assert.match(html, /matchResult\.data\?\.match_score !== null/);
+
+assert.doesNotMatch(
+  html,
+  /\.from\("career_evidence_entries"\)[\s\S]{0,240}?\.(?:insert|update|delete)\(/,
+  "Career Evidence lifecycle writes must go through controlled RPCs",
+);
+assert.doesNotMatch(
+  html,
+  /reviewed_data:\s*payload/,
+  "The browser must not directly write reviewed_data",
+);
+assert.doesNotMatch(
+  html,
+  /status:\s*"approved"/,
+  "The browser must not directly forge approved evidence state",
+);
 assert.match(
   html,
   /const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set\(\[\]\)/,
