@@ -1,0 +1,35 @@
+name: Export Search Coverage Source
+
+on:
+  push:
+    branches:
+      - agent/search-coverage-repair
+    paths:
+      - .github/workflows/export-search-coverage-source.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out search coverage branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/search-coverage-repair
+
+      - name: Package website source
+        run: |
+          tar -czf /tmp/search-coverage-source.tgz \
+            index.html \
+            scripts/application-quality-ui-check.mjs \
+            scripts/mobile-header-browser-check.mjs
+
+      - name: Upload website source
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-coverage-source
+          path: /tmp/search-coverage-source.tgz
+          retention-days: 1
+          if-no-files-found: error
