@@ -1,0 +1,773 @@
+    function careerEvidenceStatusLabel(value) {
+      return ({
+        draft: "Draft",
+        analyzing: "Analyzing",
+        ready_for_review: "Ready for review",
+        approved: "Approved",
+        archived: "Archived"
+      })[value] || "Draft";
+    }
+
+    function addCareerEvidenceExperienceOptions(select, selectedId = "") {
+      select.innerHTML = "";
+      const empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = "Choose later";
+      select.appendChild(empty);
+      careerEvidenceExperienceMap.forEach((experience, id) => {
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent = [experience.job_title, experience.company_name].filter(Boolean).join(" — ") || "Work experience";
+        option.selected = id === selectedId;
+        select.appendChild(option);
+      });
+    }
+
+    function careerEvidenceErrorMessage(error, fallback = "ApplyStronger could not save this Career Evidence entry.") {
+      const raw = String(error?.message || error?.error_description || "").trim();
+      const code = String(error?.code || "").trim();
+      if (code === "40001" || /changed|reload|no longer valid/i.test(raw)) {
+        return "This Career Evidence entry changed. The latest version will be reloaded before you continue.";
+      }
+      if (code === "P0002" || /not found/i.test(raw)) {
+        return "This Career Evidence entry could not be found. Reload the page and try again.";
+      }
+      if (code === "42501" || /signed in|permission|not authorized/i.test(raw)) {
+        return "Your session no longer has permission to make this change. Sign in again and retry.";
+      }
+      if (code === "55000" || /current state|immutable|already being analyzed/i.test(raw)) {
+        return raw || "This Career Evidence entry cannot be changed in its current state.";
+      }
+      if (code === "22023" || /must|cannot|invalid|private identifier|characters/i.test(raw)) {
+        return raw || fallback;
+      }
+      return raw || fallback;
+    }
+
+    function careerEvidenceNeedsReload(error) {
+      const raw = String(error?.message || "");
+      const code = String(error?.code || "");
+      return code === "40001" || code === "P0002" || /changed|reload|no longer valid|not found/i.test(raw);
+    }
+
+    function approvedCareerEvidenceDestinationLabel(item) {
+      if (item.destination === "career_profile") return "Career Profile skill";
+      if (item.destination === "master_resume") return "Master resume bullet";
+      return "Evidence Bank only";
+    }
+
+    function approvedCareerEvidenceCopyLabel(item) {
+      if (item.destination === "evidence_bank") return "Verified evidence saved";
+      if (item.destination_copy_active === true) return "Destination copy active";
+      if (item.destination_copy_active === false) {
+        const reason = String(item.destination_copy_deactivation_reason || "").replaceAll("_", " ");
+        return reason ? `Destination copy inactive — ${reason}` : "Destination copy inactive";
+      }
+      return "Destination copy status unavailable";
+    }
+
+    function careerEvidenceSnippet(value, limit = 520) {
+      const text = String(value || "").trim();
+      return text.length > limit ? `${text.slice(0, limit - 3)}...` : text;
+    }
+
+    async function loadCareerEvidence(openEntryId = "") {
+      if (!currentSession?.user) return;
+
+      const [entriesResult, approvedItemsResult, experiencesResult] = await Promise.all([
+        db
+          .from("career_evidence_entries")
+          .select("id,experience_id,context_label,original_text,current_text,status,analysis,reviewed_data,analysis_version,analysis_started_at,analyzed_at,reviewed_at,approved_at,archived_at,created_at,updated_at")
+          .eq("user_id", currentSession.user.id)
+          .order("updated_at", { ascending: false })
+          .limit(50),
+        db
+          .from("career_evidence_approved_items")
+          .select("id,evidence_id,analysis_version,item_type,source_suggestion,approved_text,source_excerpt,destination,profile_record_id,destination_copy_active,destination_copy_deactivated_at,destination_copy_deactivation_reason,approved_at")
+          .eq("user_id", currentSession.user.id)
+          .order("approved_at", { ascending: false })
+          .limit(250),
+        db
+          .from("experiences")
+          .select("id,job_title,company_name,start_date,end_date,is_current")
+          .eq("user_id", currentSession.user.id)
+          .order("start_date", { ascending: false, nullsFirst: false })
+          .limit(100)
+      ]);
+
+      if (experiencesResult.error) {
+        console.error("Career Evidence experience load error:", experiencesResult.error);
+      }
+      careerEvidenceExperienceMap = new Map((experiencesResult.data || []).map(item => [item.id, item]));
+      addCareerEvidenceExperienceOptions(document.getElementById("careerEvidenceExperience"));
+
+      if (entriesResult.error || approvedItemsResult.error) {
+        console.error("Career Evidence load error:", entriesResult.error || approvedItemsResult.error);
+        document.getElementById("careerEvidenceList").textContent = "Career Evidence is not available yet.";
+        return;
+      }
+
+      const itemsByEvidence = new Map();
+      (approvedItemsResult.data || []).forEach(item => {
+        if (!itemsByEvidence.has(item.evidence_id)) itemsByEvidence.set(item.evidence_id, []);
+        itemsByEvidence.get(item.evidence_id).push(item);
+      });
+
+      careerEvidenceEntries = (entriesResult.data || []).map(entry => ({
+        ...entry,
+        approved_items: itemsByEvidence.get(entry.id) || []
+      }));
+      renderCareerEvidenceList(openEntryId);
+    }
+
+    function reviewedCareerEvidenceItemMap(reviewed) {
+      const result = new Map();
+      const items = Array.isArray(reviewed?.items) ? reviewed.items : [];
+      items.forEach(item => {
+        const type = String(item?.item_type || "");
+        const source = String(item?.source_suggestion || "");
+        if (type && source) result.set(`${type}\u0000${source}`, item);
+      });
+      return result;
+    }
+
+    function collectCareerEvidenceReview(review) {
+      const items = [...review.querySelectorAll("[data-evidence-item]")].map(wrapper => ({
+        item_type: wrapper.dataset.itemType || "",
+        source_suggestion: wrapper.dataset.sourceSuggestion || "",
+        approved_text: wrapper.querySelector("[data-evidence-approved-text]")?.value.trim() || "",
+        destination: wrapper.querySelector("[data-evidence-destination]")?.value || "",
+        selected: Boolean(wrapper.querySelector("[data-evidence-select]")?.checked)
+      }));
+      return {
+        experience_id: review.querySelector("[data-evidence-experience]")?.value || "",
+        attested: Boolean(review.querySelector("[data-evidence-attestation]")?.checked),
+        items
+      };
+    }
+
+    function makeCareerEvidenceSuggestion({ sourceSuggestion, value, evidence, type, selected, destination }) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "career-evidence-suggestion";
+      wrapper.dataset.evidenceItem = "true";
+      wrapper.dataset.itemType = type;
+      wrapper.dataset.sourceSuggestion = sourceSuggestion || "";
+
+      const choice = document.createElement("label");
+      choice.className = "career-evidence-choice";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.dataset.evidenceSelect = "true";
+      checkbox.checked = Boolean(selected);
+
+      const editor = type === "resume_bullet" ? document.createElement("textarea") : document.createElement("input");
+      if (type !== "resume_bullet") editor.type = "text";
+      editor.value = value || "";
+      editor.dataset.evidenceApprovedText = "true";
+      editor.setAttribute("aria-label", type === "resume_bullet" ? "Editable resume bullet" : "Editable skill");
+      choice.append(checkbox, editor);
+      wrapper.appendChild(choice);
+
+      const destinationField = document.createElement("div");
+      destinationField.className = "career-evidence-field";
+      destinationField.style.margin = "10px 0 0 28px";
+      const destinationLabel = document.createElement("label");
+      destinationLabel.textContent = "Save selected item to";
+      const destinationSelect = document.createElement("select");
+      destinationSelect.dataset.evidenceDestination = "true";
+      const destinationOptions = type === "skill"
+        ? [
+            ["", "Choose destination"],
+            ["evidence_bank", "Evidence Bank only"],
+            ["career_profile", "Career Profile"]
+          ]
+        : [
+            ["", "Choose destination"],
+            ["evidence_bank", "Evidence Bank only"],
+            ["master_resume", "Master resume"]
+          ];
+      destinationOptions.forEach(([optionValue, optionLabel]) => {
+        const option = document.createElement("option");
+        option.value = optionValue;
+        option.textContent = optionLabel;
+        option.selected = optionValue === destination;
+        destinationSelect.appendChild(option);
+      });
+      destinationField.append(destinationLabel, destinationSelect);
+      wrapper.appendChild(destinationField);
+
+      const support = document.createElement("div");
+      support.className = "career-evidence-support";
+      support.textContent = evidence
+        ? `Supported by your statement: ${evidence}`
+        : "Verify this suggestion against your statement before selecting it.";
+      wrapper.appendChild(support);
+      return wrapper;
+    }
+
+    function buildCareerEvidenceReview(entry) {
+      const review = document.createElement("div");
+      review.className = "career-evidence-review";
+      review.dataset.evidenceReview = entry.id;
+
+      const analysis = entry.analysis && typeof entry.analysis === "object" ? entry.analysis : {};
+      const reviewed = entry.reviewed_data && typeof entry.reviewed_data === "object" ? entry.reviewed_data : {};
+      const reviewedItems = reviewedCareerEvidenceItemMap(reviewed);
+
+      if (analysis.summary) {
+        const summary = document.createElement("p");
+        summary.className = "career-evidence-card-copy";
+        summary.textContent = analysis.summary;
+        review.appendChild(summary);
+      }
+
+      const relationshipFlags = [
+        ...(Array.isArray(analysis.duplicate_candidates) ? analysis.duplicate_candidates.map(item => `Possible duplicate: ${item.reason || "Review similar saved evidence."}`) : []),
+        ...(Array.isArray(analysis.possible_conflicts) ? analysis.possible_conflicts.map(item => `Possible conflict: ${item.reason || "Review potentially conflicting evidence."}`) : [])
+      ];
+      if (relationshipFlags.length) {
+        const warning = document.createElement("div");
+        warning.className = "review-note";
+        warning.textContent = relationshipFlags.join(" ");
+        review.appendChild(warning);
+      }
+
+      const experienceField = document.createElement("div");
+      experienceField.className = "career-evidence-field";
+      experienceField.style.marginTop = "14px";
+      const experienceLabel = document.createElement("label");
+      experienceLabel.textContent = "Work experience for any selected master-resume bullets";
+      const experienceSelect = document.createElement("select");
+      experienceSelect.dataset.evidenceExperience = "true";
+      addCareerEvidenceExperienceOptions(experienceSelect, reviewed.experience_id || entry.experience_id || "");
+      experienceField.append(experienceLabel, experienceSelect);
+      review.appendChild(experienceField);
+
+      const skillTitle = document.createElement("div");
+      skillTitle.className = "career-evidence-section-title";
+      skillTitle.textContent = "Suggested skills";
+      review.appendChild(skillTitle);
+      const skills = Array.isArray(analysis.suggested_skills) ? analysis.suggested_skills : [];
+      if (!skills.length) {
+        const empty = document.createElement("div");
+        empty.className = "career-evidence-card-copy";
+        empty.textContent = "No supported new skills were identified.";
+        review.appendChild(empty);
+      }
+      skills.forEach(item => {
+        const sourceSuggestion = String(item?.name || "");
+        const saved = reviewedItems.get(`skill\u0000${sourceSuggestion}`) || {};
+        review.appendChild(makeCareerEvidenceSuggestion({
+          sourceSuggestion,
+          value: saved.approved_text || sourceSuggestion,
+          evidence: item?.evidence,
+          type: "skill",
+          selected: saved.selected === true,
+          destination: saved.destination || ""
+        }));
+      });
+
+      const bulletTitle = document.createElement("div");
+      bulletTitle.className = "career-evidence-section-title";
+      bulletTitle.textContent = "Suggested resume bullets";
+      review.appendChild(bulletTitle);
+      const bullets = Array.isArray(analysis.resume_bullets) ? analysis.resume_bullets : [];
+      if (!bullets.length) {
+        const empty = document.createElement("div");
+        empty.className = "career-evidence-card-copy";
+        empty.textContent = "No supported resume bullets were identified.";
+        review.appendChild(empty);
+      }
+      bullets.forEach(item => {
+        const sourceSuggestion = String(item?.text || "");
+        const saved = reviewedItems.get(`resume_bullet\u0000${sourceSuggestion}`) || {};
+        review.appendChild(makeCareerEvidenceSuggestion({
+          sourceSuggestion,
+          value: saved.approved_text || sourceSuggestion,
+          evidence: item?.evidence,
+          type: "resume_bullet",
+          selected: saved.selected === true,
+          destination: saved.destination || ""
+        }));
+      });
+
+      if (Array.isArray(analysis.follow_up_questions) && analysis.follow_up_questions.length) {
+        const questionTitle = document.createElement("div");
+        questionTitle.className = "career-evidence-section-title";
+        questionTitle.textContent = "Questions that could strengthen the evidence";
+        review.appendChild(questionTitle);
+        const questions = document.createElement("ul");
+        questions.className = "readiness-list";
+        analysis.follow_up_questions.forEach(value => {
+          const item = document.createElement("li");
+          item.textContent = String(value);
+          questions.appendChild(item);
+        });
+        review.appendChild(questions);
+      }
+
+      const attestation = document.createElement("label");
+      attestation.className = "career-evidence-choice";
+      attestation.style.marginTop = "18px";
+      const attestationCheckbox = document.createElement("input");
+      attestationCheckbox.type = "checkbox";
+      attestationCheckbox.dataset.evidenceAttestation = "true";
+      attestationCheckbox.checked = reviewed.attested === true;
+      const attestationText = document.createElement("span");
+      attestationText.textContent = "I confirm that the selected information accurately describes work I performed and does not contain confidential or private information.";
+      attestation.append(attestationCheckbox, attestationText);
+      review.appendChild(attestation);
+
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const save = document.createElement("button");
+      save.type = "button";
+      save.className = "review-secondary-button";
+      save.textContent = "Save Review";
+      save.addEventListener("click", () => saveCareerEvidenceReview(entry, review, false, save));
+      const approve = document.createElement("button");
+      approve.type = "button";
+      approve.className = "review-primary-button";
+      approve.textContent = "Approve Selected Items";
+      approve.addEventListener("click", () => saveCareerEvidenceReview(entry, review, true, approve));
+      const status = document.createElement("span");
+      status.className = "career-evidence-status";
+      status.dataset.evidenceReviewStatus = "true";
+      actions.append(save, approve, status);
+      review.appendChild(actions);
+      return review;
+    }
+
+    function buildCareerEvidenceEditor(entry) {
+      const editor = document.createElement("div");
+      editor.className = "career-evidence-review";
+      editor.dataset.evidenceEditor = entry.id;
+
+      const note = document.createElement("div");
+      note.className = "review-note";
+      note.textContent = "Your first submitted statement is preserved. Editing the working statement clears any existing AI analysis and requires a fresh analysis before approval.";
+      editor.appendChild(note);
+
+      const grid = document.createElement("div");
+      grid.className = "career-evidence-grid";
+      grid.style.marginTop = "12px";
+
+      const contextField = document.createElement("div");
+      contextField.className = "career-evidence-field";
+      const contextLabel = document.createElement("label");
+      contextLabel.textContent = "Optional label";
+      const contextInput = document.createElement("input");
+      contextInput.type = "text";
+      contextInput.maxLength = 500;
+      contextInput.value = entry.context_label || "";
+      contextInput.dataset.evidenceEditContext = "true";
+      contextField.append(contextLabel, contextInput);
+
+      const experienceField = document.createElement("div");
+      experienceField.className = "career-evidence-field";
+      const experienceLabel = document.createElement("label");
+      experienceLabel.textContent = "Related work experience";
+      const experienceSelect = document.createElement("select");
+      experienceSelect.dataset.evidenceEditExperience = "true";
+      addCareerEvidenceExperienceOptions(experienceSelect, entry.experience_id || "");
+      experienceField.append(experienceLabel, experienceSelect);
+
+      const statementField = document.createElement("div");
+      statementField.className = "career-evidence-field full";
+      const statementLabel = document.createElement("label");
+      statementLabel.textContent = "Current working statement";
+      const statementInput = document.createElement("textarea");
+      statementInput.maxLength = 12000;
+      statementInput.value = entry.current_text || entry.original_text || "";
+      statementInput.dataset.evidenceEditText = "true";
+      statementField.append(statementLabel, statementInput);
+      grid.append(contextField, experienceField, statementField);
+      editor.appendChild(grid);
+
+      const actions = document.createElement("div");
+      actions.className = "career-evidence-actions";
+      const save = document.createElement("button");
+      save.type = "button";
+      save.className = "review-primary-button";
+      save.textContent = "Save Working Statement";
+      save.addEventListener("click", () => saveCareerEvidenceDraft(entry, editor, save));
+      const status = document.createElement("span");
+      status.className = "career-evidence-status";
+      status.dataset.evidenceEditStatus = "true";
+      actions.append(save, status);
+      editor.appendChild(actions);
+      return editor;
+    }
+
+    function renderCareerEvidenceApprovalHistory(entry, card) {
+      const approvedItems = Array.isArray(entry.approved_items) ? entry.approved_items : [];
+      if (!approvedItems.length) return;
+
+      const title = document.createElement("div");
+      title.className = "career-evidence-section-title";
+      title.textContent = "Approval history";
+      card.appendChild(title);
+
+      approvedItems.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "career-evidence-suggestion";
+        const approvedText = document.createElement("div");
+        approvedText.className = "career-evidence-card-title";
+        approvedText.textContent = item.approved_text || "Approved evidence";
+        const meta = document.createElement("div");
+        meta.className = "career-evidence-card-copy";
+        const version = item.analysis_version ? `Analysis v${item.analysis_version}` : "";
+        const approvedDate = item.approved_at ? new Date(item.approved_at).toLocaleDateString() : "";
+        meta.textContent = [approvedCareerEvidenceDestinationLabel(item), approvedCareerEvidenceCopyLabel(item), version, approvedDate].filter(Boolean).join(" • ");
+        row.append(approvedText, meta);
+        if (item.source_suggestion && item.source_suggestion !== item.approved_text) {
+          const source = document.createElement("div");
+          source.className = "career-evidence-card-copy";
+          source.textContent = `Original AI suggestion: ${careerEvidenceSnippet(item.source_suggestion, 400)}`;
+          row.appendChild(source);
+        }
+        if (item.source_excerpt) {
+          const support = document.createElement("div");
+          support.className = "career-evidence-card-copy";
+          support.textContent = `Approved evidence source: ${careerEvidenceSnippet(item.source_excerpt, 500)}`;
+          row.appendChild(support);
+        }
+        card.appendChild(row);
+      });
+    }
+
+    function renderCareerEvidenceList(openEntryId = "") {
+      const container = document.getElementById("careerEvidenceList");
+      container.innerHTML = "";
+      if (!careerEvidenceEntries.length) {
+        const empty = document.createElement("div");
+        empty.className = "career-evidence-card-copy";
+        empty.textContent = "No Career Evidence entries yet.";
+        container.appendChild(empty);
+        return;
+      }
+
+      careerEvidenceEntries.forEach(entry => {
+        const card = document.createElement("div");
+        card.className = "career-evidence-card";
+        const top = document.createElement("div");
+        top.className = "career-evidence-card-top";
+        const text = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "career-evidence-card-title";
+        title.textContent = entry.context_label || "Career Evidence";
+        const original = document.createElement("div");
+        original.className = "career-evidence-card-copy";
+        original.textContent = `First submitted statement: ${careerEvidenceSnippet(entry.original_text)}`;
+        text.append(title, original);
+        if (entry.current_text && entry.current_text !== entry.original_text) {
+          const current = document.createElement("div");
+          current.className = "career-evidence-card-copy";
+          current.textContent = `Current working statement: ${careerEvidenceSnippet(entry.current_text)}`;
+          text.appendChild(current);
+        }
+        const badge = document.createElement("span");
+        badge.className = `career-evidence-badge ${entry.status || "draft"}`;
+        badge.textContent = careerEvidenceStatusLabel(entry.status);
+        top.append(text, badge);
+        card.appendChild(top);
+
+        if (entry.status === "draft") {
+          const editor = buildCareerEvidenceEditor(entry);
+          const actions = document.createElement("div");
+          actions.className = "career-evidence-actions";
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "review-secondary-button";
+          edit.textContent = "Edit Draft";
+          edit.addEventListener("click", () => editor.classList.toggle("show"));
+          const analyze = document.createElement("button");
+          analyze.type = "button";
+          analyze.className = "review-primary-button";
+          analyze.textContent = "Analyze Draft";
+          analyze.addEventListener("click", () => analyzeExistingCareerEvidence(entry.id, analyze));
+          const archive = document.createElement("button");
+          archive.type = "button";
+          archive.className = "review-secondary-button";
+          archive.textContent = "Archive";
+          archive.addEventListener("click", () => archiveCareerEvidence(entry, archive));
+          actions.append(edit, analyze, archive);
+          card.append(actions, editor);
+        } else if (entry.status === "ready_for_review") {
+          const review = buildCareerEvidenceReview(entry);
+          const editor = buildCareerEvidenceEditor(entry);
+          const actions = document.createElement("div");
+          actions.className = "career-evidence-actions";
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "review-primary-button";
+          toggle.textContent = "Review Suggestions";
+          toggle.addEventListener("click", () => {
+            review.classList.toggle("show");
+            toggle.textContent = review.classList.contains("show") ? "Close Review" : "Review Suggestions";
+          });
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "review-secondary-button";
+          edit.textContent = "Edit Statement";
+          edit.addEventListener("click", () => editor.classList.toggle("show"));
+          const archive = document.createElement("button");
+          archive.type = "button";
+          archive.className = "review-secondary-button";
+          archive.textContent = "Archive";
+          archive.addEventListener("click", () => archiveCareerEvidence(entry, archive));
+          actions.append(toggle, edit, archive);
+          card.append(actions, review, editor);
+          if (entry.id === openEntryId) {
+            review.classList.add("show");
+            toggle.textContent = "Close Review";
+          }
+        } else if (entry.status === "approved") {
+          const approved = document.createElement("div");
+          approved.className = "career-evidence-card-copy";
+          approved.textContent = "Verified Career Evidence. Profile or master-resume copies remain independently editable.";
+          card.appendChild(approved);
+          renderCareerEvidenceApprovalHistory(entry, card);
+          const actions = document.createElement("div");
+          actions.className = "career-evidence-actions";
+          const archive = document.createElement("button");
+          archive.type = "button";
+          archive.className = "review-secondary-button";
+          archive.textContent = "Archive Evidence";
+          archive.addEventListener("click", () => archiveCareerEvidence(entry, archive));
+          actions.appendChild(archive);
+          card.appendChild(actions);
+        } else if (entry.status === "archived") {
+          const archived = document.createElement("div");
+          archived.className = "career-evidence-card-copy";
+          archived.textContent = "Archived evidence is preserved for your history but excluded from future Application Readiness analysis.";
+          card.appendChild(archived);
+          renderCareerEvidenceApprovalHistory(entry, card);
+        } else if (entry.status === "analyzing") {
+          const analyzing = document.createElement("div");
+          analyzing.className = "career-evidence-card-copy";
+          analyzing.textContent = "Analysis is in progress. Reload shortly if this state does not update.";
+          card.appendChild(analyzing);
+        }
+        container.appendChild(card);
+      });
+    }
+
+    function invalidateCareerEvidenceDependentState() {
+      careerFitData = null;
+      careerFitDataUserId = null;
+      careerFitScoreMap = new Map();
+      if (currentApplicationReadiness) {
+        delete currentApplicationReadiness.__stalenessChecked;
+        delete currentApplicationReadiness.__stalenessChecking;
+        delete currentApplicationReadiness.__stale;
+        delete currentApplicationReadiness.__stalenessUnknown;
+        if (currentJobDetail) renderApplicationReadinessPanel(currentJobDetail, currentApplicationReadiness);
+      }
+    }
+
+    async function analyzeExistingCareerEvidence(entryId, button) {
+      const original = button?.textContent || "Analyze Draft";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Analyzing...";
+      }
+      try {
+        const { data, error } = await db.functions.invoke("analyze-career-evidence", {
+          body: { evidence_id: entryId }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not analyze this Career Evidence."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not analyze this Career Evidence.");
+        await loadCareerEvidence(data.evidence?.id || entryId);
+        showToast("Career Evidence is ready for your review.");
+      } catch (error) {
+        console.error("Career Evidence analysis error:", error);
+        if (/changed|already being analyzed|not found/i.test(String(error?.message || ""))) await loadCareerEvidence(entryId);
+        showToast(error?.message || "We couldn't analyze this Career Evidence.");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = original;
+        }
+      }
+    }
+
+    async function createCareerEvidence() {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to build your Career Evidence.");
+        return;
+      }
+      const textInput = document.getElementById("careerEvidenceText");
+      const contextInput = document.getElementById("careerEvidenceContext");
+      const experienceInput = document.getElementById("careerEvidenceExperience");
+      const button = document.getElementById("analyzeCareerEvidenceButton");
+      const status = document.getElementById("careerEvidenceStatus");
+      const originalText = textInput.value.trim();
+      if (originalText.length < 20) {
+        status.textContent = "Describe at least one responsibility, project, tool, or accomplishment.";
+        textInput.focus();
+        return;
+      }
+      if (/\b\d{3}-\d{2}-\d{4}\b/.test(originalText) || /\b(?:medical record number|mrn)\s*[:#-]?\s*[a-z0-9-]{4,}\b/i.test(originalText)) {
+        status.textContent = "Remove private identifiers before continuing.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Saving your evidence...";
+      let entryId = "";
+      try {
+        const { data: created, error: createError } = await db.rpc("applystronger_create_career_evidence", {
+          p_original_text: originalText,
+          p_context_label: contextInput.value.trim() || null,
+          p_experience_id: experienceInput.value || null
+        });
+        if (createError) throw createError;
+        entryId = created?.evidence?.id || "";
+        if (!created?.success || !entryId) throw new Error("Career Evidence could not be saved.");
+
+        status.textContent = "Analyzing your evidence...";
+        const { data, error } = await db.functions.invoke("analyze-career-evidence", {
+          body: { evidence_id: entryId }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "ApplyStronger could not analyze this Career Evidence."));
+        if (!data?.success) throw new Error(data?.error || "ApplyStronger could not analyze this Career Evidence.");
+
+        textInput.value = "";
+        contextInput.value = "";
+        experienceInput.value = "";
+        status.textContent = "Analysis ready. Review every suggestion before approval.";
+        await loadCareerEvidence(data.evidence?.id || entryId);
+        showToast("Career Evidence is ready for your review.");
+      } catch (error) {
+        console.error("Create Career Evidence error:", error);
+        status.textContent = error instanceof Error && entryId
+          ? `${error.message} Your draft was saved and can be analyzed again.`
+          : careerEvidenceErrorMessage(error, "We couldn't save this Career Evidence.");
+        await loadCareerEvidence(entryId);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function saveCareerEvidenceDraft(entry, editor, button) {
+      const status = editor.querySelector("[data-evidence-edit-status]");
+      const currentText = editor.querySelector("[data-evidence-edit-text]")?.value.trim() || "";
+      const contextLabel = editor.querySelector("[data-evidence-edit-context]")?.value.trim() || "";
+      const experienceId = editor.querySelector("[data-evidence-edit-experience]")?.value || "";
+      if (currentText.length < 20) {
+        status.textContent = "Describe at least one responsibility, project, tool, or accomplishment.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Saving working statement...";
+      try {
+        const { data, error } = await db.rpc("applystronger_update_career_evidence", {
+          p_evidence_id: entry.id,
+          p_current_text: currentText,
+          p_context_label: contextLabel || null,
+          p_experience_id: experienceId || null,
+          p_expected_updated_at: entry.updated_at
+        });
+        if (error) throw error;
+        if (!data?.success) throw new Error("Career Evidence could not be updated.");
+        invalidateCareerEvidenceDependentState();
+        await loadCareerEvidence(entry.id);
+        showToast("Working statement saved. Analyze it again before approval.");
+      } catch (error) {
+        console.error("Career Evidence update error:", error);
+        status.textContent = careerEvidenceErrorMessage(error, "We couldn't update this Career Evidence.");
+        if (careerEvidenceNeedsReload(error)) await loadCareerEvidence(entry.id);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function saveCareerEvidenceReview(entry, review, approve, button) {
+      const payload = collectCareerEvidenceReview(review);
+      const status = review.querySelector("[data-evidence-review-status]");
+      const selected = payload.items.filter(item => item.selected);
+      if (approve && !selected.length) {
+        status.textContent = "Select at least one truthful item before approval.";
+        return;
+      }
+      if (selected.some(item => !item.destination)) {
+        status.textContent = "Choose a destination for every selected item.";
+        return;
+      }
+      if (selected.some(item => item.item_type === "resume_bullet" && item.destination === "master_resume") && !payload.experience_id) {
+        status.textContent = "Choose the work experience that should receive selected master-resume bullets.";
+        return;
+      }
+      if (approve && !payload.attested) {
+        status.textContent = "Confirm the accuracy statement before approving Career Evidence.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = approve ? "Approving selected items..." : "Saving your review...";
+      try {
+        const rpcName = approve
+          ? "applystronger_approve_career_evidence"
+          : "applystronger_save_career_evidence_review";
+        const { data, error } = await db.rpc(rpcName, {
+          p_evidence_id: entry.id,
+          p_reviewed_data: payload,
+          p_expected_updated_at: entry.updated_at
+        });
+        if (error) throw error;
+        if (!data?.success) throw new Error(approve
+          ? "ApplyStronger could not approve these Career Evidence selections."
+          : "ApplyStronger could not save this Career Evidence review.");
+
+        if (approve) {
+          invalidateCareerEvidenceDependentState();
+          await Promise.all([
+            loadCareerEvidence(),
+            loadCareerProfile(currentSession.user.id),
+            loadMemberDashboard(currentSession.user.id)
+          ]);
+          showToast("Career Evidence approved. Only the destinations you selected were updated.");
+        } else {
+          await loadCareerEvidence(entry.id);
+          showToast("Career Evidence review saved. Nothing was added to your Career Profile or resume.");
+        }
+      } catch (error) {
+        console.error("Career Evidence review error:", error);
+        status.textContent = careerEvidenceErrorMessage(error, "We couldn't save this Career Evidence review.");
+        if (careerEvidenceNeedsReload(error)) await loadCareerEvidence(entry.id);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function archiveCareerEvidence(entry, button) {
+      if (entry.status === "approved") {
+        const confirmed = window.confirm("Archive this Career Evidence? It will stop supporting future Application Readiness reviews. Skills or resume bullets you already approved into your profile will remain independently editable.");
+        if (!confirmed) return;
+      }
+      button.disabled = true;
+      const original = button.textContent;
+      button.textContent = "Archiving...";
+      try {
+        const { data, error } = await db.rpc("applystronger_archive_career_evidence", {
+          p_evidence_id: entry.id,
+          p_expected_updated_at: entry.updated_at
+        });
+        if (error) throw error;
+        if (!data?.success) throw new Error("ApplyStronger could not archive this Career Evidence.");
+        invalidateCareerEvidenceDependentState();
+        await loadCareerEvidence();
+        showToast("Career Evidence archived. Its audit history was preserved.");
+      } catch (error) {
+        console.error("Career Evidence archive error:", error);
+        showToast(careerEvidenceErrorMessage(error, "We couldn't archive this Career Evidence."));
+        if (careerEvidenceNeedsReload(error)) await loadCareerEvidence(entry.id);
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    }
+
+    document.getElementById("analyzeCareerEvidenceButton").addEventListener("click", createCareerEvidence);
