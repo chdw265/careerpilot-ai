@@ -1,0 +1,47 @@
+name: Application Quality UI
+
+on:
+  pull_request:
+    paths:
+      - index.html
+      - scripts/application-quality-ui-check.mjs
+      - scripts/harden-application-quality-ui.mjs
+      - scripts/phase0-career-evidence.block.js.txt
+      - scripts/phase0-readiness.block.js.txt
+      - .github/workflows/application-quality-ui.yml
+  push:
+    branches:
+      - agent/application-quality-ui
+    paths:
+      - index.html
+      - scripts/application-quality-ui-check.mjs
+      - scripts/harden-application-quality-ui.mjs
+      - scripts/phase0-career-evidence.block.js.txt
+      - scripts/phase0-readiness.block.js.txt
+      - .github/workflows/application-quality-ui.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Confirm hardening transform is idempotent
+        run: |
+          node scripts/harden-application-quality-ui.mjs
+          git diff --exit-code -- index.html
+
+      - name: Run Application Quality UI checks
+        run: node scripts/application-quality-ui-check.mjs
+
+      - name: Check whitespace
+        run: git diff --check
