@@ -2483,7 +2483,7 @@
   <script>
     const SUPABASE_URL = "https://jebakbovivznzcmtyvcc.supabase.co";
     const SUPABASE_KEY = "sb_publishable_QppdZWsosznSUDQZWrv5hA_qmnTa1Ng";
-    const SITE_URL = "https://chdw265.github.io/careerpilot-ai/";
+    const SITE_URL = new URL("./", window.location.href).href;
 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     // Public job reads must use the normalized, U.S.-eligible, canonical inventory.
