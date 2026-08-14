@@ -1,0 +1,108 @@
+    .employer-coverage-notice:empty { display: none; }
+    .employer-coverage-card {
+      margin: 16px 0 22px;
+      padding: 22px;
+      border: 1px solid #c7d7fe;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f8faff, #ffffff);
+      text-align: left;
+    }
+    .employer-coverage-card h3 {
+      color: #14213d;
+      font-size: 21px;
+      line-height: 1.3;
+      margin: 8px 0;
+    }
+    .employer-coverage-card p { color: #475467; }
+    .employer-coverage-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #e8edff;
+      color: #244bc5;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .employer-coverage-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .employer-coverage-metric {
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      background: white;
+      padding: 12px;
+    }
+    .employer-coverage-metric strong {
+      display: block;
+      color: #14213d;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+    .employer-coverage-metric span {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+      font-weight: 750;
+    }
+    .employer-report-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #d6e4ff;
+    }
+    .employer-report-form label {
+      display: block;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .employer-report-form input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .employer-report-button {
+      min-height: 44px;
+      border: 1px solid #315ee8;
+      border-radius: 8px;
+      background: #315ee8;
+      color: white;
+      padding: 10px 14px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .employer-report-button:disabled { opacity: .55; cursor: not-allowed; }
+    .employer-report-status {
+      grid-column: 1 / -1;
+      min-height: 20px;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .employer-report-status.success { color: #067647; }
+    .employer-report-status.error { color: #b42318; }
+    .employer-coverage-footnote {
+      margin-top: 10px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    @media (max-width: 640px) {
+      .employer-report-form { grid-template-columns: 1fr; }
+      .employer-report-button { width: 100%; }
+    }
