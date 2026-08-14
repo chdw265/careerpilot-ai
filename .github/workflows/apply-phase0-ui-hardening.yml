@@ -6,6 +6,7 @@ on:
       - agent/application-quality-ui
     paths:
       - scripts/harden-application-quality-ui.mjs
+      - scripts/application-quality-ui-check.mjs
       - scripts/phase0-career-evidence.block.js.txt
       - scripts/phase0-readiness.block.js.txt
       - .github/workflows/apply-phase0-ui-hardening.yml
