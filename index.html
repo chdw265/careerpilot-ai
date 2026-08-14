@@ -573,6 +573,115 @@
       line-height: 1.45;
     }
 
+    .employer-coverage-notice:empty { display: none; }
+    .employer-coverage-card {
+      margin: 16px 0 22px;
+      padding: 22px;
+      border: 1px solid #c7d7fe;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f8faff, #ffffff);
+      text-align: left;
+    }
+    .employer-coverage-card h3 {
+      color: #14213d;
+      font-size: 21px;
+      line-height: 1.3;
+      margin: 8px 0;
+    }
+    .employer-coverage-card p { color: #475467; }
+    .employer-coverage-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #e8edff;
+      color: #244bc5;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .employer-coverage-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .employer-coverage-metric {
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      background: white;
+      padding: 12px;
+    }
+    .employer-coverage-metric strong {
+      display: block;
+      color: #14213d;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+    .employer-coverage-metric span {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+      font-weight: 750;
+    }
+    .employer-report-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #d6e4ff;
+    }
+    .employer-report-form label {
+      display: block;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .employer-report-form input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #14213d;
+      background: white;
+      font: inherit;
+    }
+    .employer-report-button {
+      min-height: 44px;
+      border: 1px solid #315ee8;
+      border-radius: 8px;
+      background: #315ee8;
+      color: white;
+      padding: 10px 14px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .employer-report-button:disabled { opacity: .55; cursor: not-allowed; }
+    .employer-report-status {
+      grid-column: 1 / -1;
+      min-height: 20px;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .employer-report-status.success { color: #067647; }
+    .employer-report-status.error { color: #b42318; }
+    .employer-coverage-footnote {
+      margin-top: 10px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    @media (max-width: 640px) {
+      .employer-report-form { grid-template-columns: 1fr; }
+      .employer-report-button { width: 100%; }
+    }
+
     .job-card {
       position: relative;
       background: white;
@@ -2337,6 +2446,7 @@
       </form>
 
       <p id="jobSearchStatus">Loading current jobs...</p>
+      <div id="jobCoverageNotice" class="employer-coverage-notice" aria-live="polite"></div>
       <div id="jobResults"></div>
     </div>
   </section>
@@ -2516,6 +2626,9 @@
     let currentApplicationResumeOptions = new Map();
     let currentApplicationRouteMode = "none";
     let currentApplicationRouteOfficialLocation = null;
+    let employerCoverageCache = new Map();
+    let canonicalEmployerNameByAlias = new Map();
+    let employerCoverageLookupUnavailable = false;
     const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set([]); // Add provider slugs only after a real submission integration is deployed.
 
     const JOB_DETAIL_SELECT = `
@@ -2542,6 +2655,264 @@
       toast.textContent = message;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 3500);
+    }
+
+    function normalizeEmployerLookup(value) {
+      return String(value || "")
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/\b(the|incorporated|inc|llc|ltd|limited|corp|corporation|company|co|plc)\b/g, "")
+        .replace(/[^a-z0-9]+/g, "");
+    }
+
+    function rememberEmployerCoverage(row) {
+      if (!row?.canonical_name) return row || null;
+      const terms = [row.canonical_name, row.matched_alias, ...(Array.isArray(row.search_terms) ? row.search_terms : [])];
+      terms.filter(Boolean).forEach(term => {
+        const normalized = normalizeEmployerLookup(term);
+        if (normalized) canonicalEmployerNameByAlias.set(normalized, row.canonical_name);
+      });
+      return row;
+    }
+
+    async function resolveEmployerCoverage(queryText, limit = 8) {
+      const normalized = normalizeEmployerLookup(queryText);
+      if (normalized.length < 2) return [];
+      if (employerCoverageCache.has(normalized)) return employerCoverageCache.get(normalized);
+
+      const { data, error } = await db.rpc("applystronger_resolve_employer_search", {
+        p_query: queryText,
+        p_limit: Math.min(Math.max(Number(limit) || 8, 1), 20),
+      });
+
+      if (error) {
+        console.warn("Employer coverage lookup is not available yet:", error);
+        employerCoverageLookupUnavailable = true;
+        return [];
+      }
+
+      employerCoverageLookupUnavailable = false;
+      const rows = Array.isArray(data) ? data.map(rememberEmployerCoverage) : [];
+      employerCoverageCache.set(normalized, rows);
+      return rows;
+    }
+
+    function canonicalEmployerNameFor(companyName) {
+      const normalized = normalizeEmployerLookup(companyName);
+      return canonicalEmployerNameByAlias.get(normalized) || companyName || "Company not listed";
+    }
+
+    function employerSearchTerms(companyName, coverageRows) {
+      const values = [companyName];
+      (coverageRows || []).forEach(row => {
+        values.push(row?.canonical_name, row?.matched_alias);
+        if (Array.isArray(row?.search_terms)) values.push(...row.search_terms);
+      });
+
+      const seen = new Set();
+      return values
+        .map(value => String(value || "").trim())
+        .filter(value => {
+          if (!value || value.length > 300) return false;
+          const key = value.toLowerCase();
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .slice(0, 40);
+    }
+
+    function coverageStatusCopy(coverage, companyName) {
+      const displayName = coverage?.canonical_name || companyName;
+      const publicJobs = Number(coverage?.active_job_count || 0);
+      const hiddenJobs = Number(coverage?.hidden_job_count || 0);
+
+      switch (coverage?.coverage_status) {
+        case "covered":
+          return {
+            badge: "Employer covered",
+            heading: `${displayName} is in ApplyStronger`,
+            message: publicJobs
+              ? `ApplyStronger currently has ${publicJobs.toLocaleString()} public job${publicJobs === 1 ? "" : "s"} for this employer, but none matched all of the filters in this search.`
+              : "The employer is connected, but no public openings matched this search.",
+          };
+        case "covered_no_openings":
+          return {
+            badge: "Employer covered",
+            heading: `${displayName} has no current public openings`,
+            message: "ApplyStronger successfully checks this employer and did not find a current opening matching this search.",
+          };
+        case "covered_pending_review":
+          return {
+            badge: "Jobs under review",
+            heading: `${displayName} is connected`,
+            message: hiddenJobs
+              ? `${hiddenJobs.toLocaleString()} collected job${hiddenJobs === 1 ? " is" : "s are"} waiting for location, United States eligibility, or data-quality review before being shown publicly.`
+              : "Some collected jobs are waiting for eligibility or data-quality review.",
+          };
+        case "identified":
+        case "validation_pending":
+          return {
+            badge: "Employer identified",
+            heading: `${displayName} is in the coverage queue`,
+            message: "ApplyStronger has identified this employer's job-posting system and is validating the exact careers site before collection begins.",
+          };
+        case "collector_pending":
+          return {
+            badge: "Collector being built",
+            heading: `${displayName} uses a platform not connected yet`,
+            message: "The employer and posting platform are identified. ApplyStronger is building or reviewing the collector needed to add its jobs safely.",
+          };
+        case "needs_access":
+          return {
+            badge: "Feed access needed",
+            heading: `${displayName} needs an approved source`,
+            message: "A safe reusable public feed has not been confirmed. Coverage may require employer permission, a licensed partner feed, or another approved source.",
+          };
+        case "unsupported":
+          return {
+            badge: "Not supported yet",
+            heading: `${displayName} is not collectable through a current connector`,
+            message: "The employer remains on the coverage backlog while ApplyStronger evaluates an approved collection route.",
+          };
+        case "needs_review":
+          return {
+            badge: "Research needed",
+            heading: `${displayName} needs source verification`,
+            message: "ApplyStronger has recorded the employer, but its official careers page or job-posting platform still needs to be confirmed.",
+          };
+        default:
+          return {
+            badge: "Employer not covered yet",
+            heading: `Help ApplyStronger add ${displayName}`,
+            message: "This employer is not yet in the verified coverage registry. Reporting the missing job creates a prioritized review item.",
+          };
+      }
+    }
+
+    async function submitMissingEmployerReport({ company, keyword, location, careersUrl, button, message }) {
+      if (!currentSession?.user) {
+        openAuth("signin", "Sign in to report a missing employer or job and track the coverage request.");
+        return;
+      }
+
+      button.disabled = true;
+      message.className = "employer-report-status";
+      message.textContent = "Saving your coverage report...";
+
+      try {
+        const { data, error } = await db.rpc("applystronger_report_missing_job", {
+          p_employer_name: company,
+          p_job_title: keyword || null,
+          p_location_text: location || null,
+          p_careers_url: careersUrl || null,
+        });
+        if (error) throw error;
+        const result = Array.isArray(data) ? data[0] : data;
+        message.className = "employer-report-status success";
+        message.textContent = result?.message || "Report saved. This employer was added to the coverage review queue.";
+        button.textContent = "Report saved";
+      } catch (error) {
+        console.error("Missing employer report error:", error);
+        message.className = "employer-report-status error";
+        message.textContent = error?.message?.includes("applystronger_report_missing_job")
+          ? "Coverage reporting will become available after the backend foundation is released."
+          : (error?.message || "We could not save the report right now.");
+        button.disabled = false;
+      }
+    }
+
+    function renderEmployerCoverageNotice({ company, keyword, location, coverageRows }) {
+      const host = document.getElementById("jobCoverageNotice");
+      host.innerHTML = "";
+      if (!company) return;
+
+      const coverage = coverageRows?.[0] || null;
+      const copy = employerCoverageLookupUnavailable && !coverage
+        ? {
+            badge: "Coverage check unavailable",
+            heading: `We could not verify ${company}'s coverage status`,
+            message: "The job search completed, but ApplyStronger could not load the employer coverage registry. You can still report the missing job for review.",
+          }
+        : coverageStatusCopy(coverage, company);
+      const card = document.createElement("section");
+      card.className = "employer-coverage-card";
+
+      const badge = document.createElement("span");
+      badge.className = "employer-coverage-badge";
+      badge.textContent = copy.badge;
+
+      const heading = document.createElement("h3");
+      heading.textContent = copy.heading;
+
+      const description = document.createElement("p");
+      description.textContent = copy.message;
+      card.append(badge, heading, description);
+
+      if (coverage) {
+        const metrics = document.createElement("div");
+        metrics.className = "employer-coverage-metrics";
+        [
+          [coverage.active_job_count, "Public jobs"],
+          [coverage.hidden_job_count, "Collected, under review"],
+          [coverage.collected_job_count, "Total collected"],
+        ].forEach(([value, label]) => {
+          const metric = document.createElement("div");
+          metric.className = "employer-coverage-metric";
+          const strong = document.createElement("strong");
+          strong.textContent = Number(value || 0).toLocaleString();
+          const span = document.createElement("span");
+          span.textContent = label;
+          metric.append(strong, span);
+          metrics.appendChild(metric);
+        });
+        card.appendChild(metrics);
+      }
+
+      const form = document.createElement("form");
+      form.className = "employer-report-form";
+      const field = document.createElement("div");
+      const inputId = `coverageCareersUrl-${Date.now()}`;
+      const label = document.createElement("label");
+      label.htmlFor = inputId;
+      label.textContent = "Official careers link (optional)";
+      const input = document.createElement("input");
+      input.id = inputId;
+      input.type = "url";
+      input.inputMode = "url";
+      input.placeholder = "https://company.com/careers";
+      input.autocomplete = "url";
+      field.append(label, input);
+
+      const button = document.createElement("button");
+      button.type = "submit";
+      button.className = "employer-report-button";
+      button.textContent = "Report missing employer or job";
+
+      const message = document.createElement("div");
+      message.className = "employer-report-status";
+      message.setAttribute("role", "status");
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        submitMissingEmployerReport({
+          company,
+          keyword,
+          location,
+          careersUrl: input.value.trim(),
+          button,
+          message,
+        });
+      });
+      form.append(field, button, message);
+      card.appendChild(form);
+
+      const footnote = document.createElement("p");
+      footnote.className = "employer-coverage-footnote";
+      footnote.textContent = "Reports prioritize coverage research. They do not create a job listing or change an employer's status automatically.";
+      card.appendChild(footnote);
+      host.appendChild(card);
     }
 
     function setMessage(element, message, type) {
@@ -5144,7 +5515,7 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = className;
-      button.textContent = companyName || "Company not listed";
+      button.textContent = canonicalEmployerNameFor(companyName);
       if (companyName) button.addEventListener("click", () => openCompanyPage(companyName));
       else button.disabled = true;
       return button;
@@ -7619,8 +7990,9 @@
     async function openCompanyPage(companyName) {
       if (!companyName) return;
       currentCompanyName = companyName;
+      const displayCompanyName = canonicalEmployerNameFor(companyName);
       companySection.style.display = "block";
-      document.getElementById("companyPageName").textContent = companyName;
+      document.getElementById("companyPageName").textContent = displayCompanyName;
       document.getElementById("companyPageSubtitle").textContent = "Loading current ApplyStronger company data...";
       document.getElementById("companySummary").innerHTML = "";
       document.getElementById("companyJobsResults").innerHTML = "";
@@ -7663,9 +8035,9 @@
       const searchButton = document.createElement("button");
       searchButton.type = "button";
       searchButton.className = "workspace-button";
-      searchButton.textContent = `Search all ${companyName} jobs`;
+      searchButton.textContent = `Search all ${displayCompanyName} jobs`;
       searchButton.addEventListener("click", () => {
-        document.getElementById("jobCompany").value = companyName;
+        document.getElementById("jobCompany").value = displayCompanyName;
         document.getElementById("jobPosted").value = "";
         searchJobs();
         document.getElementById("job-search").scrollIntoView({ behavior: "smooth" });
@@ -8230,9 +8602,11 @@
       results.innerHTML = "";
 
       if (!jobs.length) {
-        const message = document.createElement("p");
-        message.textContent = "No jobs matched your search.";
-        results.appendChild(message);
+        if (!options.suppressEmpty) {
+          const message = document.createElement("p");
+          message.textContent = options.emptyMessage || "No jobs matched your search.";
+          results.appendChild(message);
+        }
         return;
       }
 
@@ -8391,10 +8765,14 @@
       const includeWorkSettingUnknown = document.getElementById("includeWorkSettingUnknown").checked;
       const status = document.getElementById("jobSearchStatus");
       const results = document.getElementById("jobResults");
+      const coverageNotice = document.getElementById("jobCoverageNotice");
 
       status.textContent = "Searching current jobs...";
       results.innerHTML = "";
+      coverageNotice.innerHTML = "";
 
+      const coverageRows = company ? await resolveEmployerCoverage(company, 8) : [];
+      const companyTerms = employerSearchTerms(company, coverageRows);
       const signedIn = Boolean(currentSession?.user);
       const usingFitFilter = signedIn && Boolean(minimumFit);
       const usingBestMatchSort = signedIn && sortBy === "best-match";
@@ -8409,7 +8787,11 @@
       if (keyword) {
         query = query.or(`title.ilike.%${keyword}%,description.ilike.%${keyword}%,company_name.ilike.%${keyword}%`);
       }
-      if (company) query = query.ilike("company_name", `%${company}%`);
+      if (company) {
+        query = coverageRows.length && companyTerms.length
+          ? query.in("company_name", companyTerms)
+          : query.ilike("company_name", `%${company}%`);
+      }
 
       const cutoff = getPostedCutoff(postedDays);
       if (cutoff) query = query.gte("posted_at", cutoff);
@@ -8493,7 +8875,14 @@
           : `${total} current job${total === 1 ? "" : "s"} found`;
       }
 
-      renderJobs(jobs, results, { matchMap, fitMap });
+      renderJobs(jobs, results, {
+        matchMap,
+        fitMap,
+        suppressEmpty: Boolean(company),
+      });
+      if (!jobs.length && company) {
+        renderEmployerCoverageNotice({ company, keyword, location, coverageRows });
+      }
       syncSaveButtons();
     }
 
@@ -8501,6 +8890,9 @@
       const term = searchText.trim().toLowerCase();
       if (term.length < 2) return [];
 
+      const coverageRows = databaseField === "company_name"
+        ? await resolveEmployerCoverage(searchText, 8)
+        : [];
       const { data, error } = await db
         .from(PUBLIC_JOBS_SOURCE)
         .select(databaseField)
@@ -8510,10 +8902,11 @@
 
       if (error) {
         console.error("Autocomplete error:", error);
-        return [];
       }
 
-      const uniqueValues = [...new Set((data || []).map(row => row[databaseField]).filter(Boolean))];
+      const coverageNames = coverageRows.map(row => row.canonical_name).filter(Boolean);
+      const databaseValues = (data || []).map(row => row[databaseField]).filter(Boolean);
+      const uniqueValues = [...new Set([...coverageNames, ...databaseValues])];
 
       return uniqueValues
         .map(value => {
