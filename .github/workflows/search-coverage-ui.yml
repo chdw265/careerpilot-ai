@@ -1,0 +1,40 @@
+name: Search Coverage UI
+
+on:
+  pull_request:
+    paths:
+      - index.html
+      - scripts/search-coverage-ui-check.mjs
+      - scripts/application-quality-ui-check.mjs
+      - .github/workflows/search-coverage-ui.yml
+  push:
+    branches:
+      - agent/search-coverage-repair
+    paths:
+      - index.html
+      - scripts/search-coverage-ui-check.mjs
+      - scripts/application-quality-ui-check.mjs
+      - .github/workflows/search-coverage-ui.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Run existing and coverage-specific UI checks
+        run: |
+          node scripts/application-quality-ui-check.mjs
+          node scripts/search-coverage-ui-check.mjs
+
+      - name: Check whitespace
+        run: git diff --check
