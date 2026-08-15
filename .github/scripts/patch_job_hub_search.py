@@ -1,0 +1,238 @@
+from pathlib import Path
+
+p = Path('index.html')
+s = p.read_text()
+
+css_old = '    #jobSearchStatus { margin-top: 28px; margin-bottom: 15px; font-weight: 600; }'
+css_new = '''    #jobSearchStatus { margin-top: 28px; margin-bottom: 15px; font-weight: 600; }
+    .coverage-prompt {
+      display: none;
+      margin: 14px 0 20px;
+      padding: 18px;
+      border: 1px solid #cfd6e1;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 5px 18px rgba(0,0,0,.03);
+    }
+    .coverage-prompt.open { display: block; }
+    .coverage-prompt h3 { font-size: 18px; margin-bottom: 5px; color: #14213d; }
+    .coverage-prompt p { color: #667085; font-size: 13px; margin-bottom: 12px; }
+    .coverage-report-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .coverage-report-field { display: grid; gap: 5px; }
+    .coverage-report-field.full { grid-column: 1 / -1; }
+    .coverage-report-field label { color: #344054; font-size: 12px; font-weight: 800; }
+    .coverage-report-field input { width: 100%; border: 1px solid #cfd6e1; border-radius: 8px; padding: 10px 11px; color: #14213d; background: white; font: inherit; }
+    .coverage-report-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .coverage-report-button { border: 1px solid #315ee8; background: #315ee8; color: white; border-radius: 8px; padding: 10px 14px; font-weight: 800; cursor: pointer; }
+    .coverage-report-button:disabled { opacity: .55; cursor: not-allowed; }
+    .coverage-report-status { color: #667085; font-size: 12px; font-weight: 700; }
+    .coverage-status-note { margin: 10px 0 16px; padding: 11px 12px; border-radius: 10px; border: 1px solid #d6e4ff; background: #f8faff; color: #344054; font-size: 13px; }
+    @media (max-width: 640px) { .coverage-report-grid { grid-template-columns: 1fr; } .coverage-report-field.full { grid-column: auto; } }'''
+assert css_old in s
+s = s.replace(css_old, css_new, 1)
+
+html_old = '''      <p id="jobSearchStatus">Loading current jobs...</p>
+      <div id="jobResults"></div>'''
+html_new = '''      <p id="jobSearchStatus">Loading current jobs...</p>
+      <div id="jobCoverageStatusNote" class="coverage-status-note" style="display:none;"></div>
+      <div id="jobCoveragePrompt" class="coverage-prompt" aria-live="polite">
+        <h3>Can’t find the employer or job you expected?</h3>
+        <p>Tell ApplyStronger what is missing. Your report helps prioritize employer coverage and job-source repairs.</p>
+        <form id="missingJobForm">
+          <div class="coverage-report-grid">
+            <div class="coverage-report-field"><label for="missingEmployerName">Employer</label><input id="missingEmployerName" maxlength="300" required></div>
+            <div class="coverage-report-field"><label for="missingJobTitle">Job title (optional)</label><input id="missingJobTitle" maxlength="500"></div>
+            <div class="coverage-report-field"><label for="missingJobLocation">Location (optional)</label><input id="missingJobLocation" maxlength="500"></div>
+            <div class="coverage-report-field"><label for="missingCareersUrl">Official careers link (optional)</label><input id="missingCareersUrl" type="url" maxlength="2000" placeholder="https://..."></div>
+          </div>
+          <div class="coverage-report-actions">
+            <button id="missingJobSubmit" type="submit" class="coverage-report-button">Report Missing Job</button>
+            <span id="missingJobStatus" class="coverage-report-status"></span>
+          </div>
+        </form>
+      </div>
+      <div id="jobResults"></div>'''
+assert html_old in s
+s = s.replace(html_old, html_new, 1)
+
+marker = '    async function searchJobs() {'
+helper = '''    async function resolveEmployerCoverage(value) {
+      const query = String(value || "").trim();
+      if (query.length < 2) return null;
+      const { data, error } = await db.rpc("applystronger_resolve_employer_search", { p_query: query, p_limit: 1 });
+      if (error) { console.error("Employer coverage lookup error:", error); return null; }
+      return Array.isArray(data) && data.length ? data[0] : null;
+    }
+
+    function coverageStatusCopy(coverage) {
+      if (!coverage) return "";
+      const name = coverage.canonical_name || "This employer";
+      const messages = {
+        covered: `${name} is covered by ApplyStronger. No current jobs matched these filters.`,
+        covered_no_openings: `${name} is covered, but no current openings are published in ApplyStronger.`,
+        covered_pending_review: `${name} has collected jobs waiting for eligibility or data-quality review.`,
+        validation_pending: `${name} has been identified and its job source is being validated.`,
+        collector_pending: `${name} has been identified and collection is being added.`,
+        identified: `${name} has been identified and remains in the coverage build queue.`,
+        needs_access: `${name} has been identified, but an approved job-data route is still needed.`,
+        needs_review: `${name} is in the coverage review queue.`
+      };
+      return messages[coverage.coverage_status] || `${name} is in the ApplyStronger coverage registry.`;
+    }
+
+    function updateCoveragePrompt({ total, company, keyword, location, coverage }) {
+      const prompt = document.getElementById("jobCoveragePrompt");
+      const note = document.getElementById("jobCoverageStatusNote");
+      const employer = coverage?.canonical_name || company || "";
+      note.style.display = "none";
+      note.textContent = "";
+      prompt.classList.remove("open");
+      if (coverage && total === 0) { note.textContent = coverageStatusCopy(coverage); note.style.display = "block"; }
+      if (total !== 0) return;
+      prompt.classList.add("open");
+      document.getElementById("missingEmployerName").value = employer;
+      document.getElementById("missingJobTitle").value = keyword || "";
+      document.getElementById("missingJobLocation").value = location || "";
+      document.getElementById("missingJobStatus").textContent = currentSession?.user ? "" : "Sign in to submit a report.";
+    }
+
+'''
+assert marker in s
+s = s.replace(marker, helper + marker, 1)
+
+old_begin = '''      status.textContent = "Searching current jobs...";
+      results.innerHTML = "";
+
+      const signedIn = Boolean(currentSession?.user);'''
+new_begin = '''      status.textContent = "Searching current jobs...";
+      results.innerHTML = "";
+      document.getElementById("jobCoveragePrompt").classList.remove("open");
+      document.getElementById("jobCoverageStatusNote").style.display = "none";
+
+      const companyCoverage = company ? await resolveEmployerCoverage(company) : null;
+      const signedIn = Boolean(currentSession?.user);'''
+assert old_begin in s
+s = s.replace(old_begin, new_begin, 1)
+
+old_company = '      if (company) query = query.ilike("company_name", `%${company}%`);'
+new_company = '''      if (company) {
+        const companyTerms = Array.isArray(companyCoverage?.search_terms) ? [...new Set(companyCoverage.search_terms.map(value => String(value || "").trim()).filter(Boolean))] : [];
+        if (companyTerms.length) query = query.in("company_name", companyTerms);
+        else query = query.ilike("company_name", `%${company}%`);
+      }'''
+assert old_company in s
+s = s.replace(old_company, new_company, 1)
+
+old_jobs = '      let jobs = data || [];\n      let fitMap = new Map();'
+new_jobs = '''      let jobs = data || [];
+      if (companyCoverage?.canonical_name) jobs = jobs.map(job => ({ ...job, company_name: companyCoverage.canonical_name }));
+      let fitMap = new Map();'''
+assert old_jobs in s
+s = s.replace(old_jobs, new_jobs, 1)
+
+old_render = '''      renderJobs(jobs, results, { matchMap, fitMap });
+      syncSaveButtons();
+    }
+
+    async function getSuggestions(databaseField, searchText) {'''
+new_render = '''      renderJobs(jobs, results, { matchMap, fitMap });
+      syncSaveButtons();
+      updateCoveragePrompt({ total, company, keyword, location, coverage: companyCoverage });
+    }
+
+    async function getSuggestions(databaseField, searchText) {'''
+assert old_render in s
+s = s.replace(old_render, new_render, 1)
+
+old_suggest_start = '''    async function getSuggestions(databaseField, searchText) {
+      const term = searchText.trim().toLowerCase();
+      if (term.length < 2) return [];
+
+      const { data, error } = await db'''
+new_suggest_start = '''    async function getSuggestions(databaseField, searchText) {
+      const term = searchText.trim().toLowerCase();
+      if (term.length < 2) return [];
+
+      let registrySuggestions = [];
+      if (databaseField === "company_name") {
+        const { data: coverageRows, error: coverageError } = await db.rpc("applystronger_resolve_employer_search", { p_query: searchText.trim(), p_limit: 8 });
+        if (!coverageError) registrySuggestions = (coverageRows || []).map(row => row.canonical_name).filter(Boolean);
+      }
+
+      const { data, error } = await db'''
+assert old_suggest_start in s
+s = s.replace(old_suggest_start, new_suggest_start, 1)
+
+old_return = '''      return uniqueValues
+        .map(value => {
+          const lower = value.toLowerCase().trim();
+          const words = lower.split(/[\\s\\-\\/(),]+/).filter(Boolean);
+          let score = 99;
+          if (lower.startsWith(term)) score = 0;
+          else if (words.some(word => word.startsWith(term))) score = 1;
+          return { value, score };
+        })
+        .filter(item => item.score < 99)
+        .sort((a, b) => a.score !== b.score ? a.score - b.score : a.value.localeCompare(b.value))
+        .slice(0, 8)
+        .map(item => item.value);'''
+new_return = '''      const databaseSuggestions = uniqueValues
+        .map(value => {
+          const lower = value.toLowerCase().trim();
+          const words = lower.split(/[\\s\\-\\/(),]+/).filter(Boolean);
+          let score = 99;
+          if (lower.startsWith(term)) score = 0;
+          else if (words.some(word => word.startsWith(term))) score = 1;
+          return { value, score };
+        })
+        .filter(item => item.score < 99)
+        .sort((a, b) => a.score !== b.score ? a.score - b.score : a.value.localeCompare(b.value))
+        .map(item => item.value);
+
+      return [...new Set([...registrySuggestions, ...databaseSuggestions])].slice(0, 8);'''
+assert old_return in s
+s = s.replace(old_return, new_return, 1)
+
+listener_marker = '''    document.getElementById("jobSearchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      searchJobs();
+    });'''
+listener_new = listener_marker + '''
+
+    document.getElementById("missingJobForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!currentSession?.user) { openAuth("signin", "Sign in to report a missing employer or job."); return; }
+      const button = document.getElementById("missingJobSubmit");
+      const status = document.getElementById("missingJobStatus");
+      const employerName = document.getElementById("missingEmployerName").value.trim();
+      if (!employerName) { status.textContent = "Enter an employer name."; return; }
+      button.disabled = true;
+      button.textContent = "Submitting...";
+      status.textContent = "";
+      try {
+        const { data, error } = await db.rpc("applystronger_report_missing_job", {
+          p_employer_name: employerName,
+          p_job_title: document.getElementById("missingJobTitle").value.trim() || null,
+          p_location_text: document.getElementById("missingJobLocation").value.trim() || null,
+          p_careers_url: document.getElementById("missingCareersUrl").value.trim() || null
+        });
+        if (error) throw error;
+        const row = Array.isArray(data) ? data[0] : data;
+        status.textContent = row?.message || "Report saved. Thank you.";
+        showToast("Missing-job report saved.");
+      } catch (error) {
+        console.error("Missing-job report error:", error);
+        status.textContent = error?.message || "We couldn't save that report.";
+      } finally {
+        button.disabled = false;
+        button.textContent = "Report Missing Job";
+      }
+    });'''
+assert listener_marker in s
+s = s.replace(listener_marker, listener_new, 1)
+
+p.write_text(s)
+
+for value in ['applystronger_resolve_employer_search','applystronger_report_missing_job','jobCoveragePrompt','missingJobForm','companyCoverage?.canonical_name']:
+    assert value in s, value
+assert s.count('id="missingJobForm"') == 1
