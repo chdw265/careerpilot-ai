@@ -118,7 +118,7 @@ async function runBrowser(browserType, label) {
       await page.fill('#jobCompany', 'Spring Health');
       await page.click('#jobSearchForm button[type="submit"]');
       await page.waitForFunction(() => document.querySelector('#jobSearchStatus')?.textContent?.includes('1 current job'));
-      const companyText = await page.locator('.job-company').first().textContent().catch(() => '');
+      const companyText = await page.locator('.job-meta .company-link').first().textContent().catch(() => '');
       if (!String(companyText).includes('Spring Health')) throw new Error(`${label}/${viewport.name}: canonical Spring Health name was not rendered`);
 
       await page.fill('#jobCompany', 'Cardinal Health');
