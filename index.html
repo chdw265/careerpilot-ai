@@ -8457,6 +8457,12 @@
       document.getElementById("missingJobStatus").textContent = currentSession?.user ? "" : "Sign in to submit a report.";
     }
 
+    function quotePostgrestFilterValue(value) {
+      return `"${String(value || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/"/g, '\\"')}"`;
+    }
+
     async function searchJobs() {
       const keyword = document.getElementById("jobKeyword").value.trim();
       const company = document.getElementById("jobCompany").value.trim();
@@ -8490,7 +8496,10 @@
       `, { count: "exact" }).eq("is_active", true);
 
       if (keyword) {
-        query = query.or(`title.ilike.%${keyword}%,description.ilike.%${keyword}%,company_name.ilike.%${keyword}%`);
+        const keywordPattern = quotePostgrestFilterValue(`*${keyword}*`);
+        query = query.or(
+          `title.ilike.${keywordPattern},description.ilike.${keywordPattern},company_name.ilike.${keywordPattern}`
+        );
       }
       if (company) {
         const companyTerms = Array.isArray(companyCoverage?.search_terms) ? [...new Set(companyCoverage.search_terms.map(value => String(value || "").trim()).filter(Boolean))] : [];
