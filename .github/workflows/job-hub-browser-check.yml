@@ -1,0 +1,36 @@
+name: Job Hub Browser Check
+
+on:
+  push:
+    branches:
+      - agent/job-hub-search-reporting
+    paths:
+      - index.html
+      - scripts/job-hub-search-browser-check.mjs
+      - .github/workflows/job-hub-browser-check.yml
+  pull_request:
+    paths:
+      - index.html
+      - scripts/job-hub-search-browser-check.mjs
+      - .github/workflows/job-hub-browser-check.yml
+
+permissions:
+  contents: read
+
+jobs:
+  browser-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium webkit
+      - name: Run Job Hub browser checks
+        run: node scripts/job-hub-search-browser-check.mjs
+      - name: Check whitespace
+        run: git diff --check
