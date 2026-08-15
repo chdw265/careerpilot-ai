@@ -1,0 +1,34 @@
+name: Workday Pilot Benchmark
+
+on:
+  push:
+    branches:
+      - agent/workday-production-pilot
+    paths:
+      - 'scripts/workday-pilot-benchmark.mjs'
+      - '.github/workflows/workday-pilot-benchmark.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Benchmark public Workday boards
+        run: node scripts/workday-pilot-benchmark.mjs
+      - name: Upload benchmark report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workday-pilot-benchmark
+          path: artifacts/workday-pilot-benchmark.json
+          if-no-files-found: error
+          retention-days: 7
