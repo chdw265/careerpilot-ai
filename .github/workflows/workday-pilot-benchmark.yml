@@ -6,6 +6,8 @@ on:
       - agent/workday-production-pilot
     paths:
       - 'scripts/workday-pilot-benchmark.mjs'
+      - 'supabase/functions/collect-workday-jobs/**'
+      - 'supabase/migrations/*workday_pilot_foundation.sql'
       - '.github/workflows/workday-pilot-benchmark.yml'
   workflow_dispatch:
 
@@ -22,6 +24,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Use Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check Workday collector
+        run: deno check supabase/functions/collect-workday-jobs/index.ts
+      - name: Confirm migration has no scheduler and disabled policy
+        run: |
+          grep -q "automation_enabled.*false" supabase/migrations/*workday_pilot_foundation.sql
+          grep -q "pending_review" supabase/migrations/*workday_pilot_foundation.sql
+          if grep -Eqi "cron\.schedule|create[[:space:]]+extension[[:space:]]+.*pg_cron" supabase/migrations/*workday_pilot_foundation.sql; then
+            echo "Workday pilot migration must not create a schedule."
+            exit 1
+          fi
       - name: Benchmark public Workday boards
         run: node scripts/workday-pilot-benchmark.mjs
       - name: Upload benchmark report
