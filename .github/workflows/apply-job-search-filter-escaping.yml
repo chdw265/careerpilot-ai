@@ -1,0 +1,40 @@
+name: Apply Job Search Filter Escaping
+
+on:
+  push:
+    branches:
+      - agent/job-search-filter-escaping
+    paths:
+      - scripts/fix-job-search-filter-escaping.mjs
+      - .github/workflows/apply-job-search-filter-escaping.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/job-search-filter-escaping
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Apply safe PostgREST filter escaping
+        run: node scripts/fix-job-search-filter-escaping.mjs
+      - name: Verify transform is idempotent
+        run: |
+          node scripts/fix-job-search-filter-escaping.mjs
+          grep -q 'quotePostgrestFilterValue' index.html
+          grep -q 'const keywordPattern = quotePostgrestFilterValue' index.html
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "Escape reserved characters in job keyword filters"
+            git push origin HEAD:agent/job-search-filter-escaping
+          fi
