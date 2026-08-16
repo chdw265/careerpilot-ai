@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "applystronger",
+  "compatibility_date": "2026-08-16",
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "applystronger.com",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "directory": ".",
+    "not_found_handling": "single-page-application"
+  },
+  "env": {
+    "preview": {
+      "name": "applystronger-preview",
+      "preview_urls": true,
+      "routes": []
+    }
+  }
+}

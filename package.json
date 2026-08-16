@@ -1,0 +1,14 @@
+{
+  "name": "applystronger-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --env preview",
+    "check": "wrangler deploy --dry-run --env preview",
+    "deploy:preview": "wrangler deploy --env preview",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
