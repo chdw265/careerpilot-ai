@@ -73,6 +73,11 @@
     el.dispatchEvent(new Event("blur", { bubbles: true }));
   }
 
+  function explicitAnswerFor(packet, label) {
+    const answers = packet.answers && typeof packet.answers === "object" ? packet.answers : {};
+    return Object.entries(answers).find(([question]) => normalize(question) === label) || null;
+  }
+
   function fillTextFields(packet) {
     let filled = 0;
     let skippedSensitive = 0;
@@ -87,16 +92,17 @@
       const label = labelText(el);
       if (!label) continue;
 
-      if (sensitivePatterns.some((pattern) => pattern.test(label))) {
-        skippedSensitive += 1;
-        continue;
-      }
-
-      const explicitAnswers = packet.answers && typeof packet.answers === "object" ? packet.answers : {};
-      const explicit = Object.entries(explicitAnswers).find(([question]) => normalize(question) === label);
+      // An answer deliberately saved by the user may be reused. We never infer a
+      // sensitive answer from unrelated profile data.
+      const explicit = explicitAnswerFor(packet, label);
       if (explicit && explicit[1] != null && String(explicit[1]).trim()) {
         nativeSetValue(el, String(explicit[1]));
         filled += 1;
+        continue;
+      }
+
+      if (sensitivePatterns.some((pattern) => pattern.test(label))) {
+        skippedSensitive += 1;
         continue;
       }
 
@@ -139,7 +145,7 @@
       resumeInput.dispatchEvent(new Event("change", { bubbles: true }));
       return { attached: true, reason: null };
     } catch (error) {
-      return { attached: false, reason: error instanceof Error ? error.message : String(error) };
+      return { attached: false, reason: "Resume is ready, but this site requires you to choose the file manually." };
     }
   }
 
@@ -163,8 +169,8 @@
         </div>
         <div class="as-body">
           <p><strong>Your application is ready.</strong></p>
-          <p>ApplyStronger can fill the safe fields on ${providerName()} and attach your approved resume.</p>
-          <p class="as-status">You'll review everything before you submit. Sensitive questions are left for you.</p>
+          <p>ApplyStronger can fill common fields on ${providerName()} and attach your approved resume when the site allows it.</p>
+          <p class="as-status">Review everything before you submit. Sensitive questions are left for you unless you explicitly saved an answer.</p>
           <button class="as-primary" type="button">Fill this page</button>
           <p class="as-result as-status" aria-live="polite"></p>
         </div>
@@ -203,7 +209,8 @@
     const packet = response?.packet;
     if (!packet) return;
     if (packet.savedAt && Date.now() - packet.savedAt > MAX_PACKET_AGE_MS) return;
-    if (packet.targetHost && !location.hostname.endsWith(packet.targetHost)) return;
+    if (packet.expiresAt && Date.parse(packet.expiresAt) < Date.now()) return;
+    if (packet.targetHost && location.hostname !== packet.targetHost && !location.hostname.endsWith(`.${packet.targetHost}`)) return;
     render(packet);
   });
 })();
