@@ -11,17 +11,21 @@
       p { margin: 0 0 10px; line-height: 1.45; font-size: 14px; }
       .muted { color: #5d6f84; font-size: 12px; }
       .ready { color: #18794e; font-weight: 700; }
-      button, a { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; border-radius: 9px; padding: 10px 12px; font: inherit; font-weight: 700; text-decoration: none; }
+      button, a { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; border-radius: 9px; padding: 11px 12px; font: inherit; font-weight: 700; text-decoration: none; }
       a { background: #123f7a; color: white; }
       button { margin-top: 8px; border: 1px solid #cad5e3; background: white; color: #0f2747; cursor: pointer; }
+      #fill { border-color: #123f7a; background: #123f7a; color: white; }
+      #fill:disabled { cursor: default; opacity: .55; }
     </style>
   </head>
   <body>
     <header>ApplyStronger Autofill</header>
     <main>
       <div id="status"></div>
-      <a href="https://applystronger.com/jobs" target="_blank" rel="noopener">Open ApplyStronger</a>
+      <button id="fill" type="button">Fill this page</button>
+      <a id="open" href="https://applystronger.com/jobs" target="_blank" rel="noopener">Open ApplyStronger</a>
       <button id="clear" type="button">Clear current application</button>
+      <p class="muted" style="margin-top:12px">ApplyStronger never submits an application for you. Review everything before you submit.</p>
     </main>
     <script src="popup.js"></script>
   </body>
