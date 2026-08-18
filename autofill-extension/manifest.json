@@ -3,7 +3,8 @@
   "name": "ApplyStronger Autofill",
   "version": "0.1.0",
   "description": "Fill supported job applications with your approved ApplyStronger profile and tailored resume.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "homepage_url": "https://applystronger.com/autofill",
+  "permissions": ["storage", "activeTab"],
   "host_permissions": [
     "https://applystronger.com/*",
     "https://*.myworkdayjobs.com/*",
