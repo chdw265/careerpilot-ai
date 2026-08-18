@@ -34,6 +34,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message.type === "APPLYSTRONGER_FETCH_RESUME") {
+    const url = typeof message.url === "string" ? message.url : "";
+    if (!url.startsWith("https://jebakbovivznzcmtyvcc.supabase.co/")) {
+      sendResponse({ ok: false, error: "Unsupported resume URL." });
+      return;
+    }
+    fetch(url, { credentials: "omit", cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Resume download returned ${response.status}`);
+        const buffer = await response.arrayBuffer();
+        sendResponse({
+          ok: true,
+          bytes: Array.from(new Uint8Array(buffer)),
+          contentType: response.headers.get("content-type") || "application/pdf",
+        });
+      })
+      .catch((error) => sendResponse({ ok: false, error: String(error) }));
+    return true;
+  }
+
   if (message.type === "APPLYSTRONGER_CLEAR_PACKET") {
     chrome.storage.local
       .remove(PACKET_KEY)
