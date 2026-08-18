@@ -14,6 +14,7 @@
     "https://*.greenhouse.io/*",
     "https://jobs.lever.co/*",
     "https://*.lever.co/*",
+    "https://*.icims.com/*",
     "https://jebakbovivznzcmtyvcc.supabase.co/*"
   ],
   "background": {
@@ -37,7 +38,8 @@
         "https://job-boards.greenhouse.io/*",
         "https://*.greenhouse.io/*",
         "https://jobs.lever.co/*",
-        "https://*.lever.co/*"
+        "https://*.lever.co/*",
+        "https://*.icims.com/*"
       ],
       "js": ["content/autofill.js"],
       "css": ["content/autofill.css"],
