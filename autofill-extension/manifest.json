@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "ApplyStronger Autofill",
+  "version": "0.1.0",
+  "description": "Fill supported job applications with your approved ApplyStronger profile and tailored resume.",
+  "homepage_url": "https://applystronger.com/autofill",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://applystronger.com/*",
+    "https://*.myworkdayjobs.com/*",
+    "https://*.workday.com/*",
+    "https://boards.greenhouse.io/*",
+    "https://job-boards.greenhouse.io/*",
+    "https://*.greenhouse.io/*",
+    "https://jobs.lever.co/*",
+    "https://*.lever.co/*",
+    "https://*.icims.com/*",
+    "https://jebakbovivznzcmtyvcc.supabase.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "ApplyStronger Autofill",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://applystronger.com/*"],
+      "js": ["content/applystronger-bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://*.myworkdayjobs.com/*",
+        "https://*.workday.com/*",
+        "https://boards.greenhouse.io/*",
+        "https://job-boards.greenhouse.io/*",
+        "https://*.greenhouse.io/*",
+        "https://jobs.lever.co/*",
+        "https://*.lever.co/*",
+        "https://*.icims.com/*"
+      ],
+      "js": ["content/autofill.js"],
+      "css": ["content/autofill.css"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}

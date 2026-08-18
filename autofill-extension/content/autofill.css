@@ -1,0 +1,75 @@
+#applystronger-autofill-root {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483647;
+  width: min(360px, calc(100vw - 32px));
+  font-family: Arial, Helvetica, sans-serif;
+  color: #0f2747;
+}
+
+#applystronger-autofill-root .as-card {
+  border: 1px solid #cfd9e7;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 14px 36px rgba(15, 39, 71, 0.22);
+  overflow: hidden;
+}
+
+#applystronger-autofill-root .as-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #123f7a;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+#applystronger-autofill-root .as-body {
+  padding: 14px 16px 16px;
+}
+
+#applystronger-autofill-root .as-body p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+#applystronger-autofill-root .as-status {
+  color: #52657c;
+  font-size: 12px;
+}
+
+#applystronger-autofill-root button {
+  appearance: none;
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#applystronger-autofill-root .as-primary {
+  width: 100%;
+  background: #123f7a;
+  color: #ffffff;
+}
+
+#applystronger-autofill-root .as-close {
+  background: transparent;
+  color: #ffffff;
+  padding: 2px 4px;
+  font-size: 18px;
+}
+
+#applystronger-autofill-root .as-success {
+  color: #18794e;
+  font-weight: 700;
+}
+
+#applystronger-autofill-root .as-warning {
+  color: #9a6700;
+}
