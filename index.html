@@ -7888,7 +7888,7 @@
       if (!userId) return null;
       if (careerFitData && careerFitDataUserId === userId) return careerFitData;
 
-      const [experienceResult, skillsResult, educationResult, certificationsResult] = await Promise.all([
+      const [experienceResult, skillsResult, educationResult, certificationsResult, resumeResult] = await Promise.all([
         db.from("experiences")
           .select("job_title,company_name,description,accomplishments,is_current,start_date,end_date")
           .eq("user_id", userId),
@@ -7900,10 +7900,14 @@
           .eq("user_id", userId),
         db.from("certifications")
           .select("certification_name,issuing_organization")
+          .eq("user_id", userId),
+        db.from("resumes")
+          .select("id")
           .eq("user_id", userId)
+          .limit(1)
       ]);
 
-      const firstError = [experienceResult, skillsResult, educationResult, certificationsResult].find(result => result.error)?.error;
+      const firstError = [experienceResult, skillsResult, educationResult, certificationsResult, resumeResult].find(result => result.error)?.error;
       if (firstError) {
         console.error("Career Fit profile load error:", firstError);
         return null;
@@ -7915,7 +7919,8 @@
         experiences: experienceResult.data || [],
         skills: skillsResult.data || [],
         education: educationResult.data || [],
-        certifications: certificationsResult.data || []
+        certifications: certificationsResult.data || [],
+        resumes: resumeResult.data || []
       };
       careerFitData.allText = flattenCareerFitText(careerFitData);
       careerFitData.allTokens = fitTokenSet(careerFitData.allText);
@@ -7928,15 +7933,42 @@
       if (!careerFitData.candidateFamilies.size) {
         careerFitData.candidateFamilies = detectCareerFamilies(careerFitData.allText);
       }
-      careerFitData.ready = Boolean(
+      careerFitData.readiness = evaluateCareerProfileReadiness(careerFitData);
+      careerFitData.ready = careerFitData.readiness.ready;
+      careerFitDataUserId = userId;
+      return careerFitData;
+    }
+
+    function evaluateCareerProfileReadiness(data = {}) {
+      const profile = data.profile || {};
+      const experiences = Array.isArray(data.experiences) ? data.experiences : [];
+      const skills = Array.isArray(data.skills) ? data.skills : [];
+      const resumes = Array.isArray(data.resumes) ? data.resumes : [];
+      const hasCareerDirection = Boolean(
         profile.current_job_title ||
         profile.professional_headline ||
         (Array.isArray(profile.target_job_titles) && profile.target_job_titles.length) ||
-        careerFitData.experiences.length ||
-        careerFitData.skills.length
+        experiences.some(item => item?.job_title)
       );
-      careerFitDataUserId = userId;
-      return careerFitData;
+      const hasCandidateEvidence = Boolean(
+        experiences.length ||
+        skills.length ||
+        resumes.length ||
+        profile.professional_summary
+      );
+      const missingRequired = [];
+      if (!hasCareerDirection) missingRequired.push("a current or target job title");
+      if (!hasCandidateEvidence) missingRequired.push("experience, skills, or a professional summary");
+
+      return {
+        contractVersion: 1,
+        ready: hasCareerDirection && hasCandidateEvidence,
+        missingRequired,
+        optionalMissing: [
+          !(Array.isArray(profile.work_setting_preferences) && profile.work_setting_preferences.length) ? "work setting preference" : null,
+          profile.desired_salary_min === null || profile.desired_salary_min === undefined ? "desired salary" : null,
+        ].filter(Boolean),
+      };
     }
 
     function hasCandidateEvidence(candidateText, patterns) {
@@ -8555,7 +8587,14 @@
       }
 
       if ((usingFitFilter || usingBestMatchSort) && signedIn && jobs.length && !fitMap.size) {
-        status.textContent = "Career Fit needs an imported or completed Career Profile before it can rank jobs.";
+        const readiness = careerFitData?.readiness;
+        if (readiness && !readiness.ready) {
+          status.textContent = `Career Fit needs ${readiness.missingRequired.join(" and ")} before it can rank jobs.`;
+        } else if (!careerFitData) {
+          status.textContent = "Career Fit is temporarily unavailable because profile data could not be loaded. Your profile has not been marked incomplete.";
+        } else {
+          status.textContent = "Career Fit could not evaluate these listings. Your Career Profile is ready; try the search again.";
+        }
         renderJobs(jobs.slice(0, 50), results, { matchMap, fitMap });
         syncSaveButtons();
         return;
