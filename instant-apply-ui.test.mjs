@@ -12,6 +12,8 @@ for (const required of [
   "idempotency_key: record.id",
   "consent: true",
   'button.textContent = "Application Submitted"',
+  'instantButton.textContent = "Application Already Submitted"',
+  "currentApplicationJob.quick_apply_available = false",
 ]) assert.ok(source.includes(required), `missing Instant Apply UI contract: ${required}`);
 
 assert.ok(source.indexOf("careerPilotQuickApplySupported(job)") < source.indexOf('quickButton.textContent = "ApplyStronger Instant Apply"'));
