@@ -2441,6 +2441,12 @@
           <h3>Application route</h3>
           <div id="applicationRouteText" class="application-prep-help"></div>
           <div id="applicationRouteWarning"></div>
+          <div id="instantApplyConsentPanel" class="application-prep-warning" style="display:none;">
+            <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;">
+              <input type="checkbox" id="instantApplyConsentCheckbox" style="margin-top:3px;">
+              <span>I authorize ApplyStronger to send my saved contact information and selected resume to this employer for this job. I understand this final click submits the application.</span>
+            </label>
+          </div>
           <div class="application-prep-actions">
             <button type="button" class="application-prep-button primary" id="continueApplicationButton">Continue to Company Website</button>
             <button type="button" class="application-prep-button success" id="markApplicationAppliedButton" disabled>I Submitted My Application</button>
@@ -2556,7 +2562,8 @@
     let currentApplicationResumeOptions = new Map();
     let currentApplicationRouteMode = "none";
     let currentApplicationRouteOfficialLocation = null;
-    const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set([]); // Add provider slugs only after a real submission integration is deployed.
+    let currentInstantApplyReady = false;
+    const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set(["greenhouse"]); // A job still must be explicitly enabled and pass the live server check.
 
     const JOB_DETAIL_SELECT = `
       id,title,company_name,description,requirements,industry,category,city,state,country,
@@ -5321,7 +5328,7 @@
         const quickButton = document.createElement("button");
         quickButton.type = "button";
         quickButton.className = "job-primary-action";
-        quickButton.textContent = "ApplyStronger Quick Apply";
+        quickButton.textContent = "ApplyStronger Instant Apply";
         quickButton.addEventListener("click", () => openApplicationPrep(job));
         application.appendChild(quickButton);
       } else if (directUrl) {
@@ -7032,7 +7039,7 @@
         company_name: job.company_name || null,
         location_text: job.location_text || null,
         application_url: directUrl,
-        application_method: quickApply ? "careerpilot_quick_apply" : "external_apply",
+        application_method: quickApply ? "careerpilot_instant_apply" : "external_apply",
         tailored_resume_id: tailored?.id || null,
         source_resume_id: tailored?.source_resume_id || source?.id || null,
         resume_used_name: selected ? applicationResumeLabel(selected) : null,
@@ -7094,19 +7101,30 @@
       const warningHost = document.getElementById("applicationRouteWarning");
       warningHost.innerHTML = "";
       currentApplicationRouteOfficialLocation = null;
+      currentInstantApplyReady = false;
 
       const directUrl = verifiedDirectApplyUrl(job);
       const quickApply = careerPilotQuickApplySupported(job);
 
+      const consentPanel = document.getElementById("instantApplyConsentPanel");
+      const consentCheckbox = document.getElementById("instantApplyConsentCheckbox");
+
       if (quickApply) {
         currentApplicationRouteMode = "quick";
-        continueButton.textContent = "ApplyStronger Quick Apply";
-        continueButton.disabled = false;
+        continueButton.textContent = "Checking Instant Apply...";
+        continueButton.disabled = true;
         submittedButton.disabled = true;
+        submittedButton.style.display = "none";
         elsewhereButton.style.display = "inline-flex";
-        routeText.textContent = `ApplyStronger has an active Quick Apply integration for ${job.quick_apply_provider}.`;
+        consentPanel.style.display = "block";
+        consentCheckbox.checked = false;
+        routeText.textContent = "ApplyStronger is confirming the live employer form before enabling submission.";
         return;
       }
+
+      consentPanel.style.display = "none";
+      consentCheckbox.checked = false;
+      submittedButton.style.display = "inline-flex";
 
       if (directUrl) {
         currentApplicationRouteMode = "direct";
@@ -7125,6 +7143,42 @@
       submittedButton.disabled = true;
       elsewhereButton.style.display = "inline-flex";
       routeText.textContent = "ApplyStronger is locating the verified company application page for this job.";
+    }
+
+    async function verifyInstantApplyAvailability(job) {
+      if (!careerPilotQuickApplySupported(job)) return false;
+      const button = document.getElementById("continueApplicationButton");
+      const routeText = document.getElementById("applicationRouteText");
+      const warningHost = document.getElementById("applicationRouteWarning");
+
+      try {
+        const { data, error } = await db.functions.invoke("submit-instant-application", {
+          body: { action: "prepare", job_id: job.id }
+        });
+        if (error) throw new Error(await getFunctionErrorMessage(error, "Instant Apply is not available for this job."));
+        if (!data?.success || !data?.available) {
+          const missing = Array.isArray(data?.missing_profile_fields) && data.missing_profile_fields.length
+            ? ` Complete your profile fields: ${data.missing_profile_fields.join(", ")}.`
+            : "";
+          throw new Error((data?.error || data?.message || "Instant Apply is not available for this job.") + missing);
+        }
+
+        currentInstantApplyReady = true;
+        button.textContent = "Submit Application Now";
+        button.disabled = !document.getElementById("instantApplyConsentCheckbox").checked;
+        routeText.textContent = "Instant Apply is available. Review the authorization below, then use the final submit button.";
+        return true;
+      } catch (error) {
+        console.warn("Instant Apply readiness check failed:", error);
+        job.quick_apply_available = false;
+        job.quick_apply_provider = null;
+        renderApplicationRoute(job);
+        const warning = document.createElement("div");
+        warning.className = "application-prep-warning";
+        warning.textContent = `${error?.message || "Instant Apply is not available right now."} Use the verified employer application route instead.`;
+        warningHost.appendChild(warning);
+        return false;
+      }
     }
 
     async function resolveApplicationRoute(job, button, options = {}) {
@@ -7237,6 +7291,9 @@
         : "Not analyzed";
 
       await loadApplicationResumeOptions(job, preferredTailoredResume);
+      if (careerPilotQuickApplySupported(job)) {
+        await verifyInstantApplyAvailability(job);
+      }
 
       try {
         currentApplicationRecord = await findExistingApplication(job.id);
@@ -7266,6 +7323,7 @@
       }
 
       const original = button.textContent;
+      let instantApplySubmitted = false;
       button.disabled = true;
       button.textContent = "Preparing...";
 
@@ -7277,7 +7335,33 @@
         const quickApply = careerPilotQuickApplySupported(currentApplicationJob);
 
         if (quickApply) {
-          throw new Error("Quick Apply is not enabled for any provider in this beta build yet.");
+          const consent = document.getElementById("instantApplyConsentCheckbox").checked;
+          if (!consent) throw new Error("Confirm the Instant Apply authorization before submitting.");
+
+          button.textContent = "Submitting...";
+          const { data, error } = await db.functions.invoke("submit-instant-application", {
+            body: {
+              action: "submit",
+              job_id: currentApplicationJob.id,
+              application_id: record.id,
+              idempotency_key: record.id,
+              resume_kind: selected.kind,
+              resume_id: selected.resume.id,
+              consent: true
+            }
+          });
+          if (error) throw new Error(await getFunctionErrorMessage(error, "The employer did not confirm the application."));
+          if (!data?.success || !data?.submitted) throw new Error(data?.error || "The employer did not confirm the application.");
+
+          currentApplicationRecord = data.application || { ...record, status: "applied", confirmation_number: data.confirmation_number };
+          instantApplySubmitted = true;
+          button.textContent = "Application Submitted";
+          button.disabled = true;
+          document.getElementById("instantApplyConsentCheckbox").disabled = true;
+          document.getElementById("markApplicationAppliedElsewhereButton").disabled = true;
+          await Promise.all([loadMemberDashboard(currentSession.user.id), loadApplicationsWorkspace()]);
+          showToast(`Application submitted. Confirmation: ${data.confirmation_number || "recorded"}.`);
+          return;
         }
 
         const directUrl = verifiedDirectApplyUrl(currentApplicationJob);
@@ -7291,8 +7375,10 @@
         console.error("Continue application error:", error);
         showToast(error?.message || "We couldn't prepare that application.");
       } finally {
-        button.disabled = false;
-        button.textContent = original;
+        if (!instantApplySubmitted) {
+          button.disabled = false;
+          button.textContent = original;
+        }
       }
     }
 
@@ -7649,6 +7735,11 @@
     });
     document.getElementById("downloadApplicationResumeButton").addEventListener("click", downloadSelectedApplicationResume);
     document.getElementById("continueApplicationButton").addEventListener("click", continueApplication);
+    document.getElementById("instantApplyConsentCheckbox").addEventListener("change", event => {
+      if (currentApplicationRouteMode !== "quick") return;
+      const button = document.getElementById("continueApplicationButton");
+      button.disabled = !currentInstantApplyReady || !event.target.checked;
+    });
     document.getElementById("markApplicationAppliedButton").addEventListener("click", markCurrentApplicationApplied);
     document.getElementById("markApplicationAppliedElsewhereButton").addEventListener("click", markCurrentApplicationAppliedElsewhere);
     document.getElementById("closeApplicationPrepModal").addEventListener("click", () => closeModal(applicationPrepModal));
