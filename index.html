@@ -7118,12 +7118,14 @@
         elsewhereButton.style.display = "inline-flex";
         consentPanel.style.display = "block";
         consentCheckbox.checked = false;
+        consentCheckbox.disabled = false;
         routeText.textContent = "ApplyStronger is confirming the live employer form before enabling submission.";
         return;
       }
 
       consentPanel.style.display = "none";
       consentCheckbox.checked = false;
+      consentCheckbox.disabled = false;
       submittedButton.style.display = "inline-flex";
 
       if (directUrl) {
@@ -7302,6 +7304,12 @@
           document.getElementById("markApplicationAppliedButton").disabled = true;
           document.getElementById("markApplicationAppliedButton").textContent = "Application Marked Applied";
           document.getElementById("markApplicationAppliedElsewhereButton").disabled = true;
+          if (currentApplicationRouteMode === "quick") {
+            const instantButton = document.getElementById("continueApplicationButton");
+            instantButton.disabled = true;
+            instantButton.textContent = "Application Already Submitted";
+            document.getElementById("instantApplyConsentCheckbox").disabled = true;
+          }
         } else {
           document.getElementById("markApplicationAppliedButton").textContent = "I Submitted My Application";
           document.getElementById("markApplicationAppliedElsewhereButton").disabled = false;
@@ -7373,6 +7381,15 @@
         currentApplicationRecord = record;
       } catch (error) {
         console.error("Continue application error:", error);
+        if (currentApplicationRouteMode === "quick") {
+          currentApplicationJob.quick_apply_available = false;
+          currentApplicationJob.quick_apply_provider = null;
+          renderApplicationRoute(currentApplicationJob);
+          const warning = document.createElement("div");
+          warning.className = "application-prep-warning";
+          warning.textContent = "Instant Apply was not confirmed. Use the verified employer application route instead; ApplyStronger will not submit twice.";
+          document.getElementById("applicationRouteWarning").appendChild(warning);
+        }
         showToast(error?.message || "We couldn't prepare that application.");
       } finally {
         if (!instantApplySubmitted) {
