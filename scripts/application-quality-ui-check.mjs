@@ -74,8 +74,16 @@ assert.doesNotMatch(
 );
 assert.match(
   html,
-  /const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set\(\[\]\)/,
-  "This UI change must not enable unimplemented Quick Apply providers",
+  /const CAREERPILOT_QUICK_APPLY_PROVIDERS = new Set\(\["greenhouse"\]\)/,
+  "Only the implemented Greenhouse provider may be allowlisted",
 );
+assert.match(
+  html,
+  /function careerPilotQuickApplySupported\(job\)[\s\S]{0,240}?quick_apply_available[\s\S]{0,240}?CAREERPILOT_QUICK_APPLY_PROVIDERS\.has/,
+  "Instant Apply must remain gated by both the job flag and provider allowlist",
+);
+assert.match(html, /functions\.invoke\("submit-instant-application"/);
+assert.match(html, /id="instantApplyConsentCheckbox"/);
+assert.match(html, /idempotency_key: record\.id/);
 
 console.log("Application Quality UI regression checks passed.");
